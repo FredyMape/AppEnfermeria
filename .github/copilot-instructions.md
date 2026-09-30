@@ -17,7 +17,8 @@ Este proyecto está en **fase de descubrimiento**. Todavía no existe código ni
 2. **Context Builder** — consolida `Requirements-Context.md` + todas las `HU-*.md` en `specs/context/` (glosario, personas, modelo de dominio, índice de reglas de negocio).
 3. **User Story Completer** — compara el contexto consolidado contra las `HU-*.md` existentes, detecta huecos del backlog y redacta las historias faltantes con el mismo formato (`HU-XX-slug.md` en la raíz).
 4. **Architecture Definer** — con el backlog razonablemente completo, propone y documenta la arquitectura (stack, capas, patrones de datos, decisiones clave) en `specs/context/architecture/` mediante ADRs, y deja lista la base de `.github/instructions/` para el stack elegido.
-5. A partir de ahí, por cada historia de usuario: **Spec Builder → Plan Builder → Task Definer → Orchestrator** (que delega en los implementadores de capa y en TDD Implementer), cerrando con **Coverage Analyzer**, **Doc Updater** y **PR Builder**.
+5. **Project Bootstrapper** — una sola vez, con los ADRs ya aceptados, crea el andamiaje físico real del proyecto (proyectos/paquetes, estructura de carpetas, dependencias base, build/test verificado, control de versiones). Es agnóstico de stack: nunca asume un lenguaje por defecto, solo ejecuta lo que los ADRs decidieron.
+6. A partir de ahí, por cada historia de usuario: **Spec Builder → Plan Builder → Task Definer → Orchestrator** (que delega en los implementadores de capa y en TDD Implementer), cerrando con **Coverage Analyzer**, **Doc Updater** y **PR Builder**.
 
 ## Reglas Generales
 
@@ -25,7 +26,8 @@ Este proyecto está en **fase de descubrimiento**. Todavía no existe código ni
 - **Nunca inventes alcance.** Si falta información para tomar una decisión, pregunta explícitamente al developer (usa `vscode/askQuestions` cuando esté disponible) en vez de asumir.
 - **File-first.** Todo agente que produzca un documento debe **guardarlo en disco primero** y luego presentar un resumen en el chat — nunca al revés.
 - **Aprobación explícita.** Ningún agente avanza a la siguiente fase sin aprobación explícita del developer sobre el artefacto producido. Cada documento lleva un campo `status` en su frontmatter (`borrador` → `aprobado`/`aprobadas`) que refleja este estado.
-- **Sin stack asumido.** Ningún agente de implementación (Domain/Application/Infrastructure/Api/Shared/TDD Implementer) debe asumir lenguaje, framework o base de datos hasta que **Architecture Definer** los documente en `specs/context/architecture/`. Si se les invoca antes de eso, deben detenerse e indicar que se debe correr Architecture Definer primero.
+- **Sin stack asumido.** Ningún agente de implementación (Domain/Application/Infrastructure/Api/Shared/TDD Implementer) ni **Project Bootstrapper** deben asumir lenguaje, framework o base de datos hasta que **Architecture Definer** los documente en `specs/context/architecture/`. Si se les invoca antes de eso, deben detenerse e indicar que se debe correr Architecture Definer primero.
+- **Bootstrap único, no repetible por historia.** El andamiaje físico del proyecto (**Project Bootstrapper**) se crea una sola vez tras aprobar la arquitectura, no por cada historia de usuario. Solo se vuelve a invocar si la arquitectura se reemplaza por completo con nuevos ADRs.
 - **Contexto acumulado, no duplicado.** Cada documento nuevo (spec → plan → tareas) copia íntegramente la sección de contexto técnico del documento anterior en su propia sección "Contexto Técnico Acumulado", para que el siguiente agente sea autocontenido y no tenga que releer documentos previos.
 
 ## Estructura de carpetas
@@ -57,10 +59,10 @@ Este proyecto está en **fase de descubrimiento**. Todavía no existe código ni
 
 Ver `.github/agents/`. Resumen por etapa:
 
-| Etapa | Agentes |
-|---|---|
-| Descubrimiento | Idea Shaper, Context Builder, User Story Completer |
-| Arquitectura | Architecture Definer |
-| Especificación | Spec Builder, Plan Builder, Task Definer |
-| Implementación | Orchestrator, Domain/Application/Infrastructure/Api/Shared Implementer, TDD Implementer, Codebase Explorer |
+| Etapa            | Agentes                                                                                                                        |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Descubrimiento   | Idea Shaper, Context Builder, User Story Completer                                                                             |
+| Arquitectura     | Architecture Definer, Project Bootstrapper                                                                                     |
+| Especificación   | Spec Builder, Plan Builder, Task Definer                                                                                       |
+| Implementación   | Orchestrator, Domain/Application/Infrastructure/Api/Shared Implementer, TDD Implementer, Codebase Explorer                     |
 | Calidad y cierre | Coverage Analyzer, Doc Updater, PBI Doc Builder, QA Report Builder, API Integration Doc Builder, Tech Annex Writer, PR Builder |

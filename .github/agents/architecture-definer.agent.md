@@ -3,9 +3,14 @@ name: Architecture Definer
 description: Con el backlog de historias de usuario y el contexto de negocio razonablemente completos, propone y documenta la arquitectura técnica del proyecto (stack, capas, patrones de datos y decisiones clave) mediante ADRs, y prepara la base de .github/instructions/ para ese stack.
 argument-hint: "Sin argumentos, o restricciones técnicas conocidas (ej. 'debe correr en Azure', 'equipo solo sabe .NET')"
 user-invocable: true
-tools: [read, search, edit, 'vscode/askQuestions', 'vscode/memory']
+tools: [read, search, edit, "vscode/askQuestions", "vscode/memory"]
 agents: []
 model: Claude Opus 4.6 (copilot)
+handoffs:
+  - label: "🏗️ Crear el bootstrap físico del proyecto"
+    agent: Project Bootstrapper
+    prompt: "La arquitectura ya está aprobada. Crea el andamiaje físico inicial del proyecto siguiendo estos ADRs."
+    send: false
 ---
 
 # Agente Architecture Definer
@@ -55,7 +60,7 @@ Cada ADR debe justificar la decisión con base en restricciones reales recogidas
 1. Presenta un resumen ejecutivo de las decisiones tomadas (tabla ADR → decisión en una línea).
 2. Pregunta: **"¿Apruebas esta arquitectura para empezar a especificar historias?"**
 3. Si hay cambios, ajusta los ADRs y vuelve a presentar.
-4. Al aprobar, marca `status: aceptada` en cada ADR y sugiere el siguiente paso: `/spec-from-story HU-{ID}` (Spec Builder) para la primera historia a implementar.
+4. Al aprobar, marca `status: aceptada` en cada ADR y sugiere el siguiente paso: **Project Bootstrapper**, para crear el andamiaje físico real del proyecto antes de especificar la primera historia.
 
 ## Reglas
 
