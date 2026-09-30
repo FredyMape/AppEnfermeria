@@ -1,0 +1,3 @@
+[     318ms] [WARNING] Error parsing a meta element's content: ';' is not a valid key-value pair separator. Please use ',' instead. @ https://www.minsalud.gov.co/salud/PO/paginas/registro-unico-nacional-del-talento-humano-en-salud-rethus.aspx:53
+[   15583ms] [ERROR] Failed to load resource: the server responded with a status of 404 (NOT FOUND) @ https://www.minsalud.gov.co/Style%20Library/assets/assets/fonts/Nunito_Sans/static/NunitoSans-Bold.ttf:0
+[   16771ms] [LOG] false @ https://www.minsalud.gov.co/_catalogs/masterpage/MinSalud/assets/js/customScripts.js:8

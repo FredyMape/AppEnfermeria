@@ -1,80 +1,94 @@
 # Informe de hallazgos de auditoría — Plataforma de Servicios de Enfermería (AppEnfermeria)
 
-**Fecha del informe:** 2026-09-29
+**Fecha del informe:** 2026-09-30
 **Destinatario:** agente responsable de atender los hallazgos.
 **Naturaleza del documento:** solo describe hallazgos, evidencia y aspectos a mejorar. No prescribe soluciones. Las sugerencias del auditor están en `Sugerencias-Auditoria-AppEnfermeria.md`.
 **Fuente de los datos:** `Diagnostico-Viabilidad-AppEnfermeria.html` (objeto `DIAGNOSTICO`).
+
+## Decisión de negocio que enmarca esta auditoría
+
+> Decisión de negocio (2026-09-30): la aplicación se realizará como intermediario tecnológico (marketplace) que conecta usuarios con enfermeros independientes; no como prestador de servicios de salud.
+
+Consecuencias para la auditoría:
+
+- La clasificación regulatoria deja de ser una pregunta abierta de producto y pasa a ser una **decisión declarada** (SUP-01). El concepto jurídico sigue siendo necesario, pero para confirmar que el **diseño** encaja con el modelo elegido, no para decidir el modelo.
+- La intención de operar como intermediario no fija por sí sola la calificación jurídica: la determina el diseño real. `vision.md` §7 todavía la registra como «restricción activa, no resuelta» (INC-34).
+- El modelo exige un marco contractual propio (términos y condiciones, enfermeros como independientes, límites de responsabilidad, seguros): GAP-25 y COND-21.
+
+## Alcance de esta auditoría
+
+Auditoría acotada a lo que existe: contexto (Requirements-Context, vision, modelo de dominio, reglas, glosario, personas), HU-01…HU-04 y coherencia de la definición del MVP. Las HU aún no escritas no se cuentan como incongruencias: figuran como brechas de información.
 
 ## Convenciones
 
 - **Etiquetas de evidencia:** `[VERIFICADA]` comprobada en el corpus o por cálculo; `[SUPUESTO]` declarado o asumido sin evidencia; `[SIN SUSTENTO]` afirmado sin respaldo o contradicho; `[INFERENCIA]` juicio del auditor.
 - **Naturaleza del hallazgo:** «Hecho» es verificable en el texto citado; «Inferencia» es interpretación del auditor.
 - **Severidad:** Crítica, Alta, Media o Baja.
-- **«Aspecto a mejorar»:** describe qué está deficiente, no cómo resolverlo.
+- **Incongruencia:** solo lo que contradice a otro documento existente o a sí mismo. Las HU aún no escritas (HU-05…HU-17 y los vacíos no planificados) **no** son incongruencias: figuran como brechas.
 
 ## 1. Conclusión de la auditoría
 
 - **Veredicto:** NO VIABLE EN SU ESTADO ACTUAL.
-- **Confianza:** Media. Alta en las incongruencias (cada una tiene cita textual verificable). Baja en la viabilidad económica y de mercado: 4 de 8 dimensiones no son evaluables por falta de datos.
+- **Confianza:** Media. Alta en las incongruencias (cada una tiene cita textual verificable en el corpus vigente). Baja en la viabilidad económica y de mercado: 4 de 8 dimensiones no son evaluables por falta de datos.
 - **Alcance del veredicto:** El veredicto califica el conjunto de especificaciones tal como está, no la idea de negocio. Con las 4 dimensiones sin datos, el mejor resultado posible tras corregir la especificación sería «INSUFICIENTE INFORMACIÓN», no «VIABLE».
 - **Puntaje global:** 2,25 / 5, calculado solo sobre 4 de 8 dimensiones evaluables.
-- **Limitación de la fuente:** El repositorio contiene solo documentación (0 archivos de código). La evaluación es de la especificación, no de una implementación.
+- **Limitación de la fuente:** El repositorio contiene solo documentación y definiciones de agentes de proceso (0 archivos de código de producto). La evaluación es de la especificación, no de una implementación.
 
 Razones principales:
 
-- Hay 5 incongruencias críticas abiertas: el MVP está definido de dos maneras incompatibles (vision.md borrador vs. Requirements-Context y HU-01…04) en pagos, modelo de asignación, verificación de identidad y consentimiento.
+- Hay 1 incongruencia crítica abierta: el modelo de asignación que define el MVP (directorio, invitación dirigida y negociación en vision.md) contradice la asignación atómica por orden de llegada y la máquina de estados de Requirements-Context (INC-03). Hay además 7 altas.
 - Solo 4 de 8 dimensiones son evaluables y 3 de esas 4 quedan por debajo de 3: la regla exige que ninguna evaluada sea menor a 3 para poder ser «VIABLE».
-- No existe presupuesto, cronograma, equipo ni datos de mercado en ningún documento, y 13 historias (HU-05…HU-17) más 4 vacíos no planificados siguen sin escribirse.
+- Las incongruencias se miden solo contra lo que existe; las HU pendientes no se cuentan como defecto. Aun así, no hay presupuesto, cronograma, equipo ni datos de mercado en ningún documento.
 
 ### Documentos revisados
 
 - Requirements-Context.md (normativo)
 - HU-01, HU-02, HU-03, HU-04 (normativo, «Definida para MVP»)
-- specs/context/vision.md (status: «borrador»)
-- specs/context/domain-model.md, business-rules-index.md, glossary.md, personas.md (derivados)
-- Auditoria-Especificacion.md (auditoría previa: tratada como fuente a verificar, no como verdad)
+- specs/context/vision.md (status: «aprobado»; define el alcance del MVP)
+- specs/context/domain-model.md, business-rules-index.md, glossary.md, personas.md (contexto derivado)
 
 ### Conteo de incongruencias
 
 | Severidad | Cantidad |
 | --- | --- |
-| Crítica | 5 |
-| Alta | 9 |
-| Media | 9 |
-| Baja | 3 |
-| **Total** | **26** |
+| Crítica | 1 |
+| Alta | 7 |
+| Media | 11 |
+| Baja | 2 |
+| **Total** | **21** |
 
 ## 2. Evaluación por dimensión
 
 | Dimensión | Puntaje | Confianza | Principal riesgo |
 | --- | --- | --- | --- |
-| Técnica | 3 / 5 | Media | Alcance técnico ampliado en vision.md sin arquitectura, proveedores ni requisitos no funcionales que lo respalden. |
+| Técnica | 3 / 5 | Media | Definición de MVP que la máquina de estados vigente no soporta, y una regla de seguridad (PIN) que no se puede cumplir tal como está escrita. |
 | Financiera | N/E | — | No evaluable: no se puede saber si el proyecto es financiable ni rentable. |
 | Operativa | 2 / 5 | Baja | Cuello de botella humano en el camino crítico de la oferta y ausencia de soporte para incidentes en tiempo real. |
 | Mercado / demanda | N/E | — | No evaluable: la demanda y la disposición a pagar no están demostradas. |
-| Legal / regulatoria | 2 / 5 | Media | Tratamiento de datos de salud, biométricos y de ubicación sin base legal implementada, sobre una clasificación regulatoria sin resolver. |
+| Legal / regulatoria | 2 / 5 | Media | Operación que debe demostrar que es intermediación y no prestación de salud, con datos biométricos, de ubicación y de terceros sin consentimiento definido. |
 | Cronograma | N/E | — | No evaluable. |
 | Riesgos externos | 2 / 5 | Media | Cinco o más dependencias externas críticas sin seleccionar, presupuestar ni con plan de contingencia. |
 | Sostenibilidad | N/E | — | No evaluable. |
 
 ### Técnica — 3 / 5
 
-- `[VERIFICADA]` Los principios declarados son correctos: asignación única y atómica (Req §10.2, CTX-RN-01/02), validación en backend (§21), PIN con hash (CTX-RN-18) y contraseña de 12 a 64 caracteres (HU01-RN-06).
-- `[VERIFICADA]` Faltan decisiones sin las cuales no se puede implementar ni probar: idempotencia solo enunciada (§10.3, sin clave ni retención), TTL/intentos del código de correo pendientes (HU-01), y 0 coincidencias de zona horaria, MFA, latencia o volumetría en los documentos normativos.
-- `[SUPUESTO]` Que el alcance de vision.md (pagos, biometría, geolocalización, tiempo real, negociación) sea construible: no hay arquitectura, proveedores ni requisitos no funcionales.
-- `[VERIFICADA]` No existe código en el repositorio; no se evaluó implementación.
+- `[VERIFICADA]` Los principios declarados son correctos y varias decisiones ya se aplicaron: asignación única y atómica (Req §10.2), validación en backend (§21), contraseña de 12 a 64 caracteres (HU01-RN-06) y código de correo con TTL de 15 min, 5 intentos y 3 reenvíos por hora (HU01-RN-09).
+- `[VERIFICADA]` Contradicción interna en el PIN: se exige guardarlo solo como hash y, a la vez, mostrárselo al usuario (Req §14.1 vs §14.2); «único por servicio» admite dos lecturas (INC-28, INC-31).
+- `[VERIFICADA]` La máquina de estados del servicio tiene 5 estados (Req §8.1) y no soporta negociación, invitación dirigida, expiración ni cancelación con reglas (INC-03, INC-12). 0 coincidencias de MFA, zona horaria, latencia, RPO/RTO o volumetría en Requirements-Context, HU-01…04 y vision.md.
+- `[SUPUESTO]` Que el alcance aprobado en vision.md (pagos, biometría, geolocalización, tiempo real, negociación, directorio) sea construible: no hay arquitectura, proveedores ni requisitos no funcionales.
+- `[VERIFICADA]` No existe código de producto en el repositorio; no se evaluó implementación.
 
 ### Financiera — No evaluable (N/E)
 
-- `[VERIFICADA]` 0 menciones de presupuesto total, costos, precios reales o ingresos. Única cifra económica: la ausencia de presupuesto para biometría (vision §7). La comisión figura como «A definir».
+- `[VERIFICADA]` 0 menciones de presupuesto total, costos, precios reales o ingresos en Requirements-Context y HU. Única cifra económica: la ausencia de presupuesto para biometría (vision §7). La comisión figura como «A definir».
 - **Motivo de no evaluación:** Sin presupuesto, costos por transacción (biometría, pasarela, mensajería, nube) ni modelo de ingresos.
 - **Brechas que la bloquean:** GAP-01, GAP-02, GAP-11, GAP-12
 
 ### Operativa — 2 / 5
 
-- `[VERIFICADA]` Toda aprobación de enfermeros es manual y la hace un rol (superadministrador) que además configura, audita y —según CN/§15— debería atender bloqueos (HU-03 RN-09; Req §22).
-- `[VERIFICADA]` No existe proceso de soporte: el desbloqueo tras 5 intentos de PIN está «pendiente de definición» (Req §15) y sin HU; la recaptura periódica de foto «debe diseñarse» (vision §7).
-- `[SUPUESTO]` Que 24–36 h sea alcanzable: la propia visión reconoce que el SLA «se degrada rápidamente» (vision §8) y no define revisores ni reloj.
+- `[VERIFICADA]` Toda aprobación de enfermeros es manual y la hace un único rol que además configura y audita (HU-03 RN-09; Req §22). Tras unificar los estados no existe acción terminal ni suspensión (INC-29).
+- `[VERIFICADA]` El «soporte» que recibe el evento de bloqueo por PIN (Req §15) y al que se puede acudir con una calificación pendiente (§19.1) no existe como rol (Req §2 fija tres roles), proceso ni historia; el desbloqueo sigue «pendiente de definición».
+- `[SUPUESTO]` Que 24–36 h sea alcanzable: vision §8 admite que el SLA «se degrada rápidamente» y no hay revisores, reloj ni métricas.
 - `[VERIFICADA]` 0 menciones al tamaño del equipo: la confianza de esta calificación es baja.
 
 ### Mercado / demanda — No evaluable (N/E)
@@ -85,22 +99,24 @@ Razones principales:
 
 ### Legal / regulatoria — 2 / 5
 
-- `[VERIFICADA]` La clasificación intermediario vs. prestador de salud está declarada «restricción activa, no resuelta» (vision §7) y diseño actual «tiene rasgos de prestador».
-- `[VERIFICADA]` Los flujos normativos recogen datos de salud (HU-01) sin autorización, aviso ni finalidad, aunque la visión exige «base legal, consentimiento y aviso de privacidad antes de recolectar» (vision §7). Sin consentimiento biométrico ni del tercero titular en ninguna HU.
-- `[SUPUESTO]` Marco citado por la auditoría previa (Ley 1581/2012 art. 23, Res. 3100/2019, Ley 1164/2007): coincide con mi conocimiento general, pero no fue re-verificado contra fuente primaria en esta sesión. Requiere concepto jurídico.
-- `[INFERENCIA]` Se califica 2 y no 1 porque la visión ya reconoce los riesgos y propone mitigaciones; el problema es que no llegaron a las HU.
+- `[VERIFICADA]` Avance real: HU-01 y Req §4.2 ya exigen aviso de privacidad y consentimiento explícito antes de capturar datos médicos propios (HU01-RN-08; Ley 1581 de 2012).
+- `[VERIFICADA]` Decisión declarada: la plataforma opera como intermediario tecnológico y no como prestador de salud. vision §7 todavía la registra como «restricción activa, no resuelta» y admite que el diseño (verificación de credenciales, agendamiento, control de inicio y fin del servicio) «tiene rasgos de prestador» bajo la Res. 3100/2019 (INC-34).
+- `[VERIFICADA]` Ninguna HU incorpora consentimiento para biometría facial (que la visión exige «explícito y separado»), ubicación en tiempo real, datos del tercero titular ni datos y documentos del enfermero (HU-02). 0 menciones de política de retención o supresión de datos.
+- `[SUPUESTO]` Marco legal citado por vision.md (Ley 1581/2012, Res. 3100/2019, ReTHUS): coincide con mi conocimiento general, pero no se re-verificó contra fuente primaria. Requiere concepto jurídico.
+- `[INFERENCIA]` Se califica 2 y no 1: la visión ya reconoce los riesgos y hubo un avance concreto; falta que el resto llegue a las HU.
+- `[INFERENCIA]` La intención de operar como intermediario no fija por sí sola la calificación jurídica: la determina el diseño real de la operación. Por eso el concepto jurídico sigue siendo necesario, ahora para confirmar que el diseño encaja con el modelo elegido.
 
 ### Cronograma — No evaluable (N/E)
 
 - `[VERIFICADA]` 0 menciones de cronograma, hitos, fechas objetivo ni capacidad del equipo en todo el corpus.
 - **Motivo de no evaluación:** Sin fechas, hitos, equipo ni estimaciones.
-- **Brechas que la bloquean:** GAP-03, GAP-04, GAP-10, GAP-20
+- **Brechas que la bloquean:** GAP-03, GAP-04, GAP-10
 
 ### Riesgos externos — 2 / 5
 
-- `[VERIFICADA]` Dependencias externas críticas sin proveedor ni costo: pasarela de pagos, verificación facial (vision §7 y preguntas abiertas), correo/SMS y geolocalización. 0 menciones de proveedor en los documentos normativos.
+- `[VERIFICADA]` Dependencias externas críticas sin proveedor ni costo: pasarela de pagos, verificación facial («Proveedor de verificación facial y su costo aún no definidos», vision §7), correo/SMS y geolocalización. 0 menciones de proveedor en Requirements-Context y HU.
 - `[VERIFICADA]` Conectividad obligatoria sin modo offline y sin tolerancia definida a cortes durante un servicio (vision §7, pregunta abierta 10).
-- `[SUPUESTO]` Consulta del ReTHUS como fuente externa disponible y gratuita (afirmación de la auditoría previa; no verificada aquí).
+- `[SUPUESTO]` Consulta del ReTHUS como fuente externa disponible y gratuita: vision §8 solo la nombra como mitigación; su disponibilidad y costo no están verificados.
 
 ### Sostenibilidad — No evaluable (N/E)
 
@@ -112,273 +128,183 @@ Razones principales:
 
 ### Severidad Crítica
 
-#### INC-01 — Dos definiciones de MVP sin regla de precedencia
+#### INC-03 — Metas incompatibles
 
 - **Severidad:** Crítica
-- **Tipo:** Consistencia documental
 - **Naturaleza:** Hecho
-- **Ubicación:** vision.md (front-matter y §5) vs. HU-01…HU-04 y Requirements-Context.md
-- **Cita exacta:** vision.md: status: «borrador» y «Pasarela de pagos integrada en el MVP». HU-01…04: «Estado: Definida para MVP».
-- **Descripción del hallazgo:** Hay dos definiciones de MVP. El documento en borrador amplía el alcance (pagos, biometría, geolocalización, directorio, negociación, tiempo real) y declara que «reabre y reemplaza» una restricción de HU-02, pero las HU «definidas» y Requirements-Context no se actualizaron y no hay regla de precedencia. Cada equipo construiría un producto distinto según el documento que lea.
-- **Aspecto a mejorar:** Falta un documento normativo único y una regla de precedencia entre documentos; el estado de aprobación de vision.md no está definido.
-
-#### INC-02 — Precio y pagos exigidos pero no definidos en ninguna historia
-
-- **Severidad:** Crítica
-- **Tipo:** Objetivos vs. alcance
-- **Naturaleza:** Hecho
-- **Ubicación:** Requirements-Context §9 y §17.1; HU-01/03/04 «Fuera de alcance»; vision.md §5; Req §29
-- **Cita exacta:** §9: «Precio ofrecido.» · §17.1: «El sistema calcula el valor adicional correspondiente.» · HU-04: «Definición de tarifas.» fuera de alcance · vision §5: «Pasarela de pagos integrada en el MVP (no se pospone a una fase posterior)».
-- **Descripción del hallazgo:** El sistema muestra y recalcula precios y la visión exige cobrar en el MVP, pero ninguna HU definida ni pendiente (HU-05…HU-17) cubre tarifa, negociación, pago, comisión ni liquidación. CN-06 confirmó el modelo híbrido pero admite que «no crea todavía el mecanismo concreto».
-- **Aspecto a mejorar:** Ausencia de definición de tarifa, negociación, pago, comisión y liquidación, frente a un MVP que los exige.
-
-#### INC-03 — Asignación por orden de llegada incompatible con negociación y directorio
-
-- **Severidad:** Crítica
-- **Tipo:** Metas incompatibles
-- **Naturaleza:** Hecho
-- **Ubicación:** Requirements-Context §8.2 y §10.2; vision.md §5
-- **Cita exacta:** §10.2: «El primer enfermero cuya confirmación sea procesada correctamente obtendrá la asignación.» · vision §5: «el enfermero puede contraofertar… Requiere una historia de negociación de precio antes de la asignación» y «dirigir/invitar la solicitud a uno específico».
-- **Descripción del hallazgo:** La asignación atómica por orden de llegada es incompatible con contraoferta previa y con invitación dirigida. Ambas exigen estados y reglas (ofertada, invitada, contraofertada) que la máquina de estados (Publicado → Asignado) no tiene, y cambian qué significa «atómico» y quién gana.
-- **Aspecto a mejorar:** El mecanismo de asignación del MVP no está definido de forma única; la máquina de estados no cubre negociación ni invitación dirigida.
-
-#### INC-04 — Verificación de identidad del enfermero desalineada con la visión
-
-- **Severidad:** Crítica
-- **Tipo:** Objetivos vs. alcance
-- **Naturaleza:** Hecho
-- **Ubicación:** HU-02 RN-02 y RN-04; HU-03; Req §14; vision.md §5 y §8
-- **Cita exacta:** HU-02 RN-02: cuatro documentos obligatorios (identidad, foto, título, tarjeta) y RN-04 «La aprobación… debe realizarse manualmente». vision §5: «una foto en vivo se contrasta contra el documento de identidad» (máx. 2 intentos). vision §8: mitigación «biometría/prueba de vida y contraste… contra el ReTHUS antes de aprobar».
-- **Descripción del hallazgo:** La visión identifica como riesgo la suplantación de un enfermero en el domicilio y fija su mitigación, pero HU-02/03 verifican solo imágenes autoportadas y Req §14 solo prevé el PIN. Los antecedentes disciplinarios siguen como documento opcional (HU-02). La auditoría previa propone 3 intentos biométricos (CA-E-06) frente a los 2 de la visión.
-- **Aspecto a mejorar:** La verificación de identidad y de credenciales no está alineada con el riesgo y la mitigación declarados en la visión.
-
-#### INC-05 — Datos sensibles recogidos sin autorización ni consentimiento
-
-- **Severidad:** Crítica
-- **Tipo:** Supuestos contradictorios
-- **Naturaleza:** Hecho
-- **Ubicación:** HU-01 (criterios y flujo); Req §4.2 y §21; vision.md §5 y §7
-- **Cita exacta:** HU-01: «Los datos médicos propios pueden almacenarse durante el registro.» (ningún paso de autorización) · vision §7: el tratamiento de salud «requiere base legal, consentimiento y aviso de privacidad antes de recolectar datos médicos»; biometría con «consentimiento explícito y separado».
-- **Descripción del hallazgo:** El flujo normativo recoge datos de salud (y, según la visión, biométricos y de ubicación) sin autorización, aviso ni finalidad, y sin contemplar al tercero titular (HU01-RN-05). Req §21 se titula «Privacidad» pero solo trata control de acceso. La visión declara la obligación y las HU la ignoran.
-- **Aspecto a mejorar:** Los flujos que recogen datos de salud, biométricos y de ubicación no incorporan autorización, aviso ni consentimiento; el tercero titular no está contemplado.
+- **Ubicación:** Requirements-Context §8.2, §10.2 (nota INC-03) y §27 reglas 3–5; vision.md §5
+- **Cita exacta:** §10.2: «El primer enfermero cuya confirmación sea procesada correctamente obtendrá la asignación.» · nota INC-03: reconciliar ambos modelos «quedan pendientes de diseño» · vision §5: «el enfermero puede contraofertar… Requiere una historia de negociación de precio antes de la asignación» y «dirigir/invitar la solicitud a uno específico».
+- **Descripción del hallazgo:** Vision.md (aprobado) define tres modelos de asignación que conviven en el MVP: feed atómico por orden de llegada, negociación de precio previa y invitación dirigida. Requirements-Context mantiene solo Publicado → Asignado → En curso → Finalizado / Cancelado y reglas críticas (§27, 3–5) que exigen que gane el primero en confirmar. Ofertado, invitado o contraofertado no existen en esa máquina y cambian qué significa «atómico» y quién gana. La propia nota INC-03 lo reconoce sin resolverlo. Es una contradicción entre documentos existentes, no una HU ausente.
 
 ### Severidad Alta
 
-#### INC-06 — Enfermero y superadministrador sin definición de credenciales
+#### INC-02 — Objetivos vs. alcance
 
 - **Severidad:** Alta
-- **Tipo:** Dependencias sin precedente
+- **Naturaleza:** Hecho
+- **Ubicación:** vision.md §5 (precio híbrido, tarifa sugerida por tipo de servicio); HU-04 «Fuera de alcance»; domain-model (TipoServicio, Configuracion); Requirements-Context §9 y §17.1
+- **Cita exacta:** vision §5: «el superadministrador define una tarifa sugerida por tipo de servicio» · HU-04: «Definición de tarifas.» y «Cálculo del precio del servicio.» fuera de alcance · domain-model: TipoServicio sin atributo de tarifa; Configuracion solo con minutos de ventanas · Req §17.1: «El sistema calcula el valor adicional correspondiente.»
+- **Descripción del hallazgo:** El MVP define que el superadministrador fija una tarifa por tipo de servicio, pero HU-04 (la historia que gestiona los tipos) la excluye y ni TipoServicio ni Configuracion la modelan. Req §17.1 calcula un valor adicional sin base de cálculo definida, y con pasarela en el MVP una extensión implica un cobro adicional que ningún documento contempla. El mecanismo concreto de negociación y pago sí es trabajo de HU futuras (GAP-12); aquí se señala solo que las piezas existentes no encajan con lo definido.
+
+#### INC-04 — Objetivos vs. alcance
+
+- **Severidad:** Alta
+- **Naturaleza:** Hecho
+- **Ubicación:** HU-02 RN-02 y RN-04; HU-03; Req §14; vision.md §5, §7 y §8
+- **Cita exacta:** HU-02 RN-02: cuatro documentos obligatorios (identidad, foto, título, tarjeta) y RN-04 «La aprobación… debe realizarse manualmente». vision §5: «una foto en vivo se contrasta contra el documento de identidad» (máx. 2 intentos) y verificación al iniciar el servicio. vision §7: «Proveedor de verificación facial y su costo aún no definidos».
+- **Descripción del hallazgo:** La visión aprobada incluye verificación facial en el registro y al iniciar el servicio, pero HU-02 y HU-03 —que siguen «Definida para MVP»— verifican solo imágenes autoportadas y Req §14 solo prevé el PIN. La visión identifica la suplantación como riesgo principal y fija esa mitigación; las HU existentes la ignoran y quedaron desactualizadas frente al MVP.
+
+#### INC-05 — Supuestos contradictorios
+
+- **Severidad:** Alta
+- **Naturaleza:** Hecho
+- **Ubicación:** HU-01 (RN-08, criterios); HU-02; Req §4.2 y §21; vision.md §5 y §7
+- **Cita exacta:** Resuelto solo para datos médicos propios (HU01-RN-08). Sigue: Req §4.2: «junto con el consentimiento correspondiente del titular o de quien lo represente» (sin mecanismo) · vision §7: biometría con «consentimiento explícito y separado» (0 menciones en HU-02) · Req §21: «Privacidad» solo trata control de acceso.
+- **Descripción del hallazgo:** El MVP y Req §4.2 exigen consentimiento del tercero titular, y la visión exige consentimiento biométrico «explícito y separado», pero las HU existentes no lo recogen: HU-01 solo cubre datos médicos propios, sin mecanismo de representación, y HU-02 no tiene aviso ni autorización para los datos, documentos y foto del enfermero. Falta también qué registra el consentimiento (versión, fecha, revocación). Req §21 sigue tratando solo control de acceso.
+
+#### INC-06 — Dependencias sin precedente
+
+- **Severidad:** Alta
 - **Naturaleza:** Hecho
 - **Ubicación:** HU-02 (flujo, pasos 1–14); HU-01 «Fuera de alcance»; Req §4.3–4.4 y §22
 - **Cita exacta:** HU-02 no contiene contraseña ni verificación de correo. HU-01 excluye «Registro y aprobación profesional de enfermeros.» Req §4.3 y §4.4 están bajo «4. Usuario / Cliente».
-- **Descripción del hallazgo:** Ninguna historia define cómo el enfermero crea credenciales, verifica su correo o inicia sesión, ni cómo se crea y protege (MFA: 0 menciones) la cuenta del superadministrador que aprueba perfiles con datos sensibles. HU-03 depende de ambas.
-- **Aspecto a mejorar:** No hay definición de credenciales, verificación de correo ni protección de cuenta para enfermeros y superadministrador.
+- **Descripción del hallazgo:** HU-02 no define contraseña, verificación de correo ni inicio de sesión del enfermero, y Req §4.3 y §4.4 están bajo «Usuario / Cliente». La cuenta del superadministrador que aprueba perfiles con datos sensibles tampoco tiene definición de creación ni protección (MFA: 0 menciones). HU-03 depende de ambas. Es un vacío dentro de una HU ya declarada «Definida para MVP».
 
-#### INC-07 — Atención hospitalaria dentro y fuera del MVP
-
-- **Severidad:** Alta
-- **Tipo:** Objetivos vs. alcance
-- **Naturaleza:** Hecho
-- **Ubicación:** Requirements-Context §7; HU-04 RN-01 y criterios; vision.md §5
-- **Cita exacta:** Req §7: «Para el MVP se definirán… 4. Atención hospitalaria.» · vision §5 «Explícitamente fuera del MVP»: «Atención hospitalaria dentro de una IPS mediante convenio formal».
-- **Descripción del hallazgo:** El catálogo sembrado del MVP incluye un tipo que la visión excluye del MVP. HU-04 exige que el sistema «cuenta con los cuatro tipos», así que se ofrecería a los usuarios algo que el negocio dice que no presta.
-- **Aspecto a mejorar:** El estado del tipo «Atención hospitalaria» en el MVP es contradictorio entre documentos.
-
-#### INC-08 — Restricción de radio de servicio contradicha por la visión
+#### INC-09 — Metas incompatibles
 
 - **Severidad:** Alta
-- **Tipo:** Supuestos contradictorios
-- **Naturaleza:** Hecho
-- **Ubicación:** Req §5.1 y §9; HU-02 RN-05; glossary.md; vision.md §5
-- **Cita exacta:** Req §5.1: «No se almacenará ni solicitará un radio de servicio. Solamente se almacenará la zona de residencia.» · Req §9: «Distancia aproximada.» · vision §5: «Geolocalización real del enfermero (no solo zona de residencia como texto libre)».
-- **Descripción del hallazgo:** Para mostrar distancia hace falta una referencia geográfica del enfermero; la restricción vigente lo impide y la visión la deroga sin actualizar Req, HU-02 ni el glosario. Además la zona no tiene tipo de dato (texto libre, código DANE o coordenadas).
-- **Aspecto a mejorar:** La restricción sobre zona/radio de servicio está vigente en unos documentos y derogada en otro; el tipo de dato de la zona no está definido.
-
-#### INC-09 — Origen y texto libre expuestos antes de la aceptación
-
-- **Severidad:** Alta
-- **Tipo:** Metas incompatibles
 - **Naturaleza:** Hecho + inferencia
-- **Ubicación:** Requirements-Context §9 y §12.1; vision.md (pregunta abierta 5)
-- **Cita exacta:** §9: «Punto de origen.», «Descripción general del servicio.» y «Los datos personales adicionales y los datos médicos sensibles del paciente no estarán disponibles en esta etapa.» · vision: «¿Qué nivel de precisión de geolocalización se requiere (ciudad/barrio vs. coordenadas exactas)…?»
-- **Descripción del hallazgo:** La lista previa a la aceptación muestra el origen (el domicilio de una persona vulnerable) y un texto libre a todos los enfermeros aprobados, sin precisión definida ni filtro. Una dirección exacta o una descripción como «paciente con demencia» filtra identidad o salud antes de la asignación, contradiciendo la regla que la misma sección enuncia.
-- **Aspecto a mejorar:** La precisión del origen y el contenido del texto libre visibles antes de la aceptación no están definidos; hay riesgo de exposición de identidad o salud.
+- **Ubicación:** Requirements-Context §9 (nota INC-09) y §12.1; vision.md (pregunta abierta 5)
+- **Cita exacta:** §9: «Punto de origen.», «Descripción general del servicio.» y «Los datos personales adicionales y los datos médicos sensibles del paciente no estarán disponibles en esta etapa.» · nota INC-09: la precisión «queda sin definir de forma deliberada».
+- **Descripción del hallazgo:** El origen (domicilio de una persona vulnerable) y un texto libre se muestran a todos los enfermeros aprobados sin precisión ni filtro definidos. Una dirección exacta o «paciente con demencia» filtra identidad o salud antes de la asignación, contra la regla que la misma sección enuncia. Ahora es una omisión declarada, no resuelta.
 
-#### INC-10 — Bloqueo total por calificación pendiente
+#### INC-28 — Metas incompatibles
 
 - **Severidad:** Alta
-- **Tipo:** Metas incompatibles
 - **Naturaleza:** Hecho + inferencia
-- **Ubicación:** Requirements-Context §19.1, RN-17 (§27.1), §14.2 y §17; vision.md §3
-- **Cita exacta:** §19.1: «No podrá realizar otras acciones dentro de la aplicación.» · vision §3: «ambos lados del marketplace deben tener fricción mínima para lograr liquidez».
-- **Descripción del hallazgo:** El bloqueo total por calificación pendiente impediría consultar el PIN, aprobar una extensión de un servicio en curso, cancelar o pedir ayuda mientras el usuario debe calificar otro servicio. Contradice el objetivo de fricción mínima y las reglas de PIN y extensión.
-- **Aspecto a mejorar:** El alcance del bloqueo por calificación pendiente es amplio respecto de otras reglas y del objetivo de fricción mínima.
+- **Ubicación:** Requirements-Context §14.1, §14.2, §14.3 y RN-18; glossary «PIN»
+- **Cita exacta:** §14.1: «El PIN no deberá almacenarse en texto plano en ningún momento.» (solo hash) · §14.2: «El usuario podrá visualizar el PIN únicamente durante la ventana de tiempo configurada».
+- **Descripción del hallazgo:** Un hash es irreversible: si solo se guarda el hash, el sistema no puede mostrar el PIN al usuario. Cumplir §14.2 exige guardarlo reversible (cifrado o en claro), lo que contradice §14.1 y RN-18, o derivarlo de forma recomputable (p. ej. HMAC con un secreto), que el texto no menciona. Además, un hash simple sobre solo 10^6 valores no protege ante una fuga: reconstruí la tabla completa de SHA-256 de los 1.000.000 de PIN en 2,9 s (medición propia, SUP-14). El control real son la ventana y los 5 intentos.
 
-#### INC-11 — Bloqueo de PIN sin mecanismo de desbloqueo
-
-- **Severidad:** Alta
-- **Tipo:** Dependencias sin precedente
-- **Naturaleza:** Hecho
-- **Ubicación:** Requirements-Context §15 y §29; business-rules-index.md (Vacíos)
-- **Cita exacta:** §15: «El mecanismo exacto para desbloquear el servicio después de alcanzar el límite de intentos queda pendiente de definición.»
-- **Descripción del hallazgo:** Tras 5 intentos fallidos el servicio queda bloqueado sin salida, con el paciente esperando, y ninguna HU (ni de la lista de §29) lo asume. La visión sí define un fallback para la verificación facial pero no para el PIN.
-- **Aspecto a mejorar:** El mecanismo de desbloqueo tras el límite de intentos de PIN no está definido ni tiene historia asignada.
-
-#### INC-12 — Cancelación sin reglas ni historia
+#### INC-29 — Dependencias sin precedente
 
 - **Severidad:** Alta
-- **Tipo:** Dependencias sin precedente
-- **Naturaleza:** Hecho
-- **Ubicación:** Requirements-Context §8.2, §16, §26.1 y §29
-- **Cita exacta:** §26.1: «Publicado / Asignado / En curso → Cancelación válida → Cancelado… Las condiciones específicas de cancelación deberán definirse en la historia de usuario correspondiente.» · §16: «solamente podrá ser finalizado cuando se haya cumplido como mínimo la duración contratada.»
-- **Descripción del hallazgo:** La historia de cancelación no existe ni está en la lista de pendientes. Se permite pasar de «En curso» a «Cancelado» sin reglas, mientras §16 solo prevé finalizar tras la duración contratada: no hay terminación anticipada, no-show ni expiración de solicitudes sin aceptar.
-- **Aspecto a mejorar:** Las reglas de cancelación, terminación anticipada, no-show y expiración no están definidas; la historia no existe.
-
-#### INC-13 — SLA de revisión sin capacidad, reloj ni métricas
-
-- **Severidad:** Alta
-- **Tipo:** Alcance vs. recursos
 - **Naturaleza:** Hecho + inferencia
-- **Ubicación:** HU-03 RN-09; Req §22; vision.md §8
-- **Cita exacta:** HU-03 RN-09: «El objetivo de revisión… será de 24 a 36 horas.» · vision §8: «El SLA de revisión se degrada rápidamente al crecer el volumen», mitigación «más de un revisor + métricas de cola desde el diseño».
-- **Descripción del hallazgo:** La visión reconoce el cuello de botella y su mitigación, pero HU-03 mantiene un SLA sin revisores, sin reloj (¿se reinicia al corregir?) y sin métricas. Con las premisas de la auditoría previa (no medidas) el SLA se rompe con pocas decenas de registros al día; ver cálculo en Autoverificación.
-- **Aspecto a mejorar:** El SLA de revisión no tiene capacidad, reloj ni métricas definidos, y la mitigación reconocida en la visión no está incorporada.
-
-#### INC-14 — Ubicación en tiempo real y contacto de emergencia sin modelo
-
-- **Severidad:** Alta
-- **Tipo:** Modelo de datos
-- **Naturaleza:** Hecho
-- **Ubicación:** vision.md §5 y preguntas abiertas 8–10; domain-model.md §1; HU-01
-- **Cita exacta:** vision §5: «el usuario/paciente debe tener su ubicación activa y compartida en tiempo real con un contacto de emergencia designado».
-- **Descripción del hallazgo:** Ubicación en tiempo real y contacto de emergencia están en el MVP, pero el modelo de dominio no tiene entidades para ellos, HU-01 no captura contacto de emergencia y las preguntas de la visión (obligatoriedad, paciente sin GPS, cortes de conexión) siguen abiertas. Es dato sensible continuo de una persona vulnerable.
-- **Aspecto a mejorar:** Estas funcionalidades no tienen modelo de datos, historia ni respuesta a las preguntas abiertas de la visión.
+- **Ubicación:** Requirements-Context §5.2 y §6.1; HU-03 (estados y flujos); personas.md (Enfermero, Superadministrador)
+- **Cita exacta:** §6.1: «El superadministrador podrá: Aprobar. Solicitar corrección.» · §5.2: «Rechazado» y «Corrección solicitada» se unificaron (INC-16) · personas.md: «No existe estado ni flujo para retirar la aprobación a un enfermero ya habilitado».
+- **Descripción del hallazgo:** Al unificar los estados no quedó ninguna acción terminal: ante un documento falsificado o una tarjeta profesional inexistente, lo único posible es «Solicitar corrección», y el perfil puede reenviarse sin límite de ciclos ni bloqueo del documento. Tampoco existe suspensión o revocación de un perfil ya aprobado. La visión declara la suplantación de enfermeros como riesgo principal.
 
 ### Severidad Media
 
-#### INC-15 — Canal y momento de coordinación sin definir
+#### INC-27 — Consistencia documental
 
 - **Severidad:** Media
-- **Tipo:** Dependencias sin precedente
+- **Naturaleza:** Hecho
+- **Ubicación:** vision.md (front-matter «status: aprobado», nota INC-01, §7 y §9)
+- **Cita exacta:** Nota: «Las preguntas abiertas de la sección 9 siguen sin resolver y no quedan cubiertas por esta aprobación de alcance» · §7: la clasificación legal es «restricción activa, no resuelta» · §9: 10 preguntas abiertas (pasarela y custodia, negociación, proveedor biométrico, geolocalización, contacto de emergencia, corte de conexión, umbrales…).
+- **Descripción del hallazgo:** El documento está «aprobado» y a la vez declara que las condiciones que determinan si su alcance es viable (clasificación legal, proveedor y presupuesto biométrico, pasarela, precisión de geolocalización) siguen abiertas. La aprobación no dice qué ocurre con el alcance si alguna se resuelve en contra. No se cuentan aquí las HU pendientes.
+
+#### INC-11 — Dependencias sin precedente
+
+- **Severidad:** Media
+- **Naturaleza:** Hecho
+- **Ubicación:** Requirements-Context §2, §15 y §19.1
+- **Cita exacta:** §15: «notificar o generar el evento correspondiente para soporte» · §19.1: «solicitar ayuda/soporte» · §2: «Los roles serán fijos» (Usuario, Enfermero, Superadministrador).
+- **Descripción del hallazgo:** Dos reglas vigentes dependen de un «soporte» que no existe entre los tres roles fijos ni en las funciones del superadministrador (§22). La regla se puede escribir, pero no cumplir: no hay a quién dirigirla. El mecanismo de desbloqueo del PIN es trabajo pendiente (GAP-10) y no se cuenta aquí.
+
+#### INC-12 — Dependencias sin precedente
+
+- **Severidad:** Media
+- **Naturaleza:** Hecho
+- **Ubicación:** Requirements-Context §16 y §26.1
+- **Cita exacta:** §26.1: «Publicado / Asignado / En curso → Cancelación válida → Cancelado» · §16: «solamente podrá ser finalizado cuando se haya cumplido como mínimo la duración contratada.»
+- **Descripción del hallazgo:** El texto vigente permite pasar de «En curso» a «Cancelado», mientras §16 solo prevé cerrar un servicio en curso finalizándolo tras la duración contratada; no dice qué ocurre con el cobro ni con la calificación obligatoria (§19) si se cancela en curso. Las condiciones de cancelación en sí son una HU pendiente y no se cuentan.
+
+#### INC-13 — Alcance vs. recursos
+
+- **Severidad:** Media
+- **Naturaleza:** Hecho + inferencia
+- **Ubicación:** HU-03 RN-09; Req §22; vision.md §8
+- **Cita exacta:** HU-03 RN-09: «El objetivo de revisión… será de 24 a 36 horas.» · vision §8: «El SLA de revisión se degrada rápidamente al crecer el volumen», mitigación «más de un revisor + métricas de cola desde el diseño».
+- **Descripción del hallazgo:** La visión reconoce el cuello de botella de la aprobación manual y su mitigación («más de un revisor + métricas de cola desde el diseño»), pero HU-03 mantiene un SLA de 24–36 h sin revisores, sin reloj (¿se reinicia al corregir?) y sin métricas. Además, la verificación facial y el contraste externo que exige la visión (INC-04) aumentan el trabajo por perfil.
+
+#### INC-14 — Modelo de datos
+
+- **Severidad:** Media
+- **Naturaleza:** Hecho
+- **Ubicación:** domain-model.md §1 y §4; vision.md §5
+- **Cita exacta:** domain-model §4: «no existe ContactoEmergencia, ni un atributo de geolocalización en Enfermero, ni un estado de verificación biométrica» · vision §5: directorio con «servicios prestados, distancia, costo promedio por hora» y ubicación en tiempo real con contacto de emergencia.
+- **Descripción del hallazgo:** El modelo de dominio no cubre entidades ni atributos que el MVP define (ubicación, contacto de emergencia, verificación biométrica, costo promedio por hora, servicios prestados). El modelo reconoce el vacío; la incongruencia es que el MVP se declara aprobado y su modelo de negocio no lo representa. Las HU respectivas son trabajo pendiente y no se cuentan.
+
+#### INC-10 — Consistencia documental
+
+- **Severidad:** Media
+- **Naturaleza:** Hecho
+- **Ubicación:** Requirements-Context §19.1 vs. §27 (regla 16) y §27.1 RN-17; business-rules-index CTX-RN-17; glossary «Calificación obligatoria»
+- **Cita exacta:** §19.1 (corregido): «No podrá crear nuevas solicitudes de servicio ni aceptar nuevos servicios… Sí podrá continuar con servicios ya en curso» · §27 regla 16: «Una calificación pendiente bloquea el resto de funcionalidades de la aplicación hasta completarla.» · RN-17: «impedirá realizar otras acciones en la aplicación hasta completarla.»
+- **Descripción del hallazgo:** CN-17 acotó el bloqueo solo en §19.1. La lista «Reglas críticas del MVP» (§27), RN-17, CTX-RN-17 del índice y el glosario conservan el bloqueo total: dos reglas normativas contradictorias sobre el mismo evento. Se rebajó a Media porque la intención (CN-17) es clara y la corrección es editorial. §19.1 además presupone una función de «ayuda/soporte» que no existe (INC-11).
+
+#### INC-15 — Dependencias sin precedente
+
+- **Severidad:** Media
 - **Naturaleza:** Hecho + inferencia
 - **Ubicación:** Requirements-Context §11, §12.2 y §29 (HU-17); vision.md §5
 - **Cita exacta:** §11: «Se habilitará la información necesaria para coordinar el servicio.» · §12.2: «Los datos de contacto se habilitarán de acuerdo con las mismas reglas de tiempo» · vision: chat fuera del MVP «más allá de lo estrictamente necesario para coordinar».
-- **Descripción del hallazgo:** Con la ventana por defecto de 180 min, un servicio aceptado con días de antelación no permite contactar al paciente hasta 3 h antes, y no está definido qué canal cubre «lo estrictamente necesario». Tampoco se define el caso de un servicio que se acepta con menos de 180 min de margen ni el «servicio no programado».
-- **Aspecto a mejorar:** El canal de coordinación previo al servicio y el tratamiento de servicios con margen menor a la ventana no están definidos.
+- **Descripción del hallazgo:** Con la ventana por defecto de 180 min, un servicio aceptado con días de antelación no permite contactar al paciente hasta 3 h antes, mientras §11 promete habilitar «los mecanismos de comunicación» y la visión limita el chat a lo «estrictamente necesario para coordinar». No se define qué canal cubre ese mínimo ni el servicio aceptado con menos de 180 min de margen.
 
-#### INC-16 — Rechazado y Corrección solicitada con comportamiento idéntico
-
-- **Severidad:** Media
-- **Tipo:** Terminología y definiciones
-- **Naturaleza:** Hecho
-- **Ubicación:** Requirements-Context §5.2 y §6.1; HU-03 (flujos de rechazo y corrección, RN-05)
-- **Cita exacta:** §5.2: «Rechazado y Corrección solicitada son estados independientes: el primero indica que la información no fue aprobada… el segundo que se requieren ajustes puntuales». HU-03: ambos flujos terminan igual (corrige, solicita nueva revisión, vuelve a «Pendiente de revisión»). §6.1: «Rechazar / solicitar corrección» como una sola acción.
-- **Descripción del hallazgo:** Dos estados con significados distintos y comportamiento idéntico: la distinción no tiene efecto. No hay estado terminal de rechazo ni apelación, y solo el rechazo exige comentario por regla (RN-05).
-- **Aspecto a mejorar:** Los dos estados se definen distintos pero se comportan igual; falta estado terminal o apelación.
-
-#### INC-17 — Métricas de éxito sin umbral ni medición de confianza
+#### INC-17 — Métricas de éxito
 
 - **Severidad:** Media
-- **Tipo:** Métricas de éxito
 - **Naturaleza:** Hecho
 - **Ubicación:** vision.md §2 y §6; Req §8.1 y §26
 - **Cita exacta:** vision §6: «% de solicitudes PUBLICADO que llegan a ASIGNADO antes de expirar» · todos los objetivos: «A definir». vision §2: conecta «de forma confiable».
-- **Descripción del hallazgo:** Una métrica depende del estado «expirar», que no existe en los cinco estados del servicio. Además ninguna de las cinco métricas mide la promesa central (confianza y seguridad: incidentes, suplantaciones detectadas, cancelaciones) y ninguna tiene umbral.
-- **Aspecto a mejorar:** Las métricas no tienen umbral, no miden confianza/seguridad y una depende de un estado inexistente.
+- **Descripción del hallazgo:** Una métrica depende del estado «expirar», que no existe entre los cinco estados del servicio. Ninguna de las cinco métricas mide la promesa central (confianza y seguridad: incidentes, suplantaciones detectadas, cancelaciones) y ninguna tiene umbral.
 
-#### INC-18 — Usuario y paciente usados como sinónimos frente al PIN
+#### INC-30 — Consistencia documental
 
 - **Severidad:** Media
-- **Tipo:** Terminología y definiciones
+- **Naturaleza:** Hecho
+- **Ubicación:** Requirements-Context §4.5; HU-01 (Recordatorio de verificación y RN-09)
+- **Cita exacta:** §4.5: «Si el usuario no verifica el correo dentro de las primeras 24 horas, el sistema deberá enviar un recordatorio.» · RN-09: «vigencia (TTL) de 15 minutos desde su generación… un máximo de 3 reenvíos por hora».
+- **Descripción del hallazgo:** A las 24 h el código original expiró hace 23 h 45 min, así que el recordatorio no puede llevar un código válido. No se define si el recordatorio incluye un código nuevo (¿cuenta contra los 3 reenvíos por hora?), un enlace o solo invita a pedir otro, ni qué pasa si se agotan los reenvíos. CN-20 introdujo el TTL sin revisar el recordatorio.
+
+#### INC-31 — Terminología y definiciones
+
+- **Severidad:** Media
 - **Naturaleza:** Hecho + inferencia
-- **Ubicación:** Requirements-Context §14.3 y §4.2; vision.md §5; HU01-RN-05
-- **Cita exacta:** §14.3: «El usuario consulta el PIN… El usuario proporciona el PIN al enfermero.» · vision §5: «el PIN sigue validando la presencia del paciente/usuario».
-- **Descripción del hallazgo:** «Usuario» y «paciente» se usan como sinónimos, pero cuando el servicio es para un tercero son personas distintas: el PIN lo ve quien contrata, que puede estar ausente. Un PIN dictable por teléfono no prueba presencia, que es lo que la visión le atribuye.
-- **Aspecto a mejorar:** El destinatario del PIN en servicios para terceros y el valor probatorio del PIN no están definidos.
+- **Ubicación:** Requirements-Context §14.1 (punto 5), §27 (regla 9) y RN-08
+- **Cita exacta:** §14.1: «Deberá ser único por servicio.» · §27 regla 9: «El PIN debe ser único por servicio.» · RN-08: «Cada servicio tendrá su propio PIN.»
+- **Descripción del hallazgo:** «Único por servicio» admite dos lecturas: (a) cada servicio tiene su PIN, aunque el valor se repita entre servicios; (b) ningún valor se repite entre servicios. La lectura (b) se agota con 10^6 valores y colisiona pronto: con 1.000 servicios activos, la probabilidad de que dos coincidan es 39,3 % (cálculo propio). Además, con hash salado la unicidad no se puede comprobar (INC-28).
 
-#### INC-19 — Diagrama de dominio contradice la cardinalidad 1:1
-
-- **Severidad:** Media
-- **Tipo:** Modelo de datos
-- **Naturaleza:** Hecho
-- **Ubicación:** specs/context/domain-model.md §3 y §4
-- **Cita exacta:** §4: «una misma Persona no puede registrarse bajo más de un Rol». Diagrama: «PERSONA ||--o{ ROL : asociado a (1:1, resuelto 2026-09-22)» y tres especializaciones opcionales «||--o|».
-- **Descripción del hallazgo:** El diagrama expresa que una persona tiene cero o muchos roles y permite tener a la vez perfil de Usuario y de Enfermero, contra la decisión 1:1 (CN-07) que el propio texto cita.
-- **Aspecto a mejorar:** El diagrama del modelo de dominio no refleja la cardinalidad 1:1 decidida.
-
-#### INC-20 — Regla inexistente atribuida a la asignación única
+#### INC-33 — Metas incompatibles
 
 - **Severidad:** Media
-- **Tipo:** Modelo de datos
-- **Naturaleza:** Hecho
-- **Ubicación:** specs/context/domain-model.md §2 (Enfermero → Servicio)
-- **Cita exacta:** «…un enfermero puede aceptar múltiples servicios… pero solo uno activo a la vez por regla de asignación única.»
-- **Descripción del hallazgo:** CTX-RN-01 dice que un servicio tiene un solo enfermero, no que un enfermero tenga un solo servicio activo. La regla atribuida no existe y, al mismo tiempo, nada regula que un enfermero acepte servicios con horarios solapados.
-- **Aspecto a mejorar:** La regla atribuida no existe en la fuente y el solapamiento de servicios del enfermero no tiene regla.
-
-#### INC-21 — Experiencia profesional obligatoria en el requisito y opcional en la historia
-
-- **Severidad:** Media
-- **Tipo:** Consistencia documental
-- **Naturaleza:** Hecho
-- **Ubicación:** Requirements-Context §5.1 vs. HU-02 («Experiencia profesional», criterios de aceptación)
-- **Cita exacta:** Req §5.1: «El registro deberá incluir información personal y profesional» (años, experiencia, lugares…). HU-02: «El enfermero podrá registrar: Años de experiencia. Experiencia profesional…»; ningún criterio de aceptación la exige.
-- **Descripción del hallazgo:** El requisito dice «deberá incluir» y la historia lo hace opcional. Lo que el revisor debe poder evaluar no está definido.
-- **Aspecto a mejorar:** La obligatoriedad de los datos de experiencia difiere entre el requisito y la historia.
-
-#### INC-22 — Auditoría previa desactualizada y con errores de cálculo
-
-- **Severidad:** Media
-- **Tipo:** Cifras
-- **Naturaleza:** Hecho
-- **Ubicación:** Auditoria-Especificacion.md §1.2, §3.4.5, §4.4.1, §6.2.1, Anexo A.2
-- **Cita exacta:** «La cadena a1!… cumple los tres requisitos literales y el backend la aceptaría.» · tabla M/M/1: «15 | 0,50 | 1,9 h».
-- **Descripción del hallazgo:** La auditoría previa (22-sep) describe como abiertos defectos ya corregidos (contraseña sin longitud: HU01-RN-06 exige 12–64; PIN en claro: CTX-RN-18; §9/§12.1 y numeración duplicada; lista de datos sensibles vacía). Contiene errores de cálculo: con μ=30/día y λ=15, W=24/(30−15)=1,6 h, no 1,9 h; y «≈7/día» mezcla multitarea con reprocesos (sin ellos son 9/día). La cifra «14 veces pendiente de definición» no se reproduce: hay 3 coincidencias exactas en Requirements+HU. Sus recomendaciones N:M y «probablemente no CRUD» fueron decididas al revés (CN-07, CN-05) sin dejar razón registrada.
-- **Aspecto a mejorar:** El documento de auditoría previa está desactualizado, contiene errores de cálculo y no registra la razón de las recomendaciones descartadas.
-
-#### INC-23 — Flujo de código expirado sin TTL definido
-
-- **Severidad:** Media
-- **Tipo:** Dependencias sin precedente
-- **Naturaleza:** Hecho
-- **Ubicación:** HU-01 (Flujos alternativos: código incorrecto y código expirado)
-- **Cita exacta:** «Las reglas de expiración y cantidad máxima de intentos quedan pendientes de definición.» y, a continuación, «Si el código ha expirado: El sistema deberá informar al usuario.»
-- **Descripción del hallazgo:** El flujo de código expirado presupone un tiempo de vida que la misma historia declara no definido. Sin TTL ni límite de intentos no se puede escribir el criterio de aceptación ni la prueba de seguridad.
-- **Aspecto a mejorar:** El flujo depende de un TTL declarado como no definido; los límites de intentos y reenvíos tampoco están definidos.
+- **Naturaleza:** Hecho + inferencia
+- **Ubicación:** vision.md §3, §4, §5 y §9 (pregunta 9)
+- **Cita exacta:** §5: «el sistema traslada la confirmación al usuario/paciente, quien indica manualmente si la persona presente coincide con la foto de perfil» · §4: «la seguridad de poder confirmar en el momento que quien llega a su domicilio es realmente el enfermero asignado» · §9: «¿Qué pasa si el paciente… no puede compartir su ubicación (ej. persona sin smartphone, adulto mayor…, paciente inconsciente)?»
+- **Descripción del hallazgo:** Si el rostro no valida, la decisión pasa a quien la visión reconoce que puede no estar en condiciones de tomarla (adulto mayor sin manejo de tecnología, paciente inconsciente, o un tercero que contrató y no está presente). Con ese fallback, la mitigación de suplantación depende de la misma persona vulnerable a la que protege.
 
 ### Severidad Baja
 
-#### INC-24 — Foto y zona de residencia ubicadas en entidades distintas
+#### INC-32 — Consistencia documental
 
 - **Severidad:** Baja
-- **Tipo:** Modelo de datos
 - **Naturaleza:** Hecho
-- **Ubicación:** HU-02 «Información base de Persona» vs. Req §3.1 y domain-model.md §1
-- **Cita exacta:** HU-02 ubica «Foto» y «Zona de residencia» en Persona; Req §3.1 y domain-model las ubican en Enfermero.
-- **Descripción del hallazgo:** Dónde vive cada dato cambia el modelo de datos: Persona se comparte entre roles y el dato es solo del enfermero.
-- **Aspecto a mejorar:** La ubicación conceptual de «Foto» y «Zona de residencia» difiere entre documentos.
+- **Ubicación:** personas.md (Superadministrador); HU-03 RN-08; glossary «Radio de servicio»; domain-model §1 y §3
+- **Cita exacta:** personas.md: «Gestionar el catálogo de tipos de servicio (HU-04): consultar y cambiar estado activo/inactivo» (HU04-RN-09 dice CRUD) · HU-03 RN-08: «aprobación, rechazo y solicitud de corrección» (el rechazo ya no existe) · glossary: «solo su zona de residencia» (la geolocalización real entró al MVP) · domain-model: «foto» en Persona y en Documento (tipo «foto»).
+- **Descripción del hallazgo:** Cuatro restos de decisiones anteriores en documentos derivados y una duplicación de modelo (foto modelada como atributo de Persona y como Documento), más un diagrama cuyas especializaciones opcionales no imponen el rol único (CN-07). Ninguno cambia el alcance, pero un equipo puede construir sobre el texto obsoleto.
 
-#### INC-25 — Ventana del PIN sin valor por defecto
+#### INC-34 — Consistencia documental
 
 - **Severidad:** Baja
-- **Tipo:** Consistencia documental
-- **Naturaleza:** Hecho
-- **Ubicación:** Requirements-Context §12 y §14.2; domain-model.md (Configuracion)
-- **Cita exacta:** §12: «El valor por defecto es de 180 minutos» (datos sensibles) · §14.2: «Configuración: 5 minutos antes» (solo ejemplo).
-- **Descripción del hallazgo:** La ventana de datos sensibles tiene valor por defecto y la del PIN no. Si nadie la configura, el comportamiento es indefinido.
-- **Aspecto a mejorar:** La ventana del PIN no tiene valor por defecto, a diferencia de la ventana de datos sensibles.
-
-#### INC-26 — Registro de cambios no coincide con el documento
-
-- **Severidad:** Baja
-- **Tipo:** Consistencia documental
-- **Naturaleza:** Hecho
-- **Ubicación:** business-rules-index.md (CN-01) vs. Requirements-Context §12.1
-- **Cita exacta:** Índice: «§12.1 reescrita como referencia a §9; eliminada la lista duplicada.» El archivo aún contiene bajo §12.1 la lista completa de 11 elementos.
-- **Descripción del hallazgo:** El registro de cambios afirma algo que el documento no cumple. Hoy las dos listas coinciden, pero siguen siendo dos fuentes que pueden divergir.
-- **Aspecto a mejorar:** El registro de cambios declara una corrección que el documento fuente no refleja.
+- **Naturaleza:** Hecho + inferencia
+- **Ubicación:** vision.md §7 y §8; HU-04 (descripciones de tipos de servicio); vision.md §5 (tarifa sugerida)
+- **Cita exacta:** vision §7: «Validar la clasificación legal del negocio (intermediario tecnológico vs. prestador de servicios de salud)… Se registra como restricción activa, no resuelta.» · vision §8: «Reclasificación legal como prestador de salud (no intermediario)» · HU-04: «Servicio de atención de enfermería realizado en el domicilio».
+- **Descripción del hallazgo:** La decisión de operar como intermediario no está propagada: vision.md sigue tratando la clasificación como abierta. Además, algunas piezas del propio diseño pueden leerse como rasgos de prestador (la plataforma define el catálogo clínico, fija tarifas sugeridas, verifica credenciales y controla inicio y fin del servicio). Es una inferencia para revisión jurídica, no una conclusión legal.
 
 ## 4. Brechas de información
+
+Las historias de usuario pendientes se registran aquí (GAP-10), no como incongruencias.
 
 | ID | Dato faltante | Impacto | Dimensiones que bloquea | Prioridad |
 | --- | --- | --- | --- | --- |
@@ -388,40 +314,45 @@ Razones principales:
 | GAP-04 | Equipo: tamaño, perfiles, capacidad de desarrollo, revisión y soporte. | No se puede contrastar alcance con recursos. | Cronograma, Operativa | Alta |
 | GAP-05 | Volumetría objetivo y requisitos no funcionales (latencia, disponibilidad, RPO/RTO, retención). | «Escalar» no tiene objetivo medible. | Técnica | Media |
 | GAP-06 | Datos de mercado: demanda, oferta de enfermeros, disposición a pagar, competencia. | La hipótesis de valor no está demostrada. | Mercado / demanda | Alta |
-| GAP-07 | Concepto jurídico sobre intermediario vs. prestador de salud. | Puede invalidar el modelo operativo. | Legal / regulatoria | Alta |
-| GAP-08 | Base legal del tratamiento: autorizaciones, aviso de privacidad, consentimiento biométrico y del tercero, retención y supresión. | Riesgo de cierre de la operación con datos sensibles. | Legal / regulatoria | Alta |
+| GAP-07 | Concepto jurídico que confirme que el diseño (verificación de credenciales, agendamiento, PIN, control de inicio y fin, tarifa sugerida) es compatible con operar como intermediario y no como prestador de salud. | Si el diseño se califica como prestación, el modelo elegido no se sostiene. | Legal / regulatoria | Alta |
+| GAP-08 | Base legal restante del tratamiento: consentimiento biométrico, de ubicación y del tercero titular; aviso para datos del enfermero; qué registra el consentimiento (versión, fecha, revocación); retención y supresión. | Riesgo de cierre de la operación con datos sensibles. Ya existe el consentimiento para datos médicos propios. | Legal / regulatoria | Alta |
 | GAP-09 | Umbrales numéricos de las métricas de éxito. | No hay criterio para decidir continuar o parar. | Mercado / demanda, Sostenibilidad | Media |
-| GAP-10 | HU-05…HU-17 (13 historias) y 4 vacíos no planificados: cancelación, recuperación de contraseña, desbloqueo de PIN, revocación de enfermeros. | El ciclo de vida del servicio no está especificado. | Técnica, Cronograma | Alta |
+| GAP-10 | HU-05…HU-17 (13 historias planificadas) y 9 vacíos no planificados según el índice: cancelación, recuperación de contraseña, desbloqueo de PIN, revocación de enfermeros, negociación/pago/liquidación, reconciliación asignación–directorio, verificación facial, ubicación en tiempo real y canal de coordinación. Se listan como brecha, no como incongruencia. | El ciclo de vida del servicio y el alcance aprobado no están especificados. | Técnica, Cronograma | Alta |
 | GAP-11 | Selección de proveedores: pasarela, verificación facial, correo/SMS, almacenamiento, mapas. | Costos y riesgos externos sin cuantificar. | Riesgos externos, Financiera | Media |
 | GAP-12 | Mecanismo concreto de precio y negociación (rondas, última palabra). | Sin él no se puede diseñar la asignación. | Financiera, Técnica | Alta |
 | GAP-13 | Precisión y frecuencia de la geolocalización. | Afecta privacidad, costo y diseño. | Técnica, Legal / regulatoria | Media |
 | GAP-14 | Especificación de idempotencia (clave, alcance, retención, respuesta ante repetición). | La aceptación atómica no es verificable. | Técnica | Media |
-| GAP-15 | Reglas del código de correo: TTL, intentos, uso único, reenvíos. | Cuentas atacables por fuerza bruta. | Técnica | Media |
 | GAP-16 | Contacto de emergencia: obligatoriedad, cantidad, excepciones (paciente sin dispositivo o inconsciente). | Funcionalidad de seguridad sin definir. | Operativa, Legal / regulatoria | Media |
 | GAP-17 | Estrategia para lograr liquidez del marketplace (vision §8: «No cubierto»). | Riesgo principal de negocio sin plan. | Mercado / demanda, Sostenibilidad | Alta |
 | GAP-18 | Reloj del sistema: zona horaria, evaluación de ventanas solo en servidor y qué configuración aplica a servicios ya asignados. | Riesgo de exponer o retirar datos sensibles por error. | Técnica | Media |
-| GAP-19 | Nivel de competencia (auxiliar/profesional) y requisitos documentales por tipo de servicio (p. ej. transporte). | Servicios aceptables por quien no puede prestarlos. | Legal / regulatoria, Operativa | Media |
-| GAP-20 | Regla de precedencia entre documentos y estado de aprobación de vision.md. | El equipo no sabe qué construir. | Técnica, Cronograma | Alta |
+| GAP-19 | Nivel de competencia (auxiliar/profesional) y requisitos documentales y legales por tipo de servicio (p. ej. transporte, hospital). | Servicios aceptables por quien no puede prestarlos. | Legal / regulatoria, Operativa | Media |
+| GAP-21 | Modelo de soporte: quién es «soporte», horario, SLA y facultades (desbloqueo de PIN, ayuda en servicio, disputas). | Bloqueos y emergencias en campo sin responsable. | Operativa | Alta |
+| GAP-22 | Criterios y fuente del revisor para aprobar o pedir corrección (qué se verifica y contra qué fuente oficial), y límite de ciclos de corrección. | La aprobación manual no es reproducible ni auditable. | Operativa, Legal / regulatoria | Media |
+| GAP-23 | Proceso de recaptura de la foto de referencia cada 6–12 meses: quién lo dispara y qué pasa si el enfermero no lo hace (vision §7: «debe diseñarse»). | La verificación facial pierde vigencia y el enfermero puede quedar activo con una referencia obsoleta. | Operativa | Media |
+| GAP-24 | Regla de solapamiento de horarios del enfermero: nada impide que acepte dos servicios simultáneos (domain-model §2 lo reconoce como vacío). | Un enfermero puede quedar asignado a dos domicilios a la vez. | Técnica, Operativa | Media |
+| GAP-25 | Marco contractual del intermediario: términos y condiciones, relación con los enfermeros como profesionales independientes, límites de responsabilidad de la plataforma y seguros. | Sin él, el modelo de intermediación no está formalizado y la responsabilidad ante un daño al paciente no está delimitada. | Legal / regulatoria, Operativa | Alta |
 
 ## 5. Supuestos críticos
 
 | ID | Supuesto | Estado | Fuente | Dimensión | Consecuencia si es falso |
 | --- | --- | --- | --- | --- | --- |
-| SUP-01 | La plataforma es un intermediario tecnológico y no un prestador de servicios de salud. | SUPUESTO | vision.md §5 y §7 | Legal / regulatoria | Habría que habilitarse como prestador, con otro modelo operativo, costos y responsabilidad clínica. |
+| SUP-01 | La operación como intermediario tecnológico (decisión de negocio) será reconocida como tal y no como prestación de servicios de salud. | SUPUESTO | Decisión de negocio 2026-09-30; vision.md §5 y §7 | Legal / regulatoria | Habría que habilitarse como prestador (REPS), con otro modelo operativo, costos y responsabilidad clínica; el diseño actual (verificación de credenciales, control de inicio y fin) estaría en el centro del análisis. |
 | SUP-02 | Hay demanda suficiente de personas dispuestas a contratar enfermería por plataforma en lugar de canales informales. | SUPUESTO | vision.md §1 (declarado hipótesis) | Mercado / demanda | El lado de la demanda no llega y el marketplace no funciona. |
 | SUP-03 | Habrá suficientes enfermeros dispuestos a operar por la plataforma con la comisión que se defina. | SIN SUSTENTO | vision.md §4 (propuesta de valor) | Mercado / demanda | La oferta no cubre la demanda y las solicitudes expiran sin aceptar. |
 | SUP-04 | La aprobación manual por un solo rol puede mantener un SLA de 24–36 h. | SIN SUSTENTO | HU-03 RN-09 | Operativa | La oferta se retrasa o abandona y el MVP no gana enfermeros. |
-| SUP-05 | Cuatro imágenes autoportadas revisadas por una persona bastan para acreditar identidad, vigencia y ausencia de sanciones. | SIN SUSTENTO | HU-02 RN-02 y RN-04 | Técnica | Un impostor o un profesional sancionado presta servicios en domicilios. |
-| SUP-06 | El PIN de 6 dígitos prueba que el enfermero y el paciente están juntos. | SIN SUSTENTO | Req §14; vision §5 | Operativa | Se cobra tiempo no prestado y se pierde el control antifraude principal. |
+| SUP-05 | Cuatro imágenes autoportadas revisadas por una persona bastan para acreditar identidad, vigencia y ausencia de sanciones. | SIN SUSTENTO | HU-02 RN-02 y RN-04 (vigentes mientras no se incorpore la verificación facial de vision §5) | Técnica | Un impostor o un profesional sancionado presta servicios en domicilios. |
+| SUP-06 | El PIN de 6 dígitos prueba que el enfermero y el paciente están juntos. | SIN SUSTENTO | Req §14; vision §5 (CN-18 aceptó el riesgo residual) | Operativa | Se cobra tiempo no prestado y se pierde el control antifraude principal. |
 | SUP-07 | Existe un proveedor de verificación facial con costo asumible y cumplimiento normativo. | SUPUESTO | vision.md §7 (proveedor y costo sin definir) | Riesgos externos | La mitigación central de suplantación no se puede implementar o excede el presupuesto. |
 | SUP-08 | Exigir internet sin modo offline es aceptable para la operación. | SUPUESTO | vision.md §7 y §8 | Riesgos externos | Servicios que no pueden iniciar o seguirse en zonas de baja cobertura. |
-| SUP-09 | Una persona solo necesita un rol (usuario, enfermero o superadministrador). | SUPUESTO | business-rules-index CN-07 | Técnica | Un enfermero no puede contratar para su familia y migrar después es costoso. |
+| SUP-09 | Una persona solo necesita un rol (usuario, enfermero o superadministrador). | SUPUESTO | business-rules-index CN-07 (decisión del developer) | Técnica | Un enfermero no puede contratar para su familia y migrar después es costoso. |
 | SUP-10 | Con 5 intentos sobre 10^6 combinaciones, adivinar el PIN tiene probabilidad de 0,0005 %. | VERIFICADA | Req §15 (recalculado) | Técnica | El límite de intentos sería insuficiente frente a fuerza bruta. |
-| SUP-11 | Las decisiones CN-02 a CN-09 se aplicaron a los documentos fuente. | VERIFICADA | business-rules-index.md | Técnica | El registro de cambios sería poco fiable. |
+| SUP-11 | Las resoluciones CN-10 a CN-21 quedaron reflejadas en todos los documentos fuente y derivados. | SIN SUSTENTO | business-rules-index.md (registro de cambios y resoluciones CN-10 a CN-21) | Técnica | El equipo construye sobre reglas contradictorias y el registro de cambios deja de ser confiable. |
 | SUP-12 | Una ventana de 180 minutos antes del inicio es suficiente para coordinar y a la vez proteger datos sensibles. | SUPUESTO | Req §12 y §13 | Operativa | Se puede impedir la coordinación previa o exponer datos innecesariamente. |
-| SUP-13 | El correo electrónico es un canal fiable para códigos y notificaciones críticas. | SUPUESTO | Req §4.4 y HU-03 | Riesgos externos | Cuentas sin verificar y enfermeros sin enterarse de correcciones o aprobaciones. |
+| SUP-13 | El correo electrónico es un canal fiable para códigos y notificaciones críticas. | SUPUESTO | Req §4.4 y HU-03 | Riesgos externos | Cuentas sin verificar y enfermeros sin enterarse de correcciones o aprobaciones. Con TTL de 15 min, un correo lento invalida el código. |
+| SUP-14 | Un PIN de 6 dígitos guardado como hash sigue protegido si se filtra la base de datos. | SIN SUSTENTO | Req §14.1 y RN-18 | Técnica | Quien obtenga la base recupera los PIN de los servicios activos en segundos y puede iniciar servicios o suplantar. |
+| SUP-15 | Un enfermero puede prestar «Acompañamiento y transporte» y «Atención hospitalaria» con los mismos requisitos que un servicio domiciliario. | SUPUESTO | HU-04 (tipos de servicio) y HU-02 (requisitos únicos) | Legal / regulatoria | Se acepta un servicio de transporte sin licencia o seguro, o una atención hospitalaria sin autorización del centro. |
 
-Resumen por estado: VERIFICADA 2 · SUPUESTO 7 · SIN SUSTENTO 4 (total 13).
+Resumen por estado: VERIFICADA 1 · SUPUESTO 8 · SIN SUSTENTO 6 (total 15).
 
 ## 6. Pre-mortem (causas probables de fracaso a 12 meses)
 
@@ -429,16 +360,16 @@ Probabilidad e impacto son juicios ordinales del auditor (`[INFERENCIA]`), en es
 
 | ID | Causa | Prob. | Imp. | Puntaje | Señal temprana | Hallazgos relacionados |
 | --- | --- | --- | --- | --- | --- | --- |
-| PM-6 | Falta de liquidez: pocos enfermeros o pocos usuarios activos y baja tasa de aceptación, sin mitigación declarada. | 4 | 5 | 20 | Solicitudes publicadas sin aceptar; retención de enfermeros a 30 días baja; ninguna hipótesis de demanda validada. | SUP-02, SUP-03, GAP-06 |
-| PM-4 | El MVP no sale: el alcance (pagos, biometría, geolocalización, tiempo real, negociación, directorio) excede lo definido y lo presupuestado. | 4 | 4 | 16 | HU-05…HU-17 sin redactar cerca del arranque; contradicciones vision/Req sin resolver; sin presupuesto ni fechas. | INC-01, INC-02, GAP-03 |
+| PM-6 | Falta de liquidez: pocos enfermeros o pocos usuarios activos y baja tasa de aceptación, sin mitigación declarada. | 4 | 5 | 20 | Solicitudes publicadas sin aceptar; retención de enfermeros a 30 días baja; ninguna hipótesis de demanda validada. | SUP-02, SUP-03, GAP-06, GAP-17 |
+| PM-4 | El MVP no sale: el alcance aprobado (pagos, biometría, geolocalización, tiempo real, negociación, directorio) no está especificado ni presupuestado. | 4 | 4 | 16 | HU-05…HU-17 sin redactar cerca del arranque; preguntas abiertas de vision §9 sin respuesta; sin presupuesto ni fechas. | INC-27, INC-02, GAP-03 |
 | PM-5 | La cola de aprobación de enfermeros crece, la oferta no se activa y el marketplace arranca sin liquidez. | 4 | 4 | 16 | Edad del perfil más antiguo mayor a 24 h; un solo revisor; sin métricas de cola. | INC-13, SUP-04 |
-| PM-1 | Incidente grave en un domicilio por un enfermero suplantado o no habilitado, con daño reputacional y legal para la plataforma. | 3 | 5 | 15 | Perfiles aprobados sin contraste con ReTHUS; tarjeta profesional duplicada; primera queja de identidad. | INC-04, SUP-05 |
-| PM-2 | Requerimiento o sanción de la autoridad de protección de datos por tratar salud, biometría y ubicación sin base legal implementada. | 3 | 5 | 15 | El piloto sale sin aviso de privacidad ni autorización en el flujo; primer reclamo de un titular. | INC-05, GAP-08 |
-| PM-3 | Se descubre tarde que la plataforma requiere habilitación como prestador de salud y el modelo operativo no es viable tal como está. | 3 | 5 | 15 | Se empieza HU-05 sin concepto jurídico escrito; consulta de una aseguradora o EPS sobre habilitación. | SUP-01, GAP-07 |
-| PM-7 | Servicios bloqueados en campo (PIN agotado, sin conectividad) con un paciente esperando y sin ruta de soporte. | 4 | 3 | 12 | Primeros tickets de PIN bloqueado; servicios que no pasan de «Asignado». | INC-11, SUP-08 |
+| PM-1 | Incidente grave en un domicilio por un enfermero suplantado o no habilitado, con daño reputacional y legal para la plataforma. | 3 | 5 | 15 | Perfiles aprobados sin contraste con ReTHUS; un perfil dudoso que solo puede devolverse a corrección; tarjeta profesional duplicada; primera queja de identidad. | INC-04, INC-29, INC-33, SUP-05 |
+| PM-2 | Requerimiento o sanción de la autoridad de protección de datos por tratar biometría, ubicación y datos de terceros sin consentimiento implementado. | 3 | 5 | 15 | El piloto sale sin consentimiento separado para biometría ni mecanismo para el tercero titular; primer reclamo de un titular. | INC-05, GAP-08 |
+| PM-3 | Pese a la decisión de operar como intermediario, la autoridad o un tercero califica la operación como prestación de servicios de salud y exige habilitación. | 3 | 5 | 15 | Se empieza HU-05 sin concepto jurídico escrito sobre el diseño; consulta de una aseguradora o EPS sobre habilitación; contratos con enfermeros ausentes. | SUP-01, GAP-07, GAP-25, INC-34 |
+| PM-7 | Servicios bloqueados en campo (PIN agotado, sin conectividad) con un paciente esperando y sin rol ni ruta de soporte. | 4 | 3 | 12 | Primeros tickets de PIN bloqueado; servicios que no pasan de «Asignado». | INC-11, GAP-21, SUP-08 |
 | PM-10 | Compromiso de la cuenta del superadministrador (sin MFA definido) con acceso a documentos y configuración de ventanas de datos sensibles. | 2 | 5 | 10 | Accesos administrativos desde ubicaciones inusuales; cambios de configuración sin ticket. | INC-06 |
-| PM-8 | Fraude de facturación: inicio del servicio con el PIN dictado a distancia, cobrando tiempo no prestado. | 3 | 3 | 9 | Servicios iniciados sin coincidencia de ubicación; extensiones sistemáticas. | INC-18, SUP-06 |
-| PM-9 | Abandono por bloqueo total ante calificación pendiente, incluso en momentos de urgencia. | 3 | 2 | 6 | Quejas por no poder usar la app; calificaciones puestas al azar para desbloquear. | INC-10 |
+| PM-8 | Fraude de facturación: inicio del servicio con el PIN dictado a distancia, cobrando tiempo no prestado. | 3 | 3 | 9 | Servicios iniciados sin coincidencia de ubicación; extensiones sistemáticas. | SUP-06 |
+| PM-11 | Para poder mostrar el PIN se guarda reversible o en claro y una fuga de la base expone los PIN de servicios activos. | 3 | 3 | 9 | HU del PIN escrita sin resolver la contradicción hash/visualización; PIN legible en revisión de código; sin secreto fuera de la base. | INC-28, SUP-14 |
 
 ## 7. Cifras recalculadas por el auditor
 
@@ -448,26 +379,26 @@ Probabilidad e impacto son juicios ordinales del auditor (`[INFERENCIA]`), en es
 | PIN visible: 15:00 − 5 min | 14:55 | Correcto | Req §14.2 |
 | Inicio 10:00 + duración 2 h | 12:00 | Correcto | Req §16 |
 | 5 intentos / 10^6 combinaciones | 0,0005 % | Correcto | Req §15; SUP-10 |
-| W = 24 h / (30 − λ), λ = 10 · 20 · 25 · 28 · 29 | 1,2 · 2,4 · 4,8 · 12 · 24 h | Correcto | Coincide con la auditoría previa (modelo M/M/1, premisas no medidas) |
-| W con λ = 15 | 24 / 15 = 1,6 h (la auditoría dice 1,9 h) | Discrepancia | Error de la auditoría previa; ver INC-22 |
-| Ruptura con 35 % de reprocesos: 1,35·λ = 29 | λ ≈ 21,5 / día | Correcto | Coincide con la auditoría previa |
-| Ruptura con μ = 10/día: sin reprocesos / con reprocesos | λ = 9 / λ ≈ 6,7 | Correcto | La auditoría dice «≈7» sin separar ambos casos |
-| [Inferencia] p95 del tiempo de revisión ≤ 24 h exige μ − λ_ef ≥ 3/día (p95 ≈ 3 × media en M/M/1) | λ ≤ 27 · ≤ 20 con reprocesos · ≤ 5,2 con reprocesos y μ = 10 | Correcto | Mi cálculo; la media de 24 h de la auditoría previa dejaría ~37 % de perfiles fuera del SLA |
+| Tabla de 1.000.000 SHA-256 sin sal (000000–999999) | 2,87 s; inversión del hash de prueba inmediata | Correcto | Medición propia en esta auditoría; SUP-14 e INC-28 |
+| Colisión de PIN con 1.000 servicios activos: 1 − e^(−n(n−1)/2N), N = 10^6 | 39,3 % | Correcto | Cálculo propio; INC-31 (lectura «único entre todos los servicios») |
+| Recordatorio 24 h − TTL 15 min | 23 h 45 min con el código vencido | Correcto | Req §4.5 y HU01-RN-09; INC-30 |
 
 ## 8. Ajustes realizados durante el análisis
 
-- Descarté como defectos abiertos varios hallazgos de la auditoría previa que ya están corregidos: contraseña sin longitud (ahora 12–64), PIN en claro (CTX-RN-18), lista de datos sensibles vacía, secciones duplicadas y contradicción de HU-04. Los registré como INC-22.
-- Detecté que la afirmación del índice sobre §12.1 (CN-01) no se cumple en el archivo: la lista duplicada sigue ahí (INC-26).
-- Detecté un error de cálculo en la auditoría previa (W=1,6 h para λ=15, no 1,9 h) y una mezcla de supuestos en «≈7/día» (INC-22).
-- Bajé de «Crítica» a «Alta» la ausencia de credenciales del enfermero (INC-06) y la contradicción de zona/geolocalización (INC-08), porque la visión ya reconoce la segunda y la primera no bloquea la definición del modelo.
-- Califiqué Legal con 2 y no con 1 para no afirmar inviabilidad legal que no puedo demostrar; queda como riesgo alto sujeto a concepto jurídico.
+- Incorporé la decisión de negocio del 2026-09-30 (intermediario, no prestador de salud): SUP-01 pasa de «hipótesis» a «decisión que debe confirmarse jurídicamente sobre el diseño»; añadí INC-34 (decisión no propagada a vision.md), GAP-25 y COND-21. No cambia el veredicto: la decisión no resuelve las incongruencias ni las dimensiones sin datos.
+- Reencuadré como incongruencias solo lo que contradice a otro documento existente: INC-02 (tarifa del MVP vs. HU-04), INC-11 («soporte» vs. roles fijos), INC-12 (§26.1 vs. §16) e INC-14 (modelo vs. MVP).
+- Retiré INC-20 (solapamiento de horarios) porque es una regla que falta, no una contradicción: pasó a GAP-24. Retiré INC-22 porque audita un informe y no el contexto.
+- Bajé INC-02 y INC-04 a Alta y INC-27 a Media: su parte de «HU sin escribir» ya no cuenta; queda solo la contradicción con documentos existentes.
+- Añadí INC-33 (fallback de la verificación facial), detectado al revisar la coherencia interna de la visión.
+- Mantuve el veredicto NO VIABLE EN SU ESTADO ACTUAL: baja a 1 la cifra de críticas, pero hay 7 altas y 3 de las 4 dimensiones evaluadas quedan bajo 3.
 - Dejé Financiera, Mercado, Cronograma y Sostenibilidad como N/E en lugar de estimarlas.
 
 ## 9. Limitaciones del análisis
 
-- Evalúo documentación, no un producto: el repositorio no tiene código.
+- Evalúo documentación, no un producto: el repositorio no tiene código de producto.
 - No hubo entrevistas ni acceso a stakeholders; la intención real puede diferir del texto.
-- Las referencias legales de la auditoría previa (Ley 1581, Res. 3100/2019, Ley 1164, ReTHUS) no se re-verificaron contra fuente primaria y no constituyen concepto jurídico.
+- Las referencias legales (Ley 1581 de 2012, Res. 3100/2019, ReTHUS) provienen de vision.md; no se re-verificaron contra fuente primaria y no constituyen concepto jurídico.
 - Las probabilidades e impactos del pre-mortem son juicios ordinales del auditor (inferencia), no estadísticas.
-- El cálculo de capacidad de revisión usa premisas de la auditoría previa (12 min/perfil, 6 h/día, 35 % de correcciones) que no están medidas en el proyecto; modela llegadas y servicio con supuestos simplificadores.
+- La medición del hash se hizo con SHA-256 sin sal en una sola máquina; no dice qué tan rápido lo harían atacantes con hardware dedicado ni evalúa diseños alternativos (HMAC, hash lento).
 - Cuatro de ocho dimensiones no son evaluables; el puntaje global solo resume las evaluadas.
+- La decisión de operar como intermediario es una intención de negocio; no constituye ni sustituye un concepto jurídico sobre la calificación de la operación.

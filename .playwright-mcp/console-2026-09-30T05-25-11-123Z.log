@@ -1,0 +1,4 @@
+[     780ms] [ERROR] Access to XMLHttpRequest at 'https://web.sispro.gov.co//SSO/Service/SSOService.svc/REST//GetApplicationsAndUserMenus' from origin 'http://web.sispro.gov.co' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://web.sispro.gov.co/THS/Cliente/ConsultasPublicas/ConsultaPublicaDeTHxIdentificacion.aspx:0
+[    6012ms] [LOG] {readyState: 0, getResponseHeader: , getAllResponseHeaders: , setRequestHeader: , overrideMimeType: } @ https://web.sispro.gov.co/Estatico//JSCSSCombineMinifier.ashx/JS_Basic:61
+[    6012ms] [LOG] No se pudo conectar al servicio, verifique su conexión e intente de nuevo @ https://web.sispro.gov.co/Estatico//JSCSSCombineMinifier.ashx/JS_Basic:61
+[  142018ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://web.sispro.gov.co//SSO/Service/SSOService.svc/REST//GetApplicationsAndUserMenus:0

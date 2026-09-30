@@ -1,51 +1,61 @@
 # Sugerencias del auditor — Plataforma de Servicios de Enfermería (AppEnfermeria)
 
-**Fecha:** 2026-09-29
+**Fecha del informe:** 2026-09-30
 **Destinatario:** agente que procesará las sugerencias.
-**Naturaleza:** propuestas del auditor. No forman parte de los hallazgos ni son requisitos: cada una requiere decisión del responsable de producto antes de aplicarse. Los hallazgos están en `Hallazgos-Auditoria-AppEnfermeria.md`; los identificadores (INC, GAP, SUP, PM, COND) son los mismos.
+**Naturaleza del documento:** propuestas del auditor. No forman parte de los hallazgos ni son requisitos: cada una requiere decisión del responsable de producto antes de aplicarse. Los hallazgos están en `Hallazgos-Auditoria-AppEnfermeria.md`; los identificadores (INC, GAP, SUP, PM, COND) son los mismos.
+**Fuente de los datos:** `Diagnostico-Viabilidad-AppEnfermeria.html` (objeto `DIAGNOSTICO`).
+
+## Decisión de negocio que enmarca esta auditoría
+
+> Decisión de negocio (2026-09-30): la aplicación se realizará como intermediario tecnológico (marketplace) que conecta usuarios con enfermeros independientes; no como prestador de servicios de salud.
+
+Consecuencias para la auditoría:
+
+- La clasificación regulatoria deja de ser una pregunta abierta de producto y pasa a ser una **decisión declarada** (SUP-01). El concepto jurídico sigue siendo necesario, pero para confirmar que el **diseño** encaja con el modelo elegido, no para decidir el modelo.
+- La intención de operar como intermediario no fija por sí sola la calificación jurídica: la determina el diseño real. `vision.md` §7 todavía la registra como «restricción activa, no resuelta» (INC-34).
+- El modelo exige un marco contractual propio (términos y condiciones, enfermeros como independientes, límites de responsabilidad, seguros): GAP-25 y COND-21.
+
+## Alcance de esta auditoría
+
+Auditoría acotada a lo que existe: contexto (Requirements-Context, vision, modelo de dominio, reglas, glosario, personas), HU-01…HU-04 y coherencia de la definición del MVP. Las HU aún no escritas no se cuentan como incongruencias: figuran como brechas de información.
 
 ## 1. Acciones prioritarias
 
-1. **Decidir el alcance real del MVP y fijar un documento normativo único.** Resolver, punto por punto, qué de vision.md entra (pagos, negociación, directorio, biometría, geolocalización, tiempo real, atención hospitalaria) y propagarlo a Requirements-Context y a las HU. _Relacionado con: INC-01, INC-02, INC-03, INC-04, INC-07, INC-08._
-2. **Obtener concepto jurídico y base legal antes de escribir HU-05.** Definir si la plataforma es intermediario o prestador, y qué autorizaciones y consentimientos exige el tratamiento de salud, biometría y ubicación. _Relacionado con: INC-05, SUP-01, GAP-07, GAP-08._
-3. **Definir presupuesto, equipo y cronograma, y dimensionar la revisión de enfermeros.** Hoy no existen. Sin ellos, cuatro dimensiones no son evaluables y el SLA de aprobación no es defendible. _Relacionado con: GAP-01, GAP-03, GAP-04, INC-13._
+1. **Reconciliar la definición del MVP con Requirements-Context y las HU existentes.** Decidir el modelo de asignación y su máquina de estados (INC-03), dónde vive la tarifa (INC-02) y actualizar HU-02/03 con la verificación facial que la visión ya define (INC-04); si algo no cabe, sacarlo del MVP. _Relacionado con: INC-03, INC-02, INC-04, INC-27._
+2. **Confirmar jurídicamente el modelo de intermediario y completar los consentimientos.** Se decidió operar como intermediario, no como prestador de salud: falta el concepto jurídico sobre el diseño y el marco contractual. HU-01 ya exige consentimiento para datos médicos propios; faltan tercero titular, biometría y datos del enfermero. _Relacionado con: SUP-01, GAP-07, GAP-25, INC-05._
+3. **Definir presupuesto, equipo y cronograma, y validar demanda y oferta.** Sin ellos cuatro dimensiones siguen sin poder evaluarse, y el SLA de aprobación y la liquidez del marketplace no son defendibles. _Relacionado con: GAP-01, GAP-03, GAP-04, GAP-06, INC-13._
 
 ## 2. Sugerencia por incongruencia
 
 | ID | Severidad | Sugerencia |
 | --- | --- | --- |
-| INC-01 | Crítica | Declarar un documento normativo único: aprobar o descartar cada ampliación de vision.md, propagar lo aprobado a Requirements-Context y a las HU, y marcar el estado real de cada documento. |
-| INC-02 | Crítica | Escribir las historias de precio/negociación y de pagos (proveedor, custodia, comisión, reembolso) antes de HU-05 y añadirlas a la lista de §29. |
-| INC-03 | Crítica | Decidir el modelo de asignación del MVP (feed atómico, negociación o directorio) y rediseñar la tabla de transiciones con estados y guardas. |
-| INC-04 | Crítica | Incorporar a HU-02/03 el contraste con ReTHUS y la verificación facial (intentos, fallback, proveedor), hacer obligatorios los antecedentes y unificar el número de intentos. |
-| INC-05 | Crítica | Añadir a HU-01/HU-02 pasos y criterios de autorización expresa (versión del aviso, fecha, canal), consentimiento separado para biometría y ubicación, y un mecanismo para el tercero titular; reescribir §21 como capítulo de cumplimiento. |
+| INC-03 | Crítica | Decidir el modelo de asignación del MVP y rediseñar la tabla de transiciones con estados y guardas (incluyendo expiración y cancelación). |
+| INC-02 | Alta | Decidir dónde vive la tarifa sugerida (TipoServicio o Configuracion), retirar la exclusión de HU-04 o documentar la excepción, y alinear Req §17.1 con el modelo de precio. |
+| INC-04 | Alta | Actualizar HU-02/03 para reflejar la verificación facial y el contraste con fuente oficial que define la visión, o retirar esa mitigación del MVP. |
+| INC-05 | Alta | Añadir a HU-01/HU-02 criterios de autorización expresa (versión del aviso, fecha, revocación), consentimiento separado para biometría, mecanismo para el tercero titular y reescribir §21 como capítulo de cumplimiento. |
 | INC-06 | Alta | Extender política de credenciales y verificación de correo a todos los roles y añadir una HU de alta y protección de cuentas administrativas. |
-| INC-07 | Alta | Decidir si el tipo entra o no; si no, sembrarlo inactivo y ajustar RN-01 y los criterios de HU-04. |
-| INC-08 | Alta | Reemplazar formalmente la restricción, definir el tipo de dato y la precisión, y actualizar Req §5.1, HU-02 y glosario. |
 | INC-09 | Alta | Fijar la precisión máxima del origen hasta la asignación y estructurar o filtrar el texto libre para impedir datos de salud. |
-| INC-10 | Alta | Convertir el bloqueo en restricción específica (p. ej. no crear ni aceptar servicios nuevos) y excluir PIN, extensiones, cancelación y soporte. |
-| INC-11 | Alta | Escribir la HU de desbloqueo (soporte con doble autorización o regeneración de PIN notificada a ambas partes). |
-| INC-12 | Alta | Escribir HU de cancelación, no-show y expiración, con tabla explícita de transiciones y guardas. |
-| INC-13 | Alta | Definir revisores, reloj y métricas del SLA; incorporar verificación asistida para que el humano revise solo excepciones. |
-| INC-14 | Alta | Modelar las entidades, definir obligatoriedad y excepciones, y escribir la HU correspondiente con su consentimiento. |
+| INC-28 | Alta | Especificar el mecanismo (PIN derivado con HMAC y secreto fuera de la base, o cifrado reversible con clave gestionada) y reescribir §14.1 y RN-18 sin presentar el hash como control suficiente. |
+| INC-29 | Alta | Definir un estado terminal (rechazo definitivo o bloqueo) y de suspensión/revocación, con causal, límite de ciclos de corrección, lista de bloqueo del documento y auditoría. |
+| INC-10 | Media | Alinear las cuatro copias con §19.1, o sustituirlas por una referencia a §19.1 como fuente única (como se hizo con §9). |
+| INC-11 | Media | Definir si «soporte» es una función del superadministrador o un rol nuevo, y reflejarlo en §2 y §22. |
+| INC-12 | Media | Precisar en §26.1 qué transiciones a «Cancelado» son válidas desde «En curso» y cómo interactúan con §16 y §19. |
+| INC-13 | Media | Definir revisores, reloj y métricas del SLA; incorporar verificación asistida para que el humano revise solo excepciones. |
+| INC-14 | Media | Extender domain-model con las entidades y atributos del MVP aprobado, o marcar los componentes sin modelo como condicionados. |
 | INC-15 | Media | Definir el canal mínimo de coordinación y el comportamiento para servicios con menos margen que la ventana. |
-| INC-16 | Media | Definir qué diferencia el rechazo (p. ej. terminal o con límite de ciclos) de la corrección, o fusionar los estados. |
 | INC-17 | Media | Añadir el estado de expiración o redefinir la métrica; incluir al menos una métrica de seguridad/confianza y fijar umbrales. |
-| INC-18 | Media | Definir quién recibe el PIN en servicios para terceros y qué evidencia adicional de presencia se exige. |
-| INC-19 | Media | Corregir el diagrama o añadir una restricción de exclusividad entre los perfiles. |
-| INC-20 | Media | Retirar la afirmación o convertirla en regla explícita, y definir el tratamiento de solapamientos. |
-| INC-21 | Media | Indicar qué campos de experiencia son obligatorios y añadir criterios de aceptación. |
-| INC-22 | Media | Marcar la auditoría como histórica, corregir sus cifras y registrar por qué se descartaron recomendaciones que se rechazaron. |
-| INC-23 | Media | Fijar TTL, intentos máximos, uso único y límite de reenvíos. |
-| INC-24 | Baja | Unificar la ubicación de ambos campos. |
-| INC-25 | Baja | Fijar un valor por defecto para la ventana del PIN. |
-| INC-26 | Baja | Sustituir la lista de §12.1 por una referencia a §9. |
+| INC-27 | Media | Registrar en el propio documento qué componentes del MVP quedan condicionados a cada pregunta abierta y qué pasa con ellos si la respuesta es negativa. |
+| INC-30 | Media | Definir contenido y canal del recordatorio, si genera código nuevo y cómo se sale del agotamiento de reenvíos. |
+| INC-31 | Media | Aclarar que basta con estar asociado al servicio (o limitar la unicidad a servicios activos) y eliminar la exigencia global. |
+| INC-33 | Media | Definir el fallback para pacientes que no pueden confirmar (p. ej. contacto de emergencia o soporte) y cuándo se bloquea el inicio. |
+| INC-32 | Baja | Reconciliar los derivados con la fuente normativa y decidir un único lugar para la foto. |
+| INC-34 | Baja | Registrar la decisión en vision.md (§5 y §7) y redactar el catálogo y las funciones de control de modo que describan a la plataforma como intermediaria (el enfermero presta, la plataforma conecta y verifica), sujeto al concepto jurídico. |
 
 ## 3. Cómo validar los supuestos críticos
 
 | ID | Supuesto | Estado | Cómo validarlo | Evidencia que lo confirmaría | Evidencia que lo refutaría |
 | --- | --- | --- | --- | --- | --- |
-| SUP-01 | La plataforma es un intermediario tecnológico y no un prestador de servicios de salud. | SUPUESTO | Concepto escrito de un abogado de salud y consulta a la autoridad sanitaria antes de HU-05. | Concepto que califique el modelo como intermediación. | Concepto que exija habilitación o vea rasgos de prestador. |
+| SUP-01 | La operación como intermediario tecnológico (decisión de negocio) será reconocida como tal y no como prestación de servicios de salud. | SUPUESTO | Concepto escrito de un abogado de salud sobre el diseño concreto (no solo la intención), y consulta a la autoridad sanitaria antes de HU-05. | Concepto que califique el diseño actual como intermediación. | Concepto que exija habilitación o que vea rasgos de prestador en funciones específicas. |
 | SUP-02 | Hay demanda suficiente de personas dispuestas a contratar enfermería por plataforma en lugar de canales informales. | SUPUESTO | Entrevistas a usuarios y una página de preinscripción con disposición a pagar, antes de construir pagos. | Preinscripciones y disposición de pago a un precio concreto. | Preferencia por el canal actual o rechazo del precio. |
 | SUP-03 | Habrá suficientes enfermeros dispuestos a operar por la plataforma con la comisión que se defina. | SIN SUSTENTO | Entrevistar a enfermeros sobre tarifa mínima, comisión tolerable y disponibilidad real. | Compromisos de registro y tarifas compatibles con lo que paga el usuario. | Tarifas mínimas por encima de la disposición de pago. |
 | SUP-04 | La aprobación manual por un solo rol puede mantener un SLA de 24–36 h. | SIN SUSTENTO | Cronometrar la revisión de 20 perfiles reales y definir número de revisores y horas efectivas. | Minutos por perfil medidos y capacidad mayor a la demanda proyectada con margen. | Capacidad menor a la llegada esperada o más de un ciclo de corrección por perfil. |
@@ -54,28 +64,33 @@
 | SUP-07 | Existe un proveedor de verificación facial con costo asumible y cumplimiento normativo. | SUPUESTO | Solicitar cotizaciones a al menos 3 proveedores con costo por verificación y ubicación de los datos. | Cotización dentro del presupuesto y contrato de tratamiento de datos. | Costos prohibitivos o datos fuera de lo permitido. |
 | SUP-08 | Exigir internet sin modo offline es aceptable para la operación. | SUPUESTO | Mapear cobertura en las zonas de lanzamiento y definir tolerancia a cortes. | Cobertura adecuada en las zonas piloto. | Cortes frecuentes en zonas objetivo. |
 | SUP-09 | Una persona solo necesita un rol (usuario, enfermero o superadministrador). | SUPUESTO | Preguntar a 10 enfermeros si contratarían servicios para familiares. | Ningún caso de doble rol relevante. | Varios casos de doble rol. |
-| SUP-10 | Con 5 intentos sobre 10^6 combinaciones, adivinar el PIN tiene probabilidad de 0,0005 %. | VERIFICADA | Cálculo: 5 / 1.000.000 = 0,0005 %. Se mantiene si el contador es por servicio y no se reinicia. | El cálculo. | Contador por sesión o reinicio del contador sin control. |
-| SUP-11 | Las decisiones CN-02 a CN-09 se aplicaron a los documentos fuente. | VERIFICADA | Comprobado en los archivos: 4 tipos de enfermero en §5.2, lista de datos sensibles en §12, hash del PIN en §14, contraseña 12–64 en HU-01, CRUD en HU-04. Excepción: CN-01 (ver INC-26). | Lectura directa de los archivos. | — |
+| SUP-10 | Con 5 intentos sobre 10^6 combinaciones, adivinar el PIN tiene probabilidad de 0,0005 %. | VERIFICADA | Cálculo: 5 / 1.000.000 = 0,0005 %. Se mantiene si el contador es por servicio y no se reinicia; el desbloqueo por soporte (INC-11) podría reiniciarlo. | El cálculo. | Contador por sesión o reinicio del contador sin control. |
+| SUP-11 | Las resoluciones CN-10 a CN-21 quedaron reflejadas en todos los documentos fuente y derivados. | SIN SUSTENTO | Revisión cruzada de cada CN contra los documentos que afecta. Contradicha en: Req §27 regla 16 y RN-17, CTX-RN-17, glosario (INC-10), HU-03 RN-08, personas.md y glosario (INC-32) y recordatorio de 24 h (INC-30). | Búsqueda sin coincidencias residuales de las reglas reemplazadas. | Coincidencias residuales (hoy hay al menos 7) |
 | SUP-12 | Una ventana de 180 minutos antes del inicio es suficiente para coordinar y a la vez proteger datos sensibles. | SUPUESTO | Simular 10 casos reales de servicios programados e inmediatos con enfermeros y familias. | Coordinación posible en menos de 3 h en la mayoría de casos. | Necesidad recurrente de contacto antes. |
-| SUP-13 | El correo electrónico es un canal fiable para códigos y notificaciones críticas. | SUPUESTO | Medir entregabilidad con un proveedor real en un piloto y definir canal alterno. | Tasa de entrega alta y sin rebotes relevantes. | Rebotes o correos en spam frecuentes. |
+| SUP-13 | El correo electrónico es un canal fiable para códigos y notificaciones críticas. | SUPUESTO | Medir entregabilidad y latencia con un proveedor real en un piloto y definir canal alterno. | Tasa de entrega alta y latencia muy inferior a 15 min. | Rebotes, spam o retrasos frecuentes. |
+| SUP-14 | Un PIN de 6 dígitos guardado como hash sigue protegido si se filtra la base de datos. | SIN SUSTENTO | Reproducido en esta auditoría: con SHA-256 sin sal, la tabla de los 1.000.000 de PIN posibles se generó en 2,87 s y se invirtió un hash de prueba al instante. Con hash lento o HMAC con secreto externo el costo sube; el texto no lo exige. | Diseño con HMAC y secreto fuera de la base, o hash lento, más límite de intentos. | Cualquier hash rápido sin secreto (resultado ya medido). |
+| SUP-15 | Un enfermero puede prestar «Acompañamiento y transporte» y «Atención hospitalaria» con los mismos requisitos que un servicio domiciliario. | SUPUESTO | Consultar requisitos legales y de seguro por tipo, y las políticas de acceso de 2 o 3 centros hospitalarios de la zona piloto. | Concepto que no exija requisitos adicionales. | Requisitos adicionales por tipo (licencia, seguro, autorización). |
 
 ## 4. Condiciones mínimas sugeridas para aprobar
 
-- [ ] **COND-01.** Existe un único documento normativo: vision.md aprobado o recortado y propagado a Requirements-Context y a HU-01…04; 0 incongruencias críticas abiertas. _(INC-01, GAP-20)_
+- [ ] **COND-01.** El modelo de asignación, la tarifa y la verificación de identidad que define vision.md quedan reflejados en Requirements-Context y en HU-02/03/04 (o se retiran del MVP); 0 incongruencias críticas abiertas. _(INC-03, INC-02, INC-04, INC-27)_
 - [ ] **COND-02.** Modelo de asignación decidido (feed atómico, negociación o directorio) y tabla de transiciones de estados con guardas, incluyendo cancelación, no-show y expiración. _(INC-03, INC-12)_
 - [ ] **COND-03.** Historias de precio/negociación y de pagos escritas, con proveedor elegido, porcentaje de comisión y regla de custodia. _(INC-02, GAP-02, GAP-12)_
-- [ ] **COND-04.** Concepto jurídico escrito, firmado por un abogado de salud, sobre intermediario vs. prestador de salud. _(SUP-01, GAP-07)_
-- [ ] **COND-05.** Autorización de tratamiento, aviso de privacidad y consentimientos separados (salud, biometría, ubicación, tercero) integrados en las HU con criterios de aceptación. _(INC-05, GAP-08)_
-- [ ] **COND-06.** Verificación de identidad y de credenciales contra fuente oficial incorporadas a HU-02/03: ningún perfil pasa a «Aprobado» sin resultado. _(INC-04, SUP-05)_
+- [ ] **COND-04.** Concepto jurídico escrito, firmado por un abogado de salud, que confirme que el diseño es compatible con operar como intermediario tecnológico y no como prestador de salud; decisión registrada en vision.md. _(SUP-01, GAP-07, INC-34)_
+- [ ] **COND-05.** Consentimientos separados y registrados (versión del aviso, fecha, revocación) para biometría, ubicación, tercero titular y datos del enfermero, integrados en las HU con criterios de aceptación; política de retención y supresión. _(INC-05, GAP-08)_
+- [ ] **COND-06.** Verificación facial y contraste con fuente oficial incorporados a HU-02/03: ningún perfil pasa a «Aprobado» sin resultado. _(INC-04, INC-33, SUP-05)_
 - [ ] **COND-07.** Presupuesto aprobado con una línea por proveedor y por rubro operativo. _(GAP-01, GAP-11)_
 - [ ] **COND-08.** Cronograma con hitos, responsables y equipo dimensionado (desarrollo, revisión, soporte). _(GAP-03, GAP-04)_
 - [ ] **COND-09.** Requisitos no funcionales documentados: volumetría año 1, latencia p95/p99, disponibilidad, RPO/RTO, retención y reloj del sistema. _(GAP-05, GAP-18)_
-- [ ] **COND-10.** Al menos 2 revisores asignados, reloj del SLA definido y métrica de edad de la cola; capacidad medida con 20 perfiles reales. _(INC-13, SUP-04)_
-- [ ] **COND-11.** Escritas las HU de cancelación, recuperación de contraseña, desbloqueo de PIN y revocación/suspensión de enfermeros; HU-05…HU-17 con estado «Definida». _(INC-11, INC-12, GAP-10)_
+- [ ] **COND-10.** Al menos 2 revisores asignados, reloj del SLA definido y métrica de edad de la cola; capacidad medida con 20 perfiles reales. _(INC-13, SUP-04, GAP-22)_
+- [ ] **COND-11.** Escritas las HU de cancelación, recuperación de contraseña, desbloqueo de PIN y revocación/suspensión con estado terminal para perfiles fraudulentos; HU-05…HU-17 con estado «Definida». _(INC-11, INC-12, INC-29, GAP-10)_
 - [ ] **COND-12.** Credenciales de enfermeros y superadministrador definidas, con verificación de correo y segundo factor para el rol administrativo. _(INC-06)_
-- [ ] **COND-13.** Idempotencia y código de correo especificados (clave, retención, TTL, intentos, reenvíos) con criterios de aceptación comprobables. _(INC-23, GAP-14, GAP-15)_
+- [ ] **COND-13.** Idempotencia especificada (clave, alcance, retención, respuesta ante repetición) con criterios de aceptación comprobables, y recordatorio de verificación alineado con el TTL del código. _(INC-30, GAP-14)_
 - [ ] **COND-14.** Evidencia de demanda y oferta: propuesta del auditor de al menos 15 entrevistas a usuarios y 15 a enfermeros, con disposición de pago y tarifa mínima (umbral ajustable por el equipo). _(SUP-02, SUP-03, GAP-06)_
 - [ ] **COND-15.** Métricas de éxito con umbral numérico, incluida al menos una métrica de seguridad/confianza y sin depender de estados inexistentes. _(INC-17, GAP-09)_
-- [ ] **COND-16.** Bloqueo por calificación pendiente redefinido para no impedir PIN, extensiones, cancelación ni soporte. _(INC-10)_
+- [ ] **COND-16.** La regla de calificación pendiente aparece igual en §19.1, §27, RN-17, índice y glosario (o solo se referencia §19.1). _(INC-10)_
 - [ ] **COND-17.** Precisión del origen previa a la aceptación fijada y texto libre estructurado o filtrado para impedir datos de salud. _(INC-09, GAP-13)_
-- [ ] **COND-18.** Documentos derivados (modelo de dominio, glosario, índice de reglas, auditoría previa) reconciliados con la fuente normativa. _(INC-19, INC-20, INC-22, INC-26)_
+- [ ] **COND-18.** Documentos derivados (personas, glosario, HU-03 RN-08, modelo de dominio) reconciliados con la fuente normativa. _(INC-32, SUP-11)_
+- [ ] **COND-19.** Mecanismo del PIN especificado sin contradicción: cómo se almacena y se muestra, protección frente a fuga de la base y alcance de «único por servicio». _(INC-28, INC-31, SUP-14)_
+- [ ] **COND-20.** Rol y proceso de soporte definidos (quién, horario, SLA, facultades) y cubiertos por una HU; regla de solapamiento de horarios del enfermero decidida. _(INC-11, GAP-21, GAP-24)_
+- [ ] **COND-21.** Marco contractual del intermediario definido: términos y condiciones, relación con los enfermeros como independientes, límites de responsabilidad y seguros. _(GAP-25, SUP-01)_

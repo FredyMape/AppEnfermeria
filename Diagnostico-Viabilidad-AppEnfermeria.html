@@ -182,402 +182,1257 @@ main,.sidebar{min-width:0}
    Convención de comillas dentro de textos: « » (cita textual del corpus).
    ============================================================ */
 const DIAGNOSTICO = {
-  meta: {
-    proyecto: "Plataforma de Servicios de Enfermería (AppEnfermeria)",
-    fecha: "2026-09-29",
-    corpus: [
+  "meta": {
+    "proyecto": "Plataforma de Servicios de Enfermería (AppEnfermeria)",
+    "fecha": "2026-09-30",
+    "ronda": "Auditoría acotada a lo que existe: contexto (Requirements-Context, vision, modelo de dominio, reglas, glosario, personas), HU-01…HU-04 y coherencia de la definición del MVP. Las HU aún no escritas no se cuentan como incongruencias: figuran como brechas de información.",
+    "corpus": [
       "Requirements-Context.md (normativo)",
       "HU-01, HU-02, HU-03, HU-04 (normativo, «Definida para MVP»)",
-      "specs/context/vision.md (status: «borrador»)",
-      "specs/context/domain-model.md, business-rules-index.md, glossary.md, personas.md (derivados)",
-      "Auditoria-Especificacion.md (auditoría previa: tratada como fuente a verificar, no como verdad)"
+      "specs/context/vision.md (status: «aprobado»; define el alcance del MVP)",
+      "specs/context/domain-model.md, business-rules-index.md, glossary.md, personas.md (contexto derivado)"
     ],
-    sin_codigo: "El repositorio contiene solo documentación (0 archivos de código). La evaluación es de la especificación, no de una implementación."
+    "sin_codigo": "El repositorio contiene solo documentación y definiciones de agentes de proceso (0 archivos de código de producto). La evaluación es de la especificación, no de una implementación.",
+    "decision": "Decisión de negocio (2026-09-30): la aplicación se realizará como intermediario tecnológico (marketplace) que conecta usuarios con enfermeros independientes; no como prestador de servicios de salud."
   },
-
-  dimensiones_def: [
-    {id:"tecnica", nombre:"Técnica", corto:"Técnica"},
-    {id:"financiera", nombre:"Financiera", corto:"Financiera"},
-    {id:"operativa", nombre:"Operativa", corto:"Operativa"},
-    {id:"mercado", nombre:"Mercado / demanda", corto:"Mercado"},
-    {id:"legal", nombre:"Legal / regulatoria", corto:"Legal"},
-    {id:"cronograma", nombre:"Cronograma", corto:"Cronograma"},
-    {id:"riesgos", nombre:"Riesgos externos", corto:"Riesgos ext."},
-    {id:"sostenibilidad", nombre:"Sostenibilidad", corto:"Sostenib."}
+  "dimensiones_def": [
+    {
+      "id": "tecnica",
+      "nombre": "Técnica",
+      "corto": "Técnica"
+    },
+    {
+      "id": "financiera",
+      "nombre": "Financiera",
+      "corto": "Financiera"
+    },
+    {
+      "id": "operativa",
+      "nombre": "Operativa",
+      "corto": "Operativa"
+    },
+    {
+      "id": "mercado",
+      "nombre": "Mercado / demanda",
+      "corto": "Mercado"
+    },
+    {
+      "id": "legal",
+      "nombre": "Legal / regulatoria",
+      "corto": "Legal"
+    },
+    {
+      "id": "cronograma",
+      "nombre": "Cronograma",
+      "corto": "Cronograma"
+    },
+    {
+      "id": "riesgos",
+      "nombre": "Riesgos externos",
+      "corto": "Riesgos ext."
+    },
+    {
+      "id": "sostenibilidad",
+      "nombre": "Sostenibilidad",
+      "corto": "Sostenib."
+    }
   ],
-
-  veredicto: {
-    valor: "NO VIABLE EN SU ESTADO ACTUAL",
-    confianza: "Media",
-    confianza_detalle: "Alta en las incongruencias (cada una tiene cita textual verificable). Baja en la viabilidad económica y de mercado: {ne} de {totdim} dimensiones no son evaluables por falta de datos.",
-    alcance_veredicto: "El veredicto califica el conjunto de especificaciones tal como está, no la idea de negocio. Con las {ne} dimensiones sin datos, el mejor resultado posible tras corregir la especificación sería «INSUFICIENTE INFORMACIÓN», no «VIABLE».",
-    razones: [
-      "Hay {crit} incongruencias críticas abiertas: el MVP está definido de dos maneras incompatibles (vision.md borrador vs. Requirements-Context y HU-01…04) en pagos, modelo de asignación, verificación de identidad y consentimiento.",
+  "veredicto": {
+    "valor": "NO VIABLE EN SU ESTADO ACTUAL",
+    "confianza": "Media",
+    "confianza_detalle": "Alta en las incongruencias (cada una tiene cita textual verificable en el corpus vigente). Baja en la viabilidad económica y de mercado: {ne} de {totdim} dimensiones no son evaluables por falta de datos.",
+    "alcance_veredicto": "El veredicto califica el conjunto de especificaciones tal como está, no la idea de negocio. Con las {ne} dimensiones sin datos, el mejor resultado posible tras corregir la especificación sería «INSUFICIENTE INFORMACIÓN», no «VIABLE».",
+    "razones": [
+      "Hay {crit} incongruencia crítica abierta: el modelo de asignación que define el MVP (directorio, invitación dirigida y negociación en vision.md) contradice la asignación atómica por orden de llegada y la máquina de estados de Requirements-Context (INC-03). Hay además {alta} altas.",
       "Solo {eval} de {totdim} dimensiones son evaluables y {reprob} de esas {eval} quedan por debajo de 3: la regla exige que ninguna evaluada sea menor a 3 para poder ser «VIABLE».",
-      "No existe presupuesto, cronograma, equipo ni datos de mercado en ningún documento, y 13 historias (HU-05…HU-17) más 4 vacíos no planificados siguen sin escribirse."
+      "Las incongruencias se miden solo contra lo que existe; las HU pendientes no se cuentan como defecto. Aun así, no hay presupuesto, cronograma, equipo ni datos de mercado en ningún documento."
     ]
   },
-
-  reconstruccion: {
-    objetivo: "Marketplace que conecta a personas que necesitan enfermería (para sí o para un tercero) con enfermeros registrados y aprobados manualmente por un superadministrador. Incluye aceptación atómica de servicios, inicio por PIN, extensión, calificación obligatoria y auditoría.",
-    alcance: "Normativo (Requirements-Context + HU-01…04): registro de usuario y enfermero, verificación manual, catálogo de 4 tipos de servicio y reglas del ciclo de vida. Aspiracional (vision.md, borrador): además directorio de enfermeros, geolocalización real, precio híbrido con contraoferta, pasarela de pagos, verificación facial y ubicación en tiempo real con contacto de emergencia.",
-    entregables: "Solo documentación: 4 HU definidas, 13 HU pendientes (HU-05…HU-17) y contexto derivado. Sin código, sin diseños, sin wireframes.",
-    actores: "Usuario/Cliente, Enfermero, Superadministrador (roles fijos, uno por persona).",
-    plazos: "No definidos en ningún documento.",
-    presupuesto: "No definido. Única mención: «No hay presupuesto asignado todavía» para verificación biométrica (vision §7).",
-    recursos: "No definidos (equipo de desarrollo, revisores de perfiles, soporte).",
-    supuestos_declarados: [
-      "La plataforma es intermediario tecnológico y no prestador de salud (vision §5; declarado «por validar»).",
+  "reconstruccion": {
+    "objetivo": "Marketplace que conecta a personas que necesitan enfermería (para sí o para un tercero) con enfermeros registrados y aprobados manualmente por un superadministrador. Cubre aceptación atómica de servicios, inicio por PIN, extensión, finalización y calificación obligatoria, con auditoría de operaciones y manejo de datos médicos sensibles.",
+    "alcance": "Desde CN-10, vision.md (aprobado) es la fuente de verdad del alcance del MVP: además del flujo base de Requirements-Context y HU-01…04, incluye directorio con invitación directa, geolocalización real del enfermero, precio híbrido con negociación, pasarela de pagos, verificación facial del enfermero (registro e inicio de servicio) y ubicación en tiempo real con contacto de emergencia. Ninguno de esos cinco componentes tiene HU, modelo de datos ni proveedor.",
+    "entregables": "Solo documentación: 4 HU definidas y 13 pendientes (HU-05…HU-17, planificadas en Req §29); el índice de reglas lista además 9 vacíos no planificados. Sin código de producto, sin diseños. Las HU pendientes se tratan como brechas, no como incongruencias.",
+    "actores": "Usuario/Cliente, Enfermero, Superadministrador (roles fijos, uno por persona). «Soporte» se menciona pero no existe como rol.",
+    "plazos": "No definidos en ningún documento.",
+    "presupuesto": "No definido. Única mención: «No hay presupuesto asignado todavía» para verificación biométrica (vision §7).",
+    "recursos": "No definidos (equipo de desarrollo, revisores de perfiles, soporte).",
+    "supuestos_declarados": [
+      "La plataforma es intermediario tecnológico y no prestador de salud (vision §5; declarado «por validar» y restricción activa sin resolver, §7).",
       "Los canales informales actuales tienen los problemas descritos (vision §1; declarado como hipótesis sin datos).",
       "Modelo de precio híbrido: tarifa sugerida + oferta del usuario + contraoferta del enfermero (CN-06, decisión del developer).",
       "Un solo rol por persona en el MVP (CN-07, decisión del developer).",
-      "Internet obligatorio durante el servicio, sin modo offline (vision §7: «restricción de negocio aceptada»)."
+      "Internet obligatorio durante el servicio, sin modo offline (vision §7: «restricción de negocio aceptada»).",
+      "El PIN no prueba presencia física del paciente en servicios para terceros: riesgo residual aceptado (CN-18, decisión del developer)."
     ],
-    ambiguedades: [
-      "¿Qué documento manda cuando vision.md y Requirements-Context/HU se contradicen? No hay regla de precedencia.",
-      "¿Quién cobra, cuánto y cuándo? No hay modelo de ingresos ni de liquidación, pero el MVP incluye pasarela.",
-      "¿Quién es el «paciente» que valida el PIN cuando el servicio es para un tercero?",
+    "ambiguedades": [
+      "¿Cómo conviven la asignación atómica por orden de llegada, la negociación de precio y la invitación dirigida? No hay máquina de estados que las reconcilie (Req §10.2, nota INC-03).",
+      "¿Quién cobra, cuánto y cuándo? No hay modelo de ingresos ni de liquidez, pero el MVP incluye pasarela.",
+      "¿Cómo se muestra el PIN al usuario si solo se guarda su hash (Req §14.1 vs §14.2)?",
+      "¿Qué significa «único por servicio» para el PIN: por servicio o entre todos los servicios?",
+      "¿Qué puede hacer el superadministrador ante un perfil fraudulento si solo puede aprobar o pedir corrección (Req §6.1)?",
       "¿Cuántos revisores hay y qué más hace el superadministrador?",
-      "¿Qué significa «servicio programado» frente a uno inmediato? (§9 solo menciona «Si el servicio es programado».)",
       "¿Cuántas personas, con qué perfiles y en qué plazo construirán y operarán esto?"
     ]
   },
-
-  dimensiones: [
-    {id:"tecnica", puntaje:3, confianza:"Media",
-     evidencia:[
-       {t:"VERIFICADA", x:"Los principios declarados son correctos: asignación única y atómica (Req §10.2, CTX-RN-01/02), validación en backend (§21), PIN con hash (CTX-RN-18) y contraseña de 12 a 64 caracteres (HU01-RN-06)."},
-       {t:"VERIFICADA", x:"Faltan decisiones sin las cuales no se puede implementar ni probar: idempotencia solo enunciada (§10.3, sin clave ni retención), TTL/intentos del código de correo pendientes (HU-01), y 0 coincidencias de zona horaria, MFA, latencia o volumetría en los documentos normativos."},
-       {t:"SUPUESTO", x:"Que el alcance de vision.md (pagos, biometría, geolocalización, tiempo real, negociación) sea construible: no hay arquitectura, proveedores ni requisitos no funcionales."},
-       {t:"VERIFICADA", x:"No existe código en el repositorio; no se evaluó implementación."}
-     ],
-     riesgo:"Alcance técnico ampliado en vision.md sin arquitectura, proveedores ni requisitos no funcionales que lo respalden."},
-    {id:"financiera", puntaje:null, confianza:"—",
-     evidencia:[{t:"VERIFICADA", x:"0 menciones de presupuesto total, costos, precios reales o ingresos. Única cifra económica: la ausencia de presupuesto para biometría (vision §7). La comisión figura como «A definir»."}],
-     riesgo:"No evaluable: no se puede saber si el proyecto es financiable ni rentable.",
-     por_que_null:"Sin presupuesto, costos por transacción (biometría, pasarela, mensajería, nube) ni modelo de ingresos."},
-    {id:"operativa", puntaje:2, confianza:"Baja",
-     evidencia:[
-       {t:"VERIFICADA", x:"Toda aprobación de enfermeros es manual y la hace un rol (superadministrador) que además configura, audita y —según CN/§15— debería atender bloqueos (HU-03 RN-09; Req §22)."},
-       {t:"VERIFICADA", x:"No existe proceso de soporte: el desbloqueo tras 5 intentos de PIN está «pendiente de definición» (Req §15) y sin HU; la recaptura periódica de foto «debe diseñarse» (vision §7)."},
-       {t:"SUPUESTO", x:"Que 24–36 h sea alcanzable: la propia visión reconoce que el SLA «se degrada rápidamente» (vision §8) y no define revisores ni reloj."},
-       {t:"VERIFICADA", x:"0 menciones al tamaño del equipo: la confianza de esta calificación es baja."}
-     ],
-     riesgo:"Cuello de botella humano en el camino crítico de la oferta y ausencia de soporte para incidentes en tiempo real."},
-    {id:"mercado", puntaje:null, confianza:"—",
-     evidencia:[{t:"VERIFICADA", x:"vision §1 admite: «no se dispone de datos de mercado verificados»; §8 marca la baja liquidez como «No cubierto en esta fase». Todos los objetivos de métricas están en «A definir»."}],
-     riesgo:"No evaluable: la demanda y la disposición a pagar no están demostradas.",
-     por_que_null:"Sin datos de demanda, oferta de enfermeros, tamaño de mercado ni disposición a pagar."},
-    {id:"legal", puntaje:2, confianza:"Media",
-     evidencia:[
-       {t:"VERIFICADA", x:"La clasificación intermediario vs. prestador de salud está declarada «restricción activa, no resuelta» (vision §7) y diseño actual «tiene rasgos de prestador»."},
-       {t:"VERIFICADA", x:"Los flujos normativos recogen datos de salud (HU-01) sin autorización, aviso ni finalidad, aunque la visión exige «base legal, consentimiento y aviso de privacidad antes de recolectar» (vision §7). Sin consentimiento biométrico ni del tercero titular en ninguna HU."},
-       {t:"SUPUESTO", x:"Marco citado por la auditoría previa (Ley 1581/2012 art. 23, Res. 3100/2019, Ley 1164/2007): coincide con mi conocimiento general, pero no fue re-verificado contra fuente primaria en esta sesión. Requiere concepto jurídico."},
-       {t:"INFERENCIA", x:"Se califica 2 y no 1 porque la visión ya reconoce los riesgos y propone mitigaciones; el problema es que no llegaron a las HU."}
-     ],
-     riesgo:"Tratamiento de datos de salud, biométricos y de ubicación sin base legal implementada, sobre una clasificación regulatoria sin resolver."},
-    {id:"cronograma", puntaje:null, confianza:"—",
-     evidencia:[{t:"VERIFICADA", x:"0 menciones de cronograma, hitos, fechas objetivo ni capacidad del equipo en todo el corpus."}],
-     riesgo:"No evaluable.",
-     por_que_null:"Sin fechas, hitos, equipo ni estimaciones."},
-    {id:"riesgos", puntaje:2, confianza:"Media",
-     evidencia:[
-       {t:"VERIFICADA", x:"Dependencias externas críticas sin proveedor ni costo: pasarela de pagos, verificación facial (vision §7 y preguntas abiertas), correo/SMS y geolocalización. 0 menciones de proveedor en los documentos normativos."},
-       {t:"VERIFICADA", x:"Conectividad obligatoria sin modo offline y sin tolerancia definida a cortes durante un servicio (vision §7, pregunta abierta 10)."},
-       {t:"SUPUESTO", x:"Consulta del ReTHUS como fuente externa disponible y gratuita (afirmación de la auditoría previa; no verificada aquí)."}
-     ],
-     riesgo:"Cinco o más dependencias externas críticas sin seleccionar, presupuestar ni con plan de contingencia."},
-    {id:"sostenibilidad", puntaje:null, confianza:"—",
-     evidencia:[{t:"VERIFICADA", x:"Sin unidad económica (ingreso por servicio, comisión, costo de adquisición y de verificación). La métrica de comisión está en «A definir»."}],
-     riesgo:"No evaluable.",
-     por_que_null:"Sin datos económicos ni de retención que permitan juzgar si el modelo se sostiene."}
+  "dimensiones": [
+    {
+      "id": "tecnica",
+      "puntaje": 3,
+      "confianza": "Media",
+      "evidencia": [
+        {
+          "t": "VERIFICADA",
+          "x": "Los principios declarados son correctos y varias decisiones ya se aplicaron: asignación única y atómica (Req §10.2), validación en backend (§21), contraseña de 12 a 64 caracteres (HU01-RN-06) y código de correo con TTL de 15 min, 5 intentos y 3 reenvíos por hora (HU01-RN-09)."
+        },
+        {
+          "t": "VERIFICADA",
+          "x": "Contradicción interna en el PIN: se exige guardarlo solo como hash y, a la vez, mostrárselo al usuario (Req §14.1 vs §14.2); «único por servicio» admite dos lecturas (INC-28, INC-31)."
+        },
+        {
+          "t": "VERIFICADA",
+          "x": "La máquina de estados del servicio tiene 5 estados (Req §8.1) y no soporta negociación, invitación dirigida, expiración ni cancelación con reglas (INC-03, INC-12). 0 coincidencias de MFA, zona horaria, latencia, RPO/RTO o volumetría en Requirements-Context, HU-01…04 y vision.md."
+        },
+        {
+          "t": "SUPUESTO",
+          "x": "Que el alcance aprobado en vision.md (pagos, biometría, geolocalización, tiempo real, negociación, directorio) sea construible: no hay arquitectura, proveedores ni requisitos no funcionales."
+        },
+        {
+          "t": "VERIFICADA",
+          "x": "No existe código de producto en el repositorio; no se evaluó implementación."
+        }
+      ],
+      "riesgo": "Definición de MVP que la máquina de estados vigente no soporta, y una regla de seguridad (PIN) que no se puede cumplir tal como está escrita."
+    },
+    {
+      "id": "financiera",
+      "puntaje": null,
+      "confianza": "—",
+      "evidencia": [
+        {
+          "t": "VERIFICADA",
+          "x": "0 menciones de presupuesto total, costos, precios reales o ingresos en Requirements-Context y HU. Única cifra económica: la ausencia de presupuesto para biometría (vision §7). La comisión figura como «A definir»."
+        }
+      ],
+      "riesgo": "No evaluable: no se puede saber si el proyecto es financiable ni rentable.",
+      "por_que_null": "Sin presupuesto, costos por transacción (biometría, pasarela, mensajería, nube) ni modelo de ingresos."
+    },
+    {
+      "id": "operativa",
+      "puntaje": 2,
+      "confianza": "Baja",
+      "evidencia": [
+        {
+          "t": "VERIFICADA",
+          "x": "Toda aprobación de enfermeros es manual y la hace un único rol que además configura y audita (HU-03 RN-09; Req §22). Tras unificar los estados no existe acción terminal ni suspensión (INC-29)."
+        },
+        {
+          "t": "VERIFICADA",
+          "x": "El «soporte» que recibe el evento de bloqueo por PIN (Req §15) y al que se puede acudir con una calificación pendiente (§19.1) no existe como rol (Req §2 fija tres roles), proceso ni historia; el desbloqueo sigue «pendiente de definición»."
+        },
+        {
+          "t": "SUPUESTO",
+          "x": "Que 24–36 h sea alcanzable: vision §8 admite que el SLA «se degrada rápidamente» y no hay revisores, reloj ni métricas."
+        },
+        {
+          "t": "VERIFICADA",
+          "x": "0 menciones al tamaño del equipo: la confianza de esta calificación es baja."
+        }
+      ],
+      "riesgo": "Cuello de botella humano en el camino crítico de la oferta y ausencia de soporte para incidentes en tiempo real."
+    },
+    {
+      "id": "mercado",
+      "puntaje": null,
+      "confianza": "—",
+      "evidencia": [
+        {
+          "t": "VERIFICADA",
+          "x": "vision §1 admite: «no se dispone de datos de mercado verificados»; §8 marca la baja liquidez como «No cubierto en esta fase». Todos los objetivos de métricas están en «A definir»."
+        }
+      ],
+      "riesgo": "No evaluable: la demanda y la disposición a pagar no están demostradas.",
+      "por_que_null": "Sin datos de demanda, oferta de enfermeros, tamaño de mercado ni disposición a pagar."
+    },
+    {
+      "id": "legal",
+      "puntaje": 2,
+      "confianza": "Media",
+      "evidencia": [
+        {
+          "t": "VERIFICADA",
+          "x": "Avance real: HU-01 y Req §4.2 ya exigen aviso de privacidad y consentimiento explícito antes de capturar datos médicos propios (HU01-RN-08; Ley 1581 de 2012)."
+        },
+        {
+          "t": "VERIFICADA",
+          "x": "Decisión declarada: la plataforma opera como intermediario tecnológico y no como prestador de salud. vision §7 todavía la registra como «restricción activa, no resuelta» y admite que el diseño (verificación de credenciales, agendamiento, control de inicio y fin del servicio) «tiene rasgos de prestador» bajo la Res. 3100/2019 (INC-34)."
+        },
+        {
+          "t": "VERIFICADA",
+          "x": "Ninguna HU incorpora consentimiento para biometría facial (que la visión exige «explícito y separado»), ubicación en tiempo real, datos del tercero titular ni datos y documentos del enfermero (HU-02). 0 menciones de política de retención o supresión de datos."
+        },
+        {
+          "t": "SUPUESTO",
+          "x": "Marco legal citado por vision.md (Ley 1581/2012, Res. 3100/2019, ReTHUS): coincide con mi conocimiento general, pero no se re-verificó contra fuente primaria. Requiere concepto jurídico."
+        },
+        {
+          "t": "INFERENCIA",
+          "x": "Se califica 2 y no 1: la visión ya reconoce los riesgos y hubo un avance concreto; falta que el resto llegue a las HU."
+        },
+        {
+          "t": "INFERENCIA",
+          "x": "La intención de operar como intermediario no fija por sí sola la calificación jurídica: la determina el diseño real de la operación. Por eso el concepto jurídico sigue siendo necesario, ahora para confirmar que el diseño encaja con el modelo elegido."
+        }
+      ],
+      "riesgo": "Operación que debe demostrar que es intermediación y no prestación de salud, con datos biométricos, de ubicación y de terceros sin consentimiento definido."
+    },
+    {
+      "id": "cronograma",
+      "puntaje": null,
+      "confianza": "—",
+      "evidencia": [
+        {
+          "t": "VERIFICADA",
+          "x": "0 menciones de cronograma, hitos, fechas objetivo ni capacidad del equipo en todo el corpus."
+        }
+      ],
+      "riesgo": "No evaluable.",
+      "por_que_null": "Sin fechas, hitos, equipo ni estimaciones."
+    },
+    {
+      "id": "riesgos",
+      "puntaje": 2,
+      "confianza": "Media",
+      "evidencia": [
+        {
+          "t": "VERIFICADA",
+          "x": "Dependencias externas críticas sin proveedor ni costo: pasarela de pagos, verificación facial («Proveedor de verificación facial y su costo aún no definidos», vision §7), correo/SMS y geolocalización. 0 menciones de proveedor en Requirements-Context y HU."
+        },
+        {
+          "t": "VERIFICADA",
+          "x": "Conectividad obligatoria sin modo offline y sin tolerancia definida a cortes durante un servicio (vision §7, pregunta abierta 10)."
+        },
+        {
+          "t": "SUPUESTO",
+          "x": "Consulta del ReTHUS como fuente externa disponible y gratuita: vision §8 solo la nombra como mitigación; su disponibilidad y costo no están verificados."
+        }
+      ],
+      "riesgo": "Cinco o más dependencias externas críticas sin seleccionar, presupuestar ni con plan de contingencia."
+    },
+    {
+      "id": "sostenibilidad",
+      "puntaje": null,
+      "confianza": "—",
+      "evidencia": [
+        {
+          "t": "VERIFICADA",
+          "x": "Sin unidad económica (ingreso por servicio, comisión, costo de adquisición y de verificación). La métrica de comisión está en «A definir»."
+        }
+      ],
+      "riesgo": "No evaluable.",
+      "por_que_null": "Sin datos económicos ni de retención que permitan juzgar si el modelo se sostiene."
+    }
   ],
-
-  incongruencias: [
-    {id:"INC-01", sev:"Crítica", tipo:"Consistencia documental", nat:"Hecho",
-     ubic:"vision.md (front-matter y §5) vs. HU-01…HU-04 y Requirements-Context.md",
-     cita:"vision.md: status: «borrador» y «Pasarela de pagos integrada en el MVP». HU-01…04: «Estado: Definida para MVP».",
-     expl:"Hay dos definiciones de MVP. El documento en borrador amplía el alcance (pagos, biometría, geolocalización, directorio, negociación, tiempo real) y declara que «reabre y reemplaza» una restricción de HU-02, pero las HU «definidas» y Requirements-Context no se actualizaron y no hay regla de precedencia. Cada equipo construiría un producto distinto según el documento que lea.",
-     corr:"Declarar un documento normativo único: aprobar o descartar cada ampliación de vision.md, propagar lo aprobado a Requirements-Context y a las HU, y marcar el estado real de cada documento."},
-    {id:"INC-02", sev:"Crítica", tipo:"Objetivos vs. alcance", nat:"Hecho",
-     ubic:"Requirements-Context §9 y §17.1; HU-01/03/04 «Fuera de alcance»; vision.md §5; Req §29",
-     cita:"§9: «Precio ofrecido.» · §17.1: «El sistema calcula el valor adicional correspondiente.» · HU-04: «Definición de tarifas.» fuera de alcance · vision §5: «Pasarela de pagos integrada en el MVP (no se pospone a una fase posterior)».",
-     expl:"El sistema muestra y recalcula precios y la visión exige cobrar en el MVP, pero ninguna HU definida ni pendiente (HU-05…HU-17) cubre tarifa, negociación, pago, comisión ni liquidación. CN-06 confirmó el modelo híbrido pero admite que «no crea todavía el mecanismo concreto».",
-     corr:"Escribir las historias de precio/negociación y de pagos (proveedor, custodia, comisión, reembolso) antes de HU-05 y añadirlas a la lista de §29."},
-    {id:"INC-03", sev:"Crítica", tipo:"Metas incompatibles", nat:"Hecho",
-     ubic:"Requirements-Context §8.2 y §10.2; vision.md §5",
-     cita:"§10.2: «El primer enfermero cuya confirmación sea procesada correctamente obtendrá la asignación.» · vision §5: «el enfermero puede contraofertar… Requiere una historia de negociación de precio antes de la asignación» y «dirigir/invitar la solicitud a uno específico».",
-     expl:"La asignación atómica por orden de llegada es incompatible con contraoferta previa y con invitación dirigida. Ambas exigen estados y reglas (ofertada, invitada, contraofertada) que la máquina de estados (Publicado → Asignado) no tiene, y cambian qué significa «atómico» y quién gana.",
-     corr:"Decidir el modelo de asignación del MVP (feed atómico, negociación o directorio) y rediseñar la tabla de transiciones con estados y guardas."},
-    {id:"INC-04", sev:"Crítica", tipo:"Objetivos vs. alcance", nat:"Hecho",
-     ubic:"HU-02 RN-02 y RN-04; HU-03; Req §14; vision.md §5 y §8",
-     cita:"HU-02 RN-02: cuatro documentos obligatorios (identidad, foto, título, tarjeta) y RN-04 «La aprobación… debe realizarse manualmente». vision §5: «una foto en vivo se contrasta contra el documento de identidad» (máx. 2 intentos). vision §8: mitigación «biometría/prueba de vida y contraste… contra el ReTHUS antes de aprobar».",
-     expl:"La visión identifica como riesgo la suplantación de un enfermero en el domicilio y fija su mitigación, pero HU-02/03 verifican solo imágenes autoportadas y Req §14 solo prevé el PIN. Los antecedentes disciplinarios siguen como documento opcional (HU-02). La auditoría previa propone 3 intentos biométricos (CA-E-06) frente a los 2 de la visión.",
-     corr:"Incorporar a HU-02/03 el contraste con ReTHUS y la verificación facial (intentos, fallback, proveedor), hacer obligatorios los antecedentes y unificar el número de intentos."},
-    {id:"INC-05", sev:"Crítica", tipo:"Supuestos contradictorios", nat:"Hecho",
-     ubic:"HU-01 (criterios y flujo); Req §4.2 y §21; vision.md §5 y §7",
-     cita:"HU-01: «Los datos médicos propios pueden almacenarse durante el registro.» (ningún paso de autorización) · vision §7: el tratamiento de salud «requiere base legal, consentimiento y aviso de privacidad antes de recolectar datos médicos»; biometría con «consentimiento explícito y separado».",
-     expl:"El flujo normativo recoge datos de salud (y, según la visión, biométricos y de ubicación) sin autorización, aviso ni finalidad, y sin contemplar al tercero titular (HU01-RN-05). Req §21 se titula «Privacidad» pero solo trata control de acceso. La visión declara la obligación y las HU la ignoran.",
-     corr:"Añadir a HU-01/HU-02 pasos y criterios de autorización expresa (versión del aviso, fecha, canal), consentimiento separado para biometría y ubicación, y un mecanismo para el tercero titular; reescribir §21 como capítulo de cumplimiento."},
-    {id:"INC-06", sev:"Alta", tipo:"Dependencias sin precedente", nat:"Hecho",
-     ubic:"HU-02 (flujo, pasos 1–14); HU-01 «Fuera de alcance»; Req §4.3–4.4 y §22",
-     cita:"HU-02 no contiene contraseña ni verificación de correo. HU-01 excluye «Registro y aprobación profesional de enfermeros.» Req §4.3 y §4.4 están bajo «4. Usuario / Cliente».",
-     expl:"Ninguna historia define cómo el enfermero crea credenciales, verifica su correo o inicia sesión, ni cómo se crea y protege (MFA: 0 menciones) la cuenta del superadministrador que aprueba perfiles con datos sensibles. HU-03 depende de ambas.",
-     corr:"Extender política de credenciales y verificación de correo a todos los roles y añadir una HU de alta y protección de cuentas administrativas."},
-    {id:"INC-07", sev:"Alta", tipo:"Objetivos vs. alcance", nat:"Hecho",
-     ubic:"Requirements-Context §7; HU-04 RN-01 y criterios; vision.md §5",
-     cita:"Req §7: «Para el MVP se definirán… 4. Atención hospitalaria.» · vision §5 «Explícitamente fuera del MVP»: «Atención hospitalaria dentro de una IPS mediante convenio formal».",
-     expl:"El catálogo sembrado del MVP incluye un tipo que la visión excluye del MVP. HU-04 exige que el sistema «cuenta con los cuatro tipos», así que se ofrecería a los usuarios algo que el negocio dice que no presta.",
-     corr:"Decidir si el tipo entra o no; si no, sembrarlo inactivo y ajustar RN-01 y los criterios de HU-04."},
-    {id:"INC-08", sev:"Alta", tipo:"Supuestos contradictorios", nat:"Hecho",
-     ubic:"Req §5.1 y §9; HU-02 RN-05; glossary.md; vision.md §5",
-     cita:"Req §5.1: «No se almacenará ni solicitará un radio de servicio. Solamente se almacenará la zona de residencia.» · Req §9: «Distancia aproximada.» · vision §5: «Geolocalización real del enfermero (no solo zona de residencia como texto libre)».",
-     expl:"Para mostrar distancia hace falta una referencia geográfica del enfermero; la restricción vigente lo impide y la visión la deroga sin actualizar Req, HU-02 ni el glosario. Además la zona no tiene tipo de dato (texto libre, código DANE o coordenadas).",
-     corr:"Reemplazar formalmente la restricción, definir el tipo de dato y la precisión, y actualizar Req §5.1, HU-02 y glosario."},
-    {id:"INC-09", sev:"Alta", tipo:"Metas incompatibles", nat:"Hecho + inferencia",
-     ubic:"Requirements-Context §9 y §12.1; vision.md (pregunta abierta 5)",
-     cita:"§9: «Punto de origen.», «Descripción general del servicio.» y «Los datos personales adicionales y los datos médicos sensibles del paciente no estarán disponibles en esta etapa.» · vision: «¿Qué nivel de precisión de geolocalización se requiere (ciudad/barrio vs. coordenadas exactas)…?»",
-     expl:"La lista previa a la aceptación muestra el origen (el domicilio de una persona vulnerable) y un texto libre a todos los enfermeros aprobados, sin precisión definida ni filtro. Una dirección exacta o una descripción como «paciente con demencia» filtra identidad o salud antes de la asignación, contradiciendo la regla que la misma sección enuncia.",
-     corr:"Fijar la precisión máxima del origen hasta la asignación y estructurar o filtrar el texto libre para impedir datos de salud."},
-    {id:"INC-10", sev:"Alta", tipo:"Metas incompatibles", nat:"Hecho + inferencia",
-     ubic:"Requirements-Context §19.1, RN-17 (§27.1), §14.2 y §17; vision.md §3",
-     cita:"§19.1: «No podrá realizar otras acciones dentro de la aplicación.» · vision §3: «ambos lados del marketplace deben tener fricción mínima para lograr liquidez».",
-     expl:"El bloqueo total por calificación pendiente impediría consultar el PIN, aprobar una extensión de un servicio en curso, cancelar o pedir ayuda mientras el usuario debe calificar otro servicio. Contradice el objetivo de fricción mínima y las reglas de PIN y extensión.",
-     corr:"Convertir el bloqueo en restricción específica (p. ej. no crear ni aceptar servicios nuevos) y excluir PIN, extensiones, cancelación y soporte."},
-    {id:"INC-11", sev:"Alta", tipo:"Dependencias sin precedente", nat:"Hecho",
-     ubic:"Requirements-Context §15 y §29; business-rules-index.md (Vacíos)",
-     cita:"§15: «El mecanismo exacto para desbloquear el servicio después de alcanzar el límite de intentos queda pendiente de definición.»",
-     expl:"Tras 5 intentos fallidos el servicio queda bloqueado sin salida, con el paciente esperando, y ninguna HU (ni de la lista de §29) lo asume. La visión sí define un fallback para la verificación facial pero no para el PIN.",
-     corr:"Escribir la HU de desbloqueo (soporte con doble autorización o regeneración de PIN notificada a ambas partes)."},
-    {id:"INC-12", sev:"Alta", tipo:"Dependencias sin precedente", nat:"Hecho",
-     ubic:"Requirements-Context §8.2, §16, §26.1 y §29",
-     cita:"§26.1: «Publicado / Asignado / En curso → Cancelación válida → Cancelado… Las condiciones específicas de cancelación deberán definirse en la historia de usuario correspondiente.» · §16: «solamente podrá ser finalizado cuando se haya cumplido como mínimo la duración contratada.»",
-     expl:"La historia de cancelación no existe ni está en la lista de pendientes. Se permite pasar de «En curso» a «Cancelado» sin reglas, mientras §16 solo prevé finalizar tras la duración contratada: no hay terminación anticipada, no-show ni expiración de solicitudes sin aceptar.",
-     corr:"Escribir HU de cancelación, no-show y expiración, con tabla explícita de transiciones y guardas."},
-    {id:"INC-13", sev:"Alta", tipo:"Alcance vs. recursos", nat:"Hecho + inferencia",
-     ubic:"HU-03 RN-09; Req §22; vision.md §8",
-     cita:"HU-03 RN-09: «El objetivo de revisión… será de 24 a 36 horas.» · vision §8: «El SLA de revisión se degrada rápidamente al crecer el volumen», mitigación «más de un revisor + métricas de cola desde el diseño».",
-     expl:"La visión reconoce el cuello de botella y su mitigación, pero HU-03 mantiene un SLA sin revisores, sin reloj (¿se reinicia al corregir?) y sin métricas. Con las premisas de la auditoría previa (no medidas) el SLA se rompe con pocas decenas de registros al día; ver cálculo en Autoverificación.",
-     corr:"Definir revisores, reloj y métricas del SLA; incorporar verificación asistida para que el humano revise solo excepciones."},
-    {id:"INC-14", sev:"Alta", tipo:"Modelo de datos", nat:"Hecho",
-     ubic:"vision.md §5 y preguntas abiertas 8–10; domain-model.md §1; HU-01",
-     cita:"vision §5: «el usuario/paciente debe tener su ubicación activa y compartida en tiempo real con un contacto de emergencia designado».",
-     expl:"Ubicación en tiempo real y contacto de emergencia están en el MVP, pero el modelo de dominio no tiene entidades para ellos, HU-01 no captura contacto de emergencia y las preguntas de la visión (obligatoriedad, paciente sin GPS, cortes de conexión) siguen abiertas. Es dato sensible continuo de una persona vulnerable.",
-     corr:"Modelar las entidades, definir obligatoriedad y excepciones, y escribir la HU correspondiente con su consentimiento."},
-    {id:"INC-15", sev:"Media", tipo:"Dependencias sin precedente", nat:"Hecho + inferencia",
-     ubic:"Requirements-Context §11, §12.2 y §29 (HU-17); vision.md §5",
-     cita:"§11: «Se habilitará la información necesaria para coordinar el servicio.» · §12.2: «Los datos de contacto se habilitarán de acuerdo con las mismas reglas de tiempo» · vision: chat fuera del MVP «más allá de lo estrictamente necesario para coordinar».",
-     expl:"Con la ventana por defecto de 180 min, un servicio aceptado con días de antelación no permite contactar al paciente hasta 3 h antes, y no está definido qué canal cubre «lo estrictamente necesario». Tampoco se define el caso de un servicio que se acepta con menos de 180 min de margen ni el «servicio no programado».",
-     corr:"Definir el canal mínimo de coordinación y el comportamiento para servicios con menos margen que la ventana."},
-    {id:"INC-16", sev:"Media", tipo:"Terminología y definiciones", nat:"Hecho",
-     ubic:"Requirements-Context §5.2 y §6.1; HU-03 (flujos de rechazo y corrección, RN-05)",
-     cita:"§5.2: «Rechazado y Corrección solicitada son estados independientes: el primero indica que la información no fue aprobada… el segundo que se requieren ajustes puntuales». HU-03: ambos flujos terminan igual (corrige, solicita nueva revisión, vuelve a «Pendiente de revisión»). §6.1: «Rechazar / solicitar corrección» como una sola acción.",
-     expl:"Dos estados con significados distintos y comportamiento idéntico: la distinción no tiene efecto. No hay estado terminal de rechazo ni apelación, y solo el rechazo exige comentario por regla (RN-05).",
-     corr:"Definir qué diferencia el rechazo (p. ej. terminal o con límite de ciclos) de la corrección, o fusionar los estados."},
-    {id:"INC-17", sev:"Media", tipo:"Métricas de éxito", nat:"Hecho",
-     ubic:"vision.md §2 y §6; Req §8.1 y §26",
-     cita:"vision §6: «% de solicitudes PUBLICADO que llegan a ASIGNADO antes de expirar» · todos los objetivos: «A definir». vision §2: conecta «de forma confiable».",
-     expl:"Una métrica depende del estado «expirar», que no existe en los cinco estados del servicio. Además ninguna de las cinco métricas mide la promesa central (confianza y seguridad: incidentes, suplantaciones detectadas, cancelaciones) y ninguna tiene umbral.",
-     corr:"Añadir el estado de expiración o redefinir la métrica; incluir al menos una métrica de seguridad/confianza y fijar umbrales."},
-    {id:"INC-18", sev:"Media", tipo:"Terminología y definiciones", nat:"Hecho + inferencia",
-     ubic:"Requirements-Context §14.3 y §4.2; vision.md §5; HU01-RN-05",
-     cita:"§14.3: «El usuario consulta el PIN… El usuario proporciona el PIN al enfermero.» · vision §5: «el PIN sigue validando la presencia del paciente/usuario».",
-     expl:"«Usuario» y «paciente» se usan como sinónimos, pero cuando el servicio es para un tercero son personas distintas: el PIN lo ve quien contrata, que puede estar ausente. Un PIN dictable por teléfono no prueba presencia, que es lo que la visión le atribuye.",
-     corr:"Definir quién recibe el PIN en servicios para terceros y qué evidencia adicional de presencia se exige."},
-    {id:"INC-19", sev:"Media", tipo:"Modelo de datos", nat:"Hecho",
-     ubic:"specs/context/domain-model.md §3 y §4",
-     cita:"§4: «una misma Persona no puede registrarse bajo más de un Rol». Diagrama: «PERSONA ||--o{ ROL : asociado a (1:1, resuelto 2026-09-22)» y tres especializaciones opcionales «||--o|».",
-     expl:"El diagrama expresa que una persona tiene cero o muchos roles y permite tener a la vez perfil de Usuario y de Enfermero, contra la decisión 1:1 (CN-07) que el propio texto cita.",
-     corr:"Corregir el diagrama o añadir una restricción de exclusividad entre los perfiles."},
-    {id:"INC-20", sev:"Media", tipo:"Modelo de datos", nat:"Hecho",
-     ubic:"specs/context/domain-model.md §2 (Enfermero → Servicio)",
-     cita:"«…un enfermero puede aceptar múltiples servicios… pero solo uno activo a la vez por regla de asignación única.»",
-     expl:"CTX-RN-01 dice que un servicio tiene un solo enfermero, no que un enfermero tenga un solo servicio activo. La regla atribuida no existe y, al mismo tiempo, nada regula que un enfermero acepte servicios con horarios solapados.",
-     corr:"Retirar la afirmación o convertirla en regla explícita, y definir el tratamiento de solapamientos."},
-    {id:"INC-21", sev:"Media", tipo:"Consistencia documental", nat:"Hecho",
-     ubic:"Requirements-Context §5.1 vs. HU-02 («Experiencia profesional», criterios de aceptación)",
-     cita:"Req §5.1: «El registro deberá incluir información personal y profesional» (años, experiencia, lugares…). HU-02: «El enfermero podrá registrar: Años de experiencia. Experiencia profesional…»; ningún criterio de aceptación la exige.",
-     expl:"El requisito dice «deberá incluir» y la historia lo hace opcional. Lo que el revisor debe poder evaluar no está definido.",
-     corr:"Indicar qué campos de experiencia son obligatorios y añadir criterios de aceptación."},
-    {id:"INC-22", sev:"Media", tipo:"Cifras", nat:"Hecho",
-     ubic:"Auditoria-Especificacion.md §1.2, §3.4.5, §4.4.1, §6.2.1, Anexo A.2",
-     cita:"«La cadena a1!… cumple los tres requisitos literales y el backend la aceptaría.» · tabla M/M/1: «15 | 0,50 | 1,9 h».",
-     expl:"La auditoría previa (22-sep) describe como abiertos defectos ya corregidos (contraseña sin longitud: HU01-RN-06 exige 12–64; PIN en claro: CTX-RN-18; §9/§12.1 y numeración duplicada; lista de datos sensibles vacía). Contiene errores de cálculo: con μ=30/día y λ=15, W=24/(30−15)=1,6 h, no 1,9 h; y «≈7/día» mezcla multitarea con reprocesos (sin ellos son 9/día). La cifra «14 veces pendiente de definición» no se reproduce: hay 3 coincidencias exactas en Requirements+HU. Sus recomendaciones N:M y «probablemente no CRUD» fueron decididas al revés (CN-07, CN-05) sin dejar razón registrada.",
-     corr:"Marcar la auditoría como histórica, corregir sus cifras y registrar por qué se descartaron recomendaciones que se rechazaron."},
-    {id:"INC-23", sev:"Media", tipo:"Dependencias sin precedente", nat:"Hecho",
-     ubic:"HU-01 (Flujos alternativos: código incorrecto y código expirado)",
-     cita:"«Las reglas de expiración y cantidad máxima de intentos quedan pendientes de definición.» y, a continuación, «Si el código ha expirado: El sistema deberá informar al usuario.»",
-     expl:"El flujo de código expirado presupone un tiempo de vida que la misma historia declara no definido. Sin TTL ni límite de intentos no se puede escribir el criterio de aceptación ni la prueba de seguridad.",
-     corr:"Fijar TTL, intentos máximos, uso único y límite de reenvíos."},
-    {id:"INC-24", sev:"Baja", tipo:"Modelo de datos", nat:"Hecho",
-     ubic:"HU-02 «Información base de Persona» vs. Req §3.1 y domain-model.md §1",
-     cita:"HU-02 ubica «Foto» y «Zona de residencia» en Persona; Req §3.1 y domain-model las ubican en Enfermero.",
-     expl:"Dónde vive cada dato cambia el modelo de datos: Persona se comparte entre roles y el dato es solo del enfermero.",
-     corr:"Unificar la ubicación de ambos campos."},
-    {id:"INC-25", sev:"Baja", tipo:"Consistencia documental", nat:"Hecho",
-     ubic:"Requirements-Context §12 y §14.2; domain-model.md (Configuracion)",
-     cita:"§12: «El valor por defecto es de 180 minutos» (datos sensibles) · §14.2: «Configuración: 5 minutos antes» (solo ejemplo).",
-     expl:"La ventana de datos sensibles tiene valor por defecto y la del PIN no. Si nadie la configura, el comportamiento es indefinido.",
-     corr:"Fijar un valor por defecto para la ventana del PIN."},
-    {id:"INC-26", sev:"Baja", tipo:"Consistencia documental", nat:"Hecho",
-     ubic:"business-rules-index.md (CN-01) vs. Requirements-Context §12.1",
-     cita:"Índice: «§12.1 reescrita como referencia a §9; eliminada la lista duplicada.» El archivo aún contiene bajo §12.1 la lista completa de 11 elementos.",
-     expl:"El registro de cambios afirma algo que el documento no cumple. Hoy las dos listas coinciden, pero siguen siendo dos fuentes que pueden divergir.",
-     corr:"Sustituir la lista de §12.1 por una referencia a §9."}
+  "incongruencias": [
+    {
+      "id": "INC-02",
+      "sev": "Alta",
+      "tipo": "Objetivos vs. alcance",
+      "nat": "Hecho",
+      "ubic": "vision.md §5 (precio híbrido, tarifa sugerida por tipo de servicio); HU-04 «Fuera de alcance»; domain-model (TipoServicio, Configuracion); Requirements-Context §9 y §17.1",
+      "cita": "vision §5: «el superadministrador define una tarifa sugerida por tipo de servicio» · HU-04: «Definición de tarifas.» y «Cálculo del precio del servicio.» fuera de alcance · domain-model: TipoServicio sin atributo de tarifa; Configuracion solo con minutos de ventanas · Req §17.1: «El sistema calcula el valor adicional correspondiente.»",
+      "expl": "El MVP define que el superadministrador fija una tarifa por tipo de servicio, pero HU-04 (la historia que gestiona los tipos) la excluye y ni TipoServicio ni Configuracion la modelan. Req §17.1 calcula un valor adicional sin base de cálculo definida, y con pasarela en el MVP una extensión implica un cobro adicional que ningún documento contempla. El mecanismo concreto de negociación y pago sí es trabajo de HU futuras (GAP-12); aquí se señala solo que las piezas existentes no encajan con lo definido.",
+      "corr": "Decidir dónde vive la tarifa sugerida (TipoServicio o Configuracion), retirar la exclusión de HU-04 o documentar la excepción, y alinear Req §17.1 con el modelo de precio."
+    },
+    {
+      "id": "INC-03",
+      "sev": "Crítica",
+      "tipo": "Metas incompatibles",
+      "nat": "Hecho",
+      "ubic": "Requirements-Context §8.2, §10.2 (nota INC-03) y §27 reglas 3–5; vision.md §5",
+      "cita": "§10.2: «El primer enfermero cuya confirmación sea procesada correctamente obtendrá la asignación.» · nota INC-03: reconciliar ambos modelos «quedan pendientes de diseño» · vision §5: «el enfermero puede contraofertar… Requiere una historia de negociación de precio antes de la asignación» y «dirigir/invitar la solicitud a uno específico».",
+      "expl": "Vision.md (aprobado) define tres modelos de asignación que conviven en el MVP: feed atómico por orden de llegada, negociación de precio previa y invitación dirigida. Requirements-Context mantiene solo Publicado → Asignado → En curso → Finalizado / Cancelado y reglas críticas (§27, 3–5) que exigen que gane el primero en confirmar. Ofertado, invitado o contraofertado no existen en esa máquina y cambian qué significa «atómico» y quién gana. La propia nota INC-03 lo reconoce sin resolverlo. Es una contradicción entre documentos existentes, no una HU ausente.",
+      "corr": "Decidir el modelo de asignación del MVP y rediseñar la tabla de transiciones con estados y guardas (incluyendo expiración y cancelación)."
+    },
+    {
+      "id": "INC-04",
+      "sev": "Alta",
+      "tipo": "Objetivos vs. alcance",
+      "nat": "Hecho",
+      "ubic": "HU-02 RN-02 y RN-04; HU-03; Req §14; vision.md §5, §7 y §8",
+      "cita": "HU-02 RN-02: cuatro documentos obligatorios (identidad, foto, título, tarjeta) y RN-04 «La aprobación… debe realizarse manualmente». vision §5: «una foto en vivo se contrasta contra el documento de identidad» (máx. 2 intentos) y verificación al iniciar el servicio. vision §7: «Proveedor de verificación facial y su costo aún no definidos».",
+      "expl": "La visión aprobada incluye verificación facial en el registro y al iniciar el servicio, pero HU-02 y HU-03 —que siguen «Definida para MVP»— verifican solo imágenes autoportadas y Req §14 solo prevé el PIN. La visión identifica la suplantación como riesgo principal y fija esa mitigación; las HU existentes la ignoran y quedaron desactualizadas frente al MVP.",
+      "corr": "Actualizar HU-02/03 para reflejar la verificación facial y el contraste con fuente oficial que define la visión, o retirar esa mitigación del MVP."
+    },
+    {
+      "id": "INC-27",
+      "sev": "Media",
+      "tipo": "Consistencia documental",
+      "nat": "Hecho",
+      "ubic": "vision.md (front-matter «status: aprobado», nota INC-01, §7 y §9)",
+      "cita": "Nota: «Las preguntas abiertas de la sección 9 siguen sin resolver y no quedan cubiertas por esta aprobación de alcance» · §7: la clasificación legal es «restricción activa, no resuelta» · §9: 10 preguntas abiertas (pasarela y custodia, negociación, proveedor biométrico, geolocalización, contacto de emergencia, corte de conexión, umbrales…).",
+      "expl": "El documento está «aprobado» y a la vez declara que las condiciones que determinan si su alcance es viable (clasificación legal, proveedor y presupuesto biométrico, pasarela, precisión de geolocalización) siguen abiertas. La aprobación no dice qué ocurre con el alcance si alguna se resuelve en contra. No se cuentan aquí las HU pendientes.",
+      "corr": "Registrar en el propio documento qué componentes del MVP quedan condicionados a cada pregunta abierta y qué pasa con ellos si la respuesta es negativa."
+    },
+    {
+      "id": "INC-05",
+      "sev": "Alta",
+      "tipo": "Supuestos contradictorios",
+      "nat": "Hecho",
+      "ubic": "HU-01 (RN-08, criterios); HU-02; Req §4.2 y §21; vision.md §5 y §7",
+      "cita": "Resuelto solo para datos médicos propios (HU01-RN-08). Sigue: Req §4.2: «junto con el consentimiento correspondiente del titular o de quien lo represente» (sin mecanismo) · vision §7: biometría con «consentimiento explícito y separado» (0 menciones en HU-02) · Req §21: «Privacidad» solo trata control de acceso.",
+      "expl": "El MVP y Req §4.2 exigen consentimiento del tercero titular, y la visión exige consentimiento biométrico «explícito y separado», pero las HU existentes no lo recogen: HU-01 solo cubre datos médicos propios, sin mecanismo de representación, y HU-02 no tiene aviso ni autorización para los datos, documentos y foto del enfermero. Falta también qué registra el consentimiento (versión, fecha, revocación). Req §21 sigue tratando solo control de acceso.",
+      "corr": "Añadir a HU-01/HU-02 criterios de autorización expresa (versión del aviso, fecha, revocación), consentimiento separado para biometría, mecanismo para el tercero titular y reescribir §21 como capítulo de cumplimiento."
+    },
+    {
+      "id": "INC-06",
+      "sev": "Alta",
+      "tipo": "Dependencias sin precedente",
+      "nat": "Hecho",
+      "ubic": "HU-02 (flujo, pasos 1–14); HU-01 «Fuera de alcance»; Req §4.3–4.4 y §22",
+      "cita": "HU-02 no contiene contraseña ni verificación de correo. HU-01 excluye «Registro y aprobación profesional de enfermeros.» Req §4.3 y §4.4 están bajo «4. Usuario / Cliente».",
+      "expl": "HU-02 no define contraseña, verificación de correo ni inicio de sesión del enfermero, y Req §4.3 y §4.4 están bajo «Usuario / Cliente». La cuenta del superadministrador que aprueba perfiles con datos sensibles tampoco tiene definición de creación ni protección (MFA: 0 menciones). HU-03 depende de ambas. Es un vacío dentro de una HU ya declarada «Definida para MVP».",
+      "corr": "Extender política de credenciales y verificación de correo a todos los roles y añadir una HU de alta y protección de cuentas administrativas."
+    },
+    {
+      "id": "INC-09",
+      "sev": "Alta",
+      "tipo": "Metas incompatibles",
+      "nat": "Hecho + inferencia",
+      "ubic": "Requirements-Context §9 (nota INC-09) y §12.1; vision.md (pregunta abierta 5)",
+      "cita": "§9: «Punto de origen.», «Descripción general del servicio.» y «Los datos personales adicionales y los datos médicos sensibles del paciente no estarán disponibles en esta etapa.» · nota INC-09: la precisión «queda sin definir de forma deliberada».",
+      "expl": "El origen (domicilio de una persona vulnerable) y un texto libre se muestran a todos los enfermeros aprobados sin precisión ni filtro definidos. Una dirección exacta o «paciente con demencia» filtra identidad o salud antes de la asignación, contra la regla que la misma sección enuncia. Ahora es una omisión declarada, no resuelta.",
+      "corr": "Fijar la precisión máxima del origen hasta la asignación y estructurar o filtrar el texto libre para impedir datos de salud."
+    },
+    {
+      "id": "INC-11",
+      "sev": "Media",
+      "tipo": "Dependencias sin precedente",
+      "nat": "Hecho",
+      "ubic": "Requirements-Context §2, §15 y §19.1",
+      "cita": "§15: «notificar o generar el evento correspondiente para soporte» · §19.1: «solicitar ayuda/soporte» · §2: «Los roles serán fijos» (Usuario, Enfermero, Superadministrador).",
+      "expl": "Dos reglas vigentes dependen de un «soporte» que no existe entre los tres roles fijos ni en las funciones del superadministrador (§22). La regla se puede escribir, pero no cumplir: no hay a quién dirigirla. El mecanismo de desbloqueo del PIN es trabajo pendiente (GAP-10) y no se cuenta aquí.",
+      "corr": "Definir si «soporte» es una función del superadministrador o un rol nuevo, y reflejarlo en §2 y §22."
+    },
+    {
+      "id": "INC-12",
+      "sev": "Media",
+      "tipo": "Dependencias sin precedente",
+      "nat": "Hecho",
+      "ubic": "Requirements-Context §16 y §26.1",
+      "cita": "§26.1: «Publicado / Asignado / En curso → Cancelación válida → Cancelado» · §16: «solamente podrá ser finalizado cuando se haya cumplido como mínimo la duración contratada.»",
+      "expl": "El texto vigente permite pasar de «En curso» a «Cancelado», mientras §16 solo prevé cerrar un servicio en curso finalizándolo tras la duración contratada; no dice qué ocurre con el cobro ni con la calificación obligatoria (§19) si se cancela en curso. Las condiciones de cancelación en sí son una HU pendiente y no se cuentan.",
+      "corr": "Precisar en §26.1 qué transiciones a «Cancelado» son válidas desde «En curso» y cómo interactúan con §16 y §19."
+    },
+    {
+      "id": "INC-13",
+      "sev": "Media",
+      "tipo": "Alcance vs. recursos",
+      "nat": "Hecho + inferencia",
+      "ubic": "HU-03 RN-09; Req §22; vision.md §8",
+      "cita": "HU-03 RN-09: «El objetivo de revisión… será de 24 a 36 horas.» · vision §8: «El SLA de revisión se degrada rápidamente al crecer el volumen», mitigación «más de un revisor + métricas de cola desde el diseño».",
+      "expl": "La visión reconoce el cuello de botella de la aprobación manual y su mitigación («más de un revisor + métricas de cola desde el diseño»), pero HU-03 mantiene un SLA de 24–36 h sin revisores, sin reloj (¿se reinicia al corregir?) y sin métricas. Además, la verificación facial y el contraste externo que exige la visión (INC-04) aumentan el trabajo por perfil.",
+      "corr": "Definir revisores, reloj y métricas del SLA; incorporar verificación asistida para que el humano revise solo excepciones."
+    },
+    {
+      "id": "INC-14",
+      "sev": "Media",
+      "tipo": "Modelo de datos",
+      "nat": "Hecho",
+      "ubic": "domain-model.md §1 y §4; vision.md §5",
+      "cita": "domain-model §4: «no existe ContactoEmergencia, ni un atributo de geolocalización en Enfermero, ni un estado de verificación biométrica» · vision §5: directorio con «servicios prestados, distancia, costo promedio por hora» y ubicación en tiempo real con contacto de emergencia.",
+      "expl": "El modelo de dominio no cubre entidades ni atributos que el MVP define (ubicación, contacto de emergencia, verificación biométrica, costo promedio por hora, servicios prestados). El modelo reconoce el vacío; la incongruencia es que el MVP se declara aprobado y su modelo de negocio no lo representa. Las HU respectivas son trabajo pendiente y no se cuentan.",
+      "corr": "Extender domain-model con las entidades y atributos del MVP aprobado, o marcar los componentes sin modelo como condicionados."
+    },
+    {
+      "id": "INC-28",
+      "sev": "Alta",
+      "tipo": "Metas incompatibles",
+      "nat": "Hecho + inferencia",
+      "ubic": "Requirements-Context §14.1, §14.2, §14.3 y RN-18; glossary «PIN»",
+      "cita": "§14.1: «El PIN no deberá almacenarse en texto plano en ningún momento.» (solo hash) · §14.2: «El usuario podrá visualizar el PIN únicamente durante la ventana de tiempo configurada».",
+      "expl": "Un hash es irreversible: si solo se guarda el hash, el sistema no puede mostrar el PIN al usuario. Cumplir §14.2 exige guardarlo reversible (cifrado o en claro), lo que contradice §14.1 y RN-18, o derivarlo de forma recomputable (p. ej. HMAC con un secreto), que el texto no menciona. Además, un hash simple sobre solo 10^6 valores no protege ante una fuga: reconstruí la tabla completa de SHA-256 de los 1.000.000 de PIN en 2,9 s (medición propia, SUP-14). El control real son la ventana y los 5 intentos.",
+      "corr": "Especificar el mecanismo (PIN derivado con HMAC y secreto fuera de la base, o cifrado reversible con clave gestionada) y reescribir §14.1 y RN-18 sin presentar el hash como control suficiente."
+    },
+    {
+      "id": "INC-29",
+      "sev": "Alta",
+      "tipo": "Dependencias sin precedente",
+      "nat": "Hecho + inferencia",
+      "ubic": "Requirements-Context §5.2 y §6.1; HU-03 (estados y flujos); personas.md (Enfermero, Superadministrador)",
+      "cita": "§6.1: «El superadministrador podrá: Aprobar. Solicitar corrección.» · §5.2: «Rechazado» y «Corrección solicitada» se unificaron (INC-16) · personas.md: «No existe estado ni flujo para retirar la aprobación a un enfermero ya habilitado».",
+      "expl": "Al unificar los estados no quedó ninguna acción terminal: ante un documento falsificado o una tarjeta profesional inexistente, lo único posible es «Solicitar corrección», y el perfil puede reenviarse sin límite de ciclos ni bloqueo del documento. Tampoco existe suspensión o revocación de un perfil ya aprobado. La visión declara la suplantación de enfermeros como riesgo principal.",
+      "corr": "Definir un estado terminal (rechazo definitivo o bloqueo) y de suspensión/revocación, con causal, límite de ciclos de corrección, lista de bloqueo del documento y auditoría."
+    },
+    {
+      "id": "INC-10",
+      "sev": "Media",
+      "tipo": "Consistencia documental",
+      "nat": "Hecho",
+      "ubic": "Requirements-Context §19.1 vs. §27 (regla 16) y §27.1 RN-17; business-rules-index CTX-RN-17; glossary «Calificación obligatoria»",
+      "cita": "§19.1 (corregido): «No podrá crear nuevas solicitudes de servicio ni aceptar nuevos servicios… Sí podrá continuar con servicios ya en curso» · §27 regla 16: «Una calificación pendiente bloquea el resto de funcionalidades de la aplicación hasta completarla.» · RN-17: «impedirá realizar otras acciones en la aplicación hasta completarla.»",
+      "expl": "CN-17 acotó el bloqueo solo en §19.1. La lista «Reglas críticas del MVP» (§27), RN-17, CTX-RN-17 del índice y el glosario conservan el bloqueo total: dos reglas normativas contradictorias sobre el mismo evento. Se rebajó a Media porque la intención (CN-17) es clara y la corrección es editorial. §19.1 además presupone una función de «ayuda/soporte» que no existe (INC-11).",
+      "corr": "Alinear las cuatro copias con §19.1, o sustituirlas por una referencia a §19.1 como fuente única (como se hizo con §9)."
+    },
+    {
+      "id": "INC-15",
+      "sev": "Media",
+      "tipo": "Dependencias sin precedente",
+      "nat": "Hecho + inferencia",
+      "ubic": "Requirements-Context §11, §12.2 y §29 (HU-17); vision.md §5",
+      "cita": "§11: «Se habilitará la información necesaria para coordinar el servicio.» · §12.2: «Los datos de contacto se habilitarán de acuerdo con las mismas reglas de tiempo» · vision: chat fuera del MVP «más allá de lo estrictamente necesario para coordinar».",
+      "expl": "Con la ventana por defecto de 180 min, un servicio aceptado con días de antelación no permite contactar al paciente hasta 3 h antes, mientras §11 promete habilitar «los mecanismos de comunicación» y la visión limita el chat a lo «estrictamente necesario para coordinar». No se define qué canal cubre ese mínimo ni el servicio aceptado con menos de 180 min de margen.",
+      "corr": "Definir el canal mínimo de coordinación y el comportamiento para servicios con menos margen que la ventana."
+    },
+    {
+      "id": "INC-17",
+      "sev": "Media",
+      "tipo": "Métricas de éxito",
+      "nat": "Hecho",
+      "ubic": "vision.md §2 y §6; Req §8.1 y §26",
+      "cita": "vision §6: «% de solicitudes PUBLICADO que llegan a ASIGNADO antes de expirar» · todos los objetivos: «A definir». vision §2: conecta «de forma confiable».",
+      "expl": "Una métrica depende del estado «expirar», que no existe entre los cinco estados del servicio. Ninguna de las cinco métricas mide la promesa central (confianza y seguridad: incidentes, suplantaciones detectadas, cancelaciones) y ninguna tiene umbral.",
+      "corr": "Añadir el estado de expiración o redefinir la métrica; incluir al menos una métrica de seguridad/confianza y fijar umbrales."
+    },
+    {
+      "id": "INC-30",
+      "sev": "Media",
+      "tipo": "Consistencia documental",
+      "nat": "Hecho",
+      "ubic": "Requirements-Context §4.5; HU-01 (Recordatorio de verificación y RN-09)",
+      "cita": "§4.5: «Si el usuario no verifica el correo dentro de las primeras 24 horas, el sistema deberá enviar un recordatorio.» · RN-09: «vigencia (TTL) de 15 minutos desde su generación… un máximo de 3 reenvíos por hora».",
+      "expl": "A las 24 h el código original expiró hace 23 h 45 min, así que el recordatorio no puede llevar un código válido. No se define si el recordatorio incluye un código nuevo (¿cuenta contra los 3 reenvíos por hora?), un enlace o solo invita a pedir otro, ni qué pasa si se agotan los reenvíos. CN-20 introdujo el TTL sin revisar el recordatorio.",
+      "corr": "Definir contenido y canal del recordatorio, si genera código nuevo y cómo se sale del agotamiento de reenvíos."
+    },
+    {
+      "id": "INC-31",
+      "sev": "Media",
+      "tipo": "Terminología y definiciones",
+      "nat": "Hecho + inferencia",
+      "ubic": "Requirements-Context §14.1 (punto 5), §27 (regla 9) y RN-08",
+      "cita": "§14.1: «Deberá ser único por servicio.» · §27 regla 9: «El PIN debe ser único por servicio.» · RN-08: «Cada servicio tendrá su propio PIN.»",
+      "expl": "«Único por servicio» admite dos lecturas: (a) cada servicio tiene su PIN, aunque el valor se repita entre servicios; (b) ningún valor se repite entre servicios. La lectura (b) se agota con 10^6 valores y colisiona pronto: con 1.000 servicios activos, la probabilidad de que dos coincidan es 39,3 % (cálculo propio). Además, con hash salado la unicidad no se puede comprobar (INC-28).",
+      "corr": "Aclarar que basta con estar asociado al servicio (o limitar la unicidad a servicios activos) y eliminar la exigencia global."
+    },
+    {
+      "id": "INC-32",
+      "sev": "Baja",
+      "tipo": "Consistencia documental",
+      "nat": "Hecho",
+      "ubic": "personas.md (Superadministrador); HU-03 RN-08; glossary «Radio de servicio»; domain-model §1 y §3",
+      "cita": "personas.md: «Gestionar el catálogo de tipos de servicio (HU-04): consultar y cambiar estado activo/inactivo» (HU04-RN-09 dice CRUD) · HU-03 RN-08: «aprobación, rechazo y solicitud de corrección» (el rechazo ya no existe) · glossary: «solo su zona de residencia» (la geolocalización real entró al MVP) · domain-model: «foto» en Persona y en Documento (tipo «foto»).",
+      "expl": "Cuatro restos de decisiones anteriores en documentos derivados y una duplicación de modelo (foto modelada como atributo de Persona y como Documento), más un diagrama cuyas especializaciones opcionales no imponen el rol único (CN-07). Ninguno cambia el alcance, pero un equipo puede construir sobre el texto obsoleto.",
+      "corr": "Reconciliar los derivados con la fuente normativa y decidir un único lugar para la foto."
+    },
+    {
+      "id": "INC-33",
+      "sev": "Media",
+      "tipo": "Metas incompatibles",
+      "nat": "Hecho + inferencia",
+      "ubic": "vision.md §3, §4, §5 y §9 (pregunta 9)",
+      "cita": "§5: «el sistema traslada la confirmación al usuario/paciente, quien indica manualmente si la persona presente coincide con la foto de perfil» · §4: «la seguridad de poder confirmar en el momento que quien llega a su domicilio es realmente el enfermero asignado» · §9: «¿Qué pasa si el paciente… no puede compartir su ubicación (ej. persona sin smartphone, adulto mayor…, paciente inconsciente)?»",
+      "expl": "Si el rostro no valida, la decisión pasa a quien la visión reconoce que puede no estar en condiciones de tomarla (adulto mayor sin manejo de tecnología, paciente inconsciente, o un tercero que contrató y no está presente). Con ese fallback, la mitigación de suplantación depende de la misma persona vulnerable a la que protege.",
+      "corr": "Definir el fallback para pacientes que no pueden confirmar (p. ej. contacto de emergencia o soporte) y cuándo se bloquea el inicio."
+    },
+    {
+      "id": "INC-34",
+      "sev": "Baja",
+      "tipo": "Consistencia documental",
+      "nat": "Hecho + inferencia",
+      "ubic": "vision.md §7 y §8; HU-04 (descripciones de tipos de servicio); vision.md §5 (tarifa sugerida)",
+      "cita": "vision §7: «Validar la clasificación legal del negocio (intermediario tecnológico vs. prestador de servicios de salud)… Se registra como restricción activa, no resuelta.» · vision §8: «Reclasificación legal como prestador de salud (no intermediario)» · HU-04: «Servicio de atención de enfermería realizado en el domicilio».",
+      "expl": "La decisión de operar como intermediario no está propagada: vision.md sigue tratando la clasificación como abierta. Además, algunas piezas del propio diseño pueden leerse como rasgos de prestador (la plataforma define el catálogo clínico, fija tarifas sugeridas, verifica credenciales y controla inicio y fin del servicio). Es una inferencia para revisión jurídica, no una conclusión legal.",
+      "corr": "Registrar la decisión en vision.md (§5 y §7) y redactar el catálogo y las funciones de control de modo que describan a la plataforma como intermediaria (el enfermero presta, la plataforma conecta y verifica), sujeto al concepto jurídico."
+    }
   ],
-
-  premortem: [
-    {id:"PM-1", causa:"Incidente grave en un domicilio por un enfermero suplantado o no habilitado, con daño reputacional y legal para la plataforma.", p:3, i:5, senal:"Perfiles aprobados sin contraste con ReTHUS; tarjeta profesional duplicada; primera queja de identidad.", refs:["INC-04","SUP-05"]},
-    {id:"PM-2", causa:"Requerimiento o sanción de la autoridad de protección de datos por tratar salud, biometría y ubicación sin base legal implementada.", p:3, i:5, senal:"El piloto sale sin aviso de privacidad ni autorización en el flujo; primer reclamo de un titular.", refs:["INC-05","GAP-08"]},
-    {id:"PM-3", causa:"Se descubre tarde que la plataforma requiere habilitación como prestador de salud y el modelo operativo no es viable tal como está.", p:3, i:5, senal:"Se empieza HU-05 sin concepto jurídico escrito; consulta de una aseguradora o EPS sobre habilitación.", refs:["SUP-01","GAP-07"]},
-    {id:"PM-4", causa:"El MVP no sale: el alcance (pagos, biometría, geolocalización, tiempo real, negociación, directorio) excede lo definido y lo presupuestado.", p:4, i:4, senal:"HU-05…HU-17 sin redactar cerca del arranque; contradicciones vision/Req sin resolver; sin presupuesto ni fechas.", refs:["INC-01","INC-02","GAP-03"]},
-    {id:"PM-5", causa:"La cola de aprobación de enfermeros crece, la oferta no se activa y el marketplace arranca sin liquidez.", p:4, i:4, senal:"Edad del perfil más antiguo mayor a 24 h; un solo revisor; sin métricas de cola.", refs:["INC-13","SUP-04"]},
-    {id:"PM-6", causa:"Falta de liquidez: pocos enfermeros o pocos usuarios activos y baja tasa de aceptación, sin mitigación declarada.", p:4, i:5, senal:"Solicitudes publicadas sin aceptar; retención de enfermeros a 30 días baja; ninguna hipótesis de demanda validada.", refs:["SUP-02","SUP-03","GAP-06"]},
-    {id:"PM-7", causa:"Servicios bloqueados en campo (PIN agotado, sin conectividad) con un paciente esperando y sin ruta de soporte.", p:4, i:3, senal:"Primeros tickets de PIN bloqueado; servicios que no pasan de «Asignado».", refs:["INC-11","SUP-08"]},
-    {id:"PM-8", causa:"Fraude de facturación: inicio del servicio con el PIN dictado a distancia, cobrando tiempo no prestado.", p:3, i:3, senal:"Servicios iniciados sin coincidencia de ubicación; extensiones sistemáticas.", refs:["INC-18","SUP-06"]},
-    {id:"PM-9", causa:"Abandono por bloqueo total ante calificación pendiente, incluso en momentos de urgencia.", p:3, i:2, senal:"Quejas por no poder usar la app; calificaciones puestas al azar para desbloquear.", refs:["INC-10"]},
-    {id:"PM-10", causa:"Compromiso de la cuenta del superadministrador (sin MFA definido) con acceso a documentos y configuración de ventanas de datos sensibles.", p:2, i:5, senal:"Accesos administrativos desde ubicaciones inusuales; cambios de configuración sin ticket.", refs:["INC-06"]}
+  "premortem": [
+    {
+      "id": "PM-1",
+      "causa": "Incidente grave en un domicilio por un enfermero suplantado o no habilitado, con daño reputacional y legal para la plataforma.",
+      "p": 3,
+      "i": 5,
+      "senal": "Perfiles aprobados sin contraste con ReTHUS; un perfil dudoso que solo puede devolverse a corrección; tarjeta profesional duplicada; primera queja de identidad.",
+      "refs": [
+        "INC-04",
+        "INC-29",
+        "INC-33",
+        "SUP-05"
+      ]
+    },
+    {
+      "id": "PM-2",
+      "causa": "Requerimiento o sanción de la autoridad de protección de datos por tratar biometría, ubicación y datos de terceros sin consentimiento implementado.",
+      "p": 3,
+      "i": 5,
+      "senal": "El piloto sale sin consentimiento separado para biometría ni mecanismo para el tercero titular; primer reclamo de un titular.",
+      "refs": [
+        "INC-05",
+        "GAP-08"
+      ]
+    },
+    {
+      "id": "PM-3",
+      "causa": "Pese a la decisión de operar como intermediario, la autoridad o un tercero califica la operación como prestación de servicios de salud y exige habilitación.",
+      "p": 3,
+      "i": 5,
+      "senal": "Se empieza HU-05 sin concepto jurídico escrito sobre el diseño; consulta de una aseguradora o EPS sobre habilitación; contratos con enfermeros ausentes.",
+      "refs": [
+        "SUP-01",
+        "GAP-07",
+        "GAP-25",
+        "INC-34"
+      ]
+    },
+    {
+      "id": "PM-4",
+      "causa": "El MVP no sale: el alcance aprobado (pagos, biometría, geolocalización, tiempo real, negociación, directorio) no está especificado ni presupuestado.",
+      "p": 4,
+      "i": 4,
+      "senal": "HU-05…HU-17 sin redactar cerca del arranque; preguntas abiertas de vision §9 sin respuesta; sin presupuesto ni fechas.",
+      "refs": [
+        "INC-27",
+        "INC-02",
+        "GAP-03"
+      ]
+    },
+    {
+      "id": "PM-5",
+      "causa": "La cola de aprobación de enfermeros crece, la oferta no se activa y el marketplace arranca sin liquidez.",
+      "p": 4,
+      "i": 4,
+      "senal": "Edad del perfil más antiguo mayor a 24 h; un solo revisor; sin métricas de cola.",
+      "refs": [
+        "INC-13",
+        "SUP-04"
+      ]
+    },
+    {
+      "id": "PM-6",
+      "causa": "Falta de liquidez: pocos enfermeros o pocos usuarios activos y baja tasa de aceptación, sin mitigación declarada.",
+      "p": 4,
+      "i": 5,
+      "senal": "Solicitudes publicadas sin aceptar; retención de enfermeros a 30 días baja; ninguna hipótesis de demanda validada.",
+      "refs": [
+        "SUP-02",
+        "SUP-03",
+        "GAP-06",
+        "GAP-17"
+      ]
+    },
+    {
+      "id": "PM-7",
+      "causa": "Servicios bloqueados en campo (PIN agotado, sin conectividad) con un paciente esperando y sin rol ni ruta de soporte.",
+      "p": 4,
+      "i": 3,
+      "senal": "Primeros tickets de PIN bloqueado; servicios que no pasan de «Asignado».",
+      "refs": [
+        "INC-11",
+        "GAP-21",
+        "SUP-08"
+      ]
+    },
+    {
+      "id": "PM-8",
+      "causa": "Fraude de facturación: inicio del servicio con el PIN dictado a distancia, cobrando tiempo no prestado.",
+      "p": 3,
+      "i": 3,
+      "senal": "Servicios iniciados sin coincidencia de ubicación; extensiones sistemáticas.",
+      "refs": [
+        "SUP-06"
+      ]
+    },
+    {
+      "id": "PM-10",
+      "causa": "Compromiso de la cuenta del superadministrador (sin MFA definido) con acceso a documentos y configuración de ventanas de datos sensibles.",
+      "p": 2,
+      "i": 5,
+      "senal": "Accesos administrativos desde ubicaciones inusuales; cambios de configuración sin ticket.",
+      "refs": [
+        "INC-06"
+      ]
+    },
+    {
+      "id": "PM-11",
+      "causa": "Para poder mostrar el PIN se guarda reversible o en claro y una fuga de la base expone los PIN de servicios activos.",
+      "p": 3,
+      "i": 3,
+      "senal": "HU del PIN escrita sin resolver la contradicción hash/visualización; PIN legible en revisión de código; sin secreto fuera de la base.",
+      "refs": [
+        "INC-28",
+        "SUP-14"
+      ]
+    }
   ],
-
-  supuestos: [
-    {id:"SUP-01", enunciado:"La plataforma es un intermediario tecnológico y no un prestador de servicios de salud.", fuente:"vision.md §5 y §7", estado:"SUPUESTO", dim:"legal",
-     si_falso:"Habría que habilitarse como prestador, con otro modelo operativo, costos y responsabilidad clínica.",
-     validar:"Concepto escrito de un abogado de salud y consulta a la autoridad sanitaria antes de HU-05.",
-     confirma:"Concepto que califique el modelo como intermediación.", refuta:"Concepto que exija habilitación o vea rasgos de prestador."},
-    {id:"SUP-02", enunciado:"Hay demanda suficiente de personas dispuestas a contratar enfermería por plataforma en lugar de canales informales.", fuente:"vision.md §1 (declarado hipótesis)", estado:"SUPUESTO", dim:"mercado",
-     si_falso:"El lado de la demanda no llega y el marketplace no funciona.",
-     validar:"Entrevistas a usuarios y una página de preinscripción con disposición a pagar, antes de construir pagos.",
-     confirma:"Preinscripciones y disposición de pago a un precio concreto.", refuta:"Preferencia por el canal actual o rechazo del precio."},
-    {id:"SUP-03", enunciado:"Habrá suficientes enfermeros dispuestos a operar por la plataforma con la comisión que se defina.", fuente:"vision.md §4 (propuesta de valor)", estado:"SIN SUSTENTO", dim:"mercado",
-     si_falso:"La oferta no cubre la demanda y las solicitudes expiran sin aceptar.",
-     validar:"Entrevistar a enfermeros sobre tarifa mínima, comisión tolerable y disponibilidad real.",
-     confirma:"Compromisos de registro y tarifas compatibles con lo que paga el usuario.", refuta:"Tarifas mínimas por encima de la disposición de pago."},
-    {id:"SUP-04", enunciado:"La aprobación manual por un solo rol puede mantener un SLA de 24–36 h.", fuente:"HU-03 RN-09", estado:"SIN SUSTENTO", dim:"operativa",
-     si_falso:"La oferta se retrasa o abandona y el MVP no gana enfermeros.",
-     validar:"Cronometrar la revisión de 20 perfiles reales y definir número de revisores y horas efectivas.",
-     confirma:"Minutos por perfil medidos y capacidad mayor a la demanda proyectada con margen.", refuta:"Capacidad menor a la llegada esperada o más de un ciclo de corrección por perfil."},
-    {id:"SUP-05", enunciado:"Cuatro imágenes autoportadas revisadas por una persona bastan para acreditar identidad, vigencia y ausencia de sanciones.", fuente:"HU-02 RN-02 y RN-04", estado:"SIN SUSTENTO", dim:"tecnica",
-     si_falso:"Un impostor o un profesional sancionado presta servicios en domicilios.",
-     validar:"Prueba con 10 perfiles verdaderos y 10 simulados con datos de terceros para medir cuántos pasarían la revisión.",
-     confirma:"Los perfiles simulados son detectados de forma consistente.", refuta:"Al menos un perfil simulado es aprobado."},
-    {id:"SUP-06", enunciado:"El PIN de 6 dígitos prueba que el enfermero y el paciente están juntos.", fuente:"Req §14; vision §5", estado:"SIN SUSTENTO", dim:"operativa",
-     si_falso:"Se cobra tiempo no prestado y se pierde el control antifraude principal.",
-     validar:"Pruebas de campo con inicio remoto simulado y comparación con la ubicación del enfermero.",
-     confirma:"El inicio remoto es rechazado por una segunda señal (ubicación o rostro).", refuta:"El servicio inicia con el PIN dictado por teléfono."},
-    {id:"SUP-07", enunciado:"Existe un proveedor de verificación facial con costo asumible y cumplimiento normativo.", fuente:"vision.md §7 (proveedor y costo sin definir)", estado:"SUPUESTO", dim:"riesgos",
-     si_falso:"La mitigación central de suplantación no se puede implementar o excede el presupuesto.",
-     validar:"Solicitar cotizaciones a al menos 3 proveedores con costo por verificación y ubicación de los datos.",
-     confirma:"Cotización dentro del presupuesto y contrato de tratamiento de datos.", refuta:"Costos prohibitivos o datos fuera de lo permitido."},
-    {id:"SUP-08", enunciado:"Exigir internet sin modo offline es aceptable para la operación.", fuente:"vision.md §7 y §8", estado:"SUPUESTO", dim:"riesgos",
-     si_falso:"Servicios que no pueden iniciar o seguirse en zonas de baja cobertura.",
-     validar:"Mapear cobertura en las zonas de lanzamiento y definir tolerancia a cortes.",
-     confirma:"Cobertura adecuada en las zonas piloto.", refuta:"Cortes frecuentes en zonas objetivo."},
-    {id:"SUP-09", enunciado:"Una persona solo necesita un rol (usuario, enfermero o superadministrador).", fuente:"business-rules-index CN-07", estado:"SUPUESTO", dim:"tecnica",
-     si_falso:"Un enfermero no puede contratar para su familia y migrar después es costoso.",
-     validar:"Preguntar a 10 enfermeros si contratarían servicios para familiares.",
-     confirma:"Ningún caso de doble rol relevante.", refuta:"Varios casos de doble rol."},
-    {id:"SUP-10", enunciado:"Con 5 intentos sobre 10^6 combinaciones, adivinar el PIN tiene probabilidad de 0,0005 %.", fuente:"Req §15 (recalculado)", estado:"VERIFICADA", dim:"tecnica",
-     si_falso:"El límite de intentos sería insuficiente frente a fuerza bruta.",
-     validar:"Cálculo: 5 / 1.000.000 = 0,0005 %. Se mantiene si el contador es por servicio y no se reinicia.",
-     confirma:"El cálculo.", refuta:"Contador por sesión o reinicio del contador sin control."},
-    {id:"SUP-11", enunciado:"Las decisiones CN-02 a CN-09 se aplicaron a los documentos fuente.", fuente:"business-rules-index.md", estado:"VERIFICADA", dim:"tecnica",
-     si_falso:"El registro de cambios sería poco fiable.",
-     validar:"Comprobado en los archivos: 4 tipos de enfermero en §5.2, lista de datos sensibles en §12, hash del PIN en §14, contraseña 12–64 en HU-01, CRUD en HU-04. Excepción: CN-01 (ver INC-26).",
-     confirma:"Lectura directa de los archivos.", refuta:"—"},
-    {id:"SUP-12", enunciado:"Una ventana de 180 minutos antes del inicio es suficiente para coordinar y a la vez proteger datos sensibles.", fuente:"Req §12 y §13", estado:"SUPUESTO", dim:"operativa",
-     si_falso:"Se puede impedir la coordinación previa o exponer datos innecesariamente.",
-     validar:"Simular 10 casos reales de servicios programados e inmediatos con enfermeros y familias.",
-     confirma:"Coordinación posible en menos de 3 h en la mayoría de casos.", refuta:"Necesidad recurrente de contacto antes."},
-    {id:"SUP-13", enunciado:"El correo electrónico es un canal fiable para códigos y notificaciones críticas.", fuente:"Req §4.4 y HU-03", estado:"SUPUESTO", dim:"riesgos",
-     si_falso:"Cuentas sin verificar y enfermeros sin enterarse de correcciones o aprobaciones.",
-     validar:"Medir entregabilidad con un proveedor real en un piloto y definir canal alterno.",
-     confirma:"Tasa de entrega alta y sin rebotes relevantes.", refuta:"Rebotes o correos en spam frecuentes."}
+  "supuestos": [
+    {
+      "id": "SUP-01",
+      "enunciado": "La operación como intermediario tecnológico (decisión de negocio) será reconocida como tal y no como prestación de servicios de salud.",
+      "fuente": "Decisión de negocio 2026-09-30; vision.md §5 y §7",
+      "estado": "SUPUESTO",
+      "dim": "legal",
+      "si_falso": "Habría que habilitarse como prestador (REPS), con otro modelo operativo, costos y responsabilidad clínica; el diseño actual (verificación de credenciales, control de inicio y fin) estaría en el centro del análisis.",
+      "validar": "Concepto escrito de un abogado de salud sobre el diseño concreto (no solo la intención), y consulta a la autoridad sanitaria antes de HU-05.",
+      "confirma": "Concepto que califique el diseño actual como intermediación.",
+      "refuta": "Concepto que exija habilitación o que vea rasgos de prestador en funciones específicas."
+    },
+    {
+      "id": "SUP-02",
+      "enunciado": "Hay demanda suficiente de personas dispuestas a contratar enfermería por plataforma en lugar de canales informales.",
+      "fuente": "vision.md §1 (declarado hipótesis)",
+      "estado": "SUPUESTO",
+      "dim": "mercado",
+      "si_falso": "El lado de la demanda no llega y el marketplace no funciona.",
+      "validar": "Entrevistas a usuarios y una página de preinscripción con disposición a pagar, antes de construir pagos.",
+      "confirma": "Preinscripciones y disposición de pago a un precio concreto.",
+      "refuta": "Preferencia por el canal actual o rechazo del precio."
+    },
+    {
+      "id": "SUP-03",
+      "enunciado": "Habrá suficientes enfermeros dispuestos a operar por la plataforma con la comisión que se defina.",
+      "fuente": "vision.md §4 (propuesta de valor)",
+      "estado": "SIN SUSTENTO",
+      "dim": "mercado",
+      "si_falso": "La oferta no cubre la demanda y las solicitudes expiran sin aceptar.",
+      "validar": "Entrevistar a enfermeros sobre tarifa mínima, comisión tolerable y disponibilidad real.",
+      "confirma": "Compromisos de registro y tarifas compatibles con lo que paga el usuario.",
+      "refuta": "Tarifas mínimas por encima de la disposición de pago."
+    },
+    {
+      "id": "SUP-04",
+      "enunciado": "La aprobación manual por un solo rol puede mantener un SLA de 24–36 h.",
+      "fuente": "HU-03 RN-09",
+      "estado": "SIN SUSTENTO",
+      "dim": "operativa",
+      "si_falso": "La oferta se retrasa o abandona y el MVP no gana enfermeros.",
+      "validar": "Cronometrar la revisión de 20 perfiles reales y definir número de revisores y horas efectivas.",
+      "confirma": "Minutos por perfil medidos y capacidad mayor a la demanda proyectada con margen.",
+      "refuta": "Capacidad menor a la llegada esperada o más de un ciclo de corrección por perfil."
+    },
+    {
+      "id": "SUP-05",
+      "enunciado": "Cuatro imágenes autoportadas revisadas por una persona bastan para acreditar identidad, vigencia y ausencia de sanciones.",
+      "fuente": "HU-02 RN-02 y RN-04 (vigentes mientras no se incorpore la verificación facial de vision §5)",
+      "estado": "SIN SUSTENTO",
+      "dim": "tecnica",
+      "si_falso": "Un impostor o un profesional sancionado presta servicios en domicilios.",
+      "validar": "Prueba con 10 perfiles verdaderos y 10 simulados con datos de terceros para medir cuántos pasarían la revisión.",
+      "confirma": "Los perfiles simulados son detectados de forma consistente.",
+      "refuta": "Al menos un perfil simulado es aprobado."
+    },
+    {
+      "id": "SUP-06",
+      "enunciado": "El PIN de 6 dígitos prueba que el enfermero y el paciente están juntos.",
+      "fuente": "Req §14; vision §5 (CN-18 aceptó el riesgo residual)",
+      "estado": "SIN SUSTENTO",
+      "dim": "operativa",
+      "si_falso": "Se cobra tiempo no prestado y se pierde el control antifraude principal.",
+      "validar": "Pruebas de campo con inicio remoto simulado y comparación con la ubicación del enfermero.",
+      "confirma": "El inicio remoto es rechazado por una segunda señal (ubicación o rostro).",
+      "refuta": "El servicio inicia con el PIN dictado por teléfono."
+    },
+    {
+      "id": "SUP-07",
+      "enunciado": "Existe un proveedor de verificación facial con costo asumible y cumplimiento normativo.",
+      "fuente": "vision.md §7 (proveedor y costo sin definir)",
+      "estado": "SUPUESTO",
+      "dim": "riesgos",
+      "si_falso": "La mitigación central de suplantación no se puede implementar o excede el presupuesto.",
+      "validar": "Solicitar cotizaciones a al menos 3 proveedores con costo por verificación y ubicación de los datos.",
+      "confirma": "Cotización dentro del presupuesto y contrato de tratamiento de datos.",
+      "refuta": "Costos prohibitivos o datos fuera de lo permitido."
+    },
+    {
+      "id": "SUP-08",
+      "enunciado": "Exigir internet sin modo offline es aceptable para la operación.",
+      "fuente": "vision.md §7 y §8",
+      "estado": "SUPUESTO",
+      "dim": "riesgos",
+      "si_falso": "Servicios que no pueden iniciar o seguirse en zonas de baja cobertura.",
+      "validar": "Mapear cobertura en las zonas de lanzamiento y definir tolerancia a cortes.",
+      "confirma": "Cobertura adecuada en las zonas piloto.",
+      "refuta": "Cortes frecuentes en zonas objetivo."
+    },
+    {
+      "id": "SUP-09",
+      "enunciado": "Una persona solo necesita un rol (usuario, enfermero o superadministrador).",
+      "fuente": "business-rules-index CN-07 (decisión del developer)",
+      "estado": "SUPUESTO",
+      "dim": "tecnica",
+      "si_falso": "Un enfermero no puede contratar para su familia y migrar después es costoso.",
+      "validar": "Preguntar a 10 enfermeros si contratarían servicios para familiares.",
+      "confirma": "Ningún caso de doble rol relevante.",
+      "refuta": "Varios casos de doble rol."
+    },
+    {
+      "id": "SUP-10",
+      "enunciado": "Con 5 intentos sobre 10^6 combinaciones, adivinar el PIN tiene probabilidad de 0,0005 %.",
+      "fuente": "Req §15 (recalculado)",
+      "estado": "VERIFICADA",
+      "dim": "tecnica",
+      "si_falso": "El límite de intentos sería insuficiente frente a fuerza bruta.",
+      "validar": "Cálculo: 5 / 1.000.000 = 0,0005 %. Se mantiene si el contador es por servicio y no se reinicia; el desbloqueo por soporte (INC-11) podría reiniciarlo.",
+      "confirma": "El cálculo.",
+      "refuta": "Contador por sesión o reinicio del contador sin control."
+    },
+    {
+      "id": "SUP-11",
+      "enunciado": "Las resoluciones CN-10 a CN-21 quedaron reflejadas en todos los documentos fuente y derivados.",
+      "fuente": "business-rules-index.md (registro de cambios y resoluciones CN-10 a CN-21)",
+      "estado": "SIN SUSTENTO",
+      "dim": "tecnica",
+      "si_falso": "El equipo construye sobre reglas contradictorias y el registro de cambios deja de ser confiable.",
+      "validar": "Revisión cruzada de cada CN contra los documentos que afecta. Contradicha en: Req §27 regla 16 y RN-17, CTX-RN-17, glosario (INC-10), HU-03 RN-08, personas.md y glosario (INC-32) y recordatorio de 24 h (INC-30).",
+      "confirma": "Búsqueda sin coincidencias residuales de las reglas reemplazadas.",
+      "refuta": "Coincidencias residuales (hoy hay al menos 7)"
+    },
+    {
+      "id": "SUP-12",
+      "enunciado": "Una ventana de 180 minutos antes del inicio es suficiente para coordinar y a la vez proteger datos sensibles.",
+      "fuente": "Req §12 y §13",
+      "estado": "SUPUESTO",
+      "dim": "operativa",
+      "si_falso": "Se puede impedir la coordinación previa o exponer datos innecesariamente.",
+      "validar": "Simular 10 casos reales de servicios programados e inmediatos con enfermeros y familias.",
+      "confirma": "Coordinación posible en menos de 3 h en la mayoría de casos.",
+      "refuta": "Necesidad recurrente de contacto antes."
+    },
+    {
+      "id": "SUP-13",
+      "enunciado": "El correo electrónico es un canal fiable para códigos y notificaciones críticas.",
+      "fuente": "Req §4.4 y HU-03",
+      "estado": "SUPUESTO",
+      "dim": "riesgos",
+      "si_falso": "Cuentas sin verificar y enfermeros sin enterarse de correcciones o aprobaciones. Con TTL de 15 min, un correo lento invalida el código.",
+      "validar": "Medir entregabilidad y latencia con un proveedor real en un piloto y definir canal alterno.",
+      "confirma": "Tasa de entrega alta y latencia muy inferior a 15 min.",
+      "refuta": "Rebotes, spam o retrasos frecuentes."
+    },
+    {
+      "id": "SUP-14",
+      "enunciado": "Un PIN de 6 dígitos guardado como hash sigue protegido si se filtra la base de datos.",
+      "fuente": "Req §14.1 y RN-18",
+      "estado": "SIN SUSTENTO",
+      "dim": "tecnica",
+      "si_falso": "Quien obtenga la base recupera los PIN de los servicios activos en segundos y puede iniciar servicios o suplantar.",
+      "validar": "Reproducido en esta auditoría: con SHA-256 sin sal, la tabla de los 1.000.000 de PIN posibles se generó en 2,87 s y se invirtió un hash de prueba al instante. Con hash lento o HMAC con secreto externo el costo sube; el texto no lo exige.",
+      "confirma": "Diseño con HMAC y secreto fuera de la base, o hash lento, más límite de intentos.",
+      "refuta": "Cualquier hash rápido sin secreto (resultado ya medido)."
+    },
+    {
+      "id": "SUP-15",
+      "enunciado": "Un enfermero puede prestar «Acompañamiento y transporte» y «Atención hospitalaria» con los mismos requisitos que un servicio domiciliario.",
+      "fuente": "HU-04 (tipos de servicio) y HU-02 (requisitos únicos)",
+      "estado": "SUPUESTO",
+      "dim": "legal",
+      "si_falso": "Se acepta un servicio de transporte sin licencia o seguro, o una atención hospitalaria sin autorización del centro.",
+      "validar": "Consultar requisitos legales y de seguro por tipo, y las políticas de acceso de 2 o 3 centros hospitalarios de la zona piloto.",
+      "confirma": "Concepto que no exija requisitos adicionales.",
+      "refuta": "Requisitos adicionales por tipo (licencia, seguro, autorización)."
+    }
   ],
-
-  brechas: [
-    {id:"GAP-01", dato:"Presupuesto total y por rubro (biometría, pasarela, nube, mensajería, revisión).", impacto:"No se puede saber si el proyecto es financiable.", bloquea:["financiera","riesgos"], prioridad:"Alta"},
-    {id:"GAP-02", dato:"Modelo de ingresos: porcentaje de comisión, custodia del dinero y liquidación.", impacto:"Sin unidad económica no hay sostenibilidad evaluable.", bloquea:["financiera","sostenibilidad"], prioridad:"Alta"},
-    {id:"GAP-03", dato:"Cronograma, hitos, fecha de lanzamiento y responsables.", impacto:"No se puede evaluar factibilidad de plazo.", bloquea:["cronograma"], prioridad:"Alta"},
-    {id:"GAP-04", dato:"Equipo: tamaño, perfiles, capacidad de desarrollo, revisión y soporte.", impacto:"No se puede contrastar alcance con recursos.", bloquea:["cronograma","operativa"], prioridad:"Alta"},
-    {id:"GAP-05", dato:"Volumetría objetivo y requisitos no funcionales (latencia, disponibilidad, RPO/RTO, retención).", impacto:"«Escalar» no tiene objetivo medible.", bloquea:["tecnica"], prioridad:"Media"},
-    {id:"GAP-06", dato:"Datos de mercado: demanda, oferta de enfermeros, disposición a pagar, competencia.", impacto:"La hipótesis de valor no está demostrada.", bloquea:["mercado"], prioridad:"Alta"},
-    {id:"GAP-07", dato:"Concepto jurídico sobre intermediario vs. prestador de salud.", impacto:"Puede invalidar el modelo operativo.", bloquea:["legal"], prioridad:"Alta"},
-    {id:"GAP-08", dato:"Base legal del tratamiento: autorizaciones, aviso de privacidad, consentimiento biométrico y del tercero, retención y supresión.", impacto:"Riesgo de cierre de la operación con datos sensibles.", bloquea:["legal"], prioridad:"Alta"},
-    {id:"GAP-09", dato:"Umbrales numéricos de las métricas de éxito.", impacto:"No hay criterio para decidir continuar o parar.", bloquea:["mercado","sostenibilidad"], prioridad:"Media"},
-    {id:"GAP-10", dato:"HU-05…HU-17 (13 historias) y 4 vacíos no planificados: cancelación, recuperación de contraseña, desbloqueo de PIN, revocación de enfermeros.", impacto:"El ciclo de vida del servicio no está especificado.", bloquea:["tecnica","cronograma"], prioridad:"Alta"},
-    {id:"GAP-11", dato:"Selección de proveedores: pasarela, verificación facial, correo/SMS, almacenamiento, mapas.", impacto:"Costos y riesgos externos sin cuantificar.", bloquea:["riesgos","financiera"], prioridad:"Media"},
-    {id:"GAP-12", dato:"Mecanismo concreto de precio y negociación (rondas, última palabra).", impacto:"Sin él no se puede diseñar la asignación.", bloquea:["financiera","tecnica"], prioridad:"Alta"},
-    {id:"GAP-13", dato:"Precisión y frecuencia de la geolocalización.", impacto:"Afecta privacidad, costo y diseño.", bloquea:["tecnica","legal"], prioridad:"Media"},
-    {id:"GAP-14", dato:"Especificación de idempotencia (clave, alcance, retención, respuesta ante repetición).", impacto:"La aceptación atómica no es verificable.", bloquea:["tecnica"], prioridad:"Media"},
-    {id:"GAP-15", dato:"Reglas del código de correo: TTL, intentos, uso único, reenvíos.", impacto:"Cuentas atacables por fuerza bruta.", bloquea:["tecnica"], prioridad:"Media"},
-    {id:"GAP-16", dato:"Contacto de emergencia: obligatoriedad, cantidad, excepciones (paciente sin dispositivo o inconsciente).", impacto:"Funcionalidad de seguridad sin definir.", bloquea:["operativa","legal"], prioridad:"Media"},
-    {id:"GAP-17", dato:"Estrategia para lograr liquidez del marketplace (vision §8: «No cubierto»).", impacto:"Riesgo principal de negocio sin plan.", bloquea:["mercado","sostenibilidad"], prioridad:"Alta"},
-    {id:"GAP-18", dato:"Reloj del sistema: zona horaria, evaluación de ventanas solo en servidor y qué configuración aplica a servicios ya asignados.", impacto:"Riesgo de exponer o retirar datos sensibles por error.", bloquea:["tecnica"], prioridad:"Media"},
-    {id:"GAP-19", dato:"Nivel de competencia (auxiliar/profesional) y requisitos documentales por tipo de servicio (p. ej. transporte).", impacto:"Servicios aceptables por quien no puede prestarlos.", bloquea:["legal","operativa"], prioridad:"Media"},
-    {id:"GAP-20", dato:"Regla de precedencia entre documentos y estado de aprobación de vision.md.", impacto:"El equipo no sabe qué construir.", bloquea:["tecnica","cronograma"], prioridad:"Alta"}
+  "brechas": [
+    {
+      "id": "GAP-01",
+      "dato": "Presupuesto total y por rubro (biometría, pasarela, nube, mensajería, revisión).",
+      "impacto": "No se puede saber si el proyecto es financiable.",
+      "bloquea": [
+        "financiera",
+        "riesgos"
+      ],
+      "prioridad": "Alta"
+    },
+    {
+      "id": "GAP-02",
+      "dato": "Modelo de ingresos: porcentaje de comisión, custodia del dinero y liquidación.",
+      "impacto": "Sin unidad económica no hay sostenibilidad evaluable.",
+      "bloquea": [
+        "financiera",
+        "sostenibilidad"
+      ],
+      "prioridad": "Alta"
+    },
+    {
+      "id": "GAP-03",
+      "dato": "Cronograma, hitos, fecha de lanzamiento y responsables.",
+      "impacto": "No se puede evaluar factibilidad de plazo.",
+      "bloquea": [
+        "cronograma"
+      ],
+      "prioridad": "Alta"
+    },
+    {
+      "id": "GAP-04",
+      "dato": "Equipo: tamaño, perfiles, capacidad de desarrollo, revisión y soporte.",
+      "impacto": "No se puede contrastar alcance con recursos.",
+      "bloquea": [
+        "cronograma",
+        "operativa"
+      ],
+      "prioridad": "Alta"
+    },
+    {
+      "id": "GAP-05",
+      "dato": "Volumetría objetivo y requisitos no funcionales (latencia, disponibilidad, RPO/RTO, retención).",
+      "impacto": "«Escalar» no tiene objetivo medible.",
+      "bloquea": [
+        "tecnica"
+      ],
+      "prioridad": "Media"
+    },
+    {
+      "id": "GAP-06",
+      "dato": "Datos de mercado: demanda, oferta de enfermeros, disposición a pagar, competencia.",
+      "impacto": "La hipótesis de valor no está demostrada.",
+      "bloquea": [
+        "mercado"
+      ],
+      "prioridad": "Alta"
+    },
+    {
+      "id": "GAP-07",
+      "dato": "Concepto jurídico que confirme que el diseño (verificación de credenciales, agendamiento, PIN, control de inicio y fin, tarifa sugerida) es compatible con operar como intermediario y no como prestador de salud.",
+      "impacto": "Si el diseño se califica como prestación, el modelo elegido no se sostiene.",
+      "bloquea": [
+        "legal"
+      ],
+      "prioridad": "Alta"
+    },
+    {
+      "id": "GAP-08",
+      "dato": "Base legal restante del tratamiento: consentimiento biométrico, de ubicación y del tercero titular; aviso para datos del enfermero; qué registra el consentimiento (versión, fecha, revocación); retención y supresión.",
+      "impacto": "Riesgo de cierre de la operación con datos sensibles. Ya existe el consentimiento para datos médicos propios.",
+      "bloquea": [
+        "legal"
+      ],
+      "prioridad": "Alta"
+    },
+    {
+      "id": "GAP-09",
+      "dato": "Umbrales numéricos de las métricas de éxito.",
+      "impacto": "No hay criterio para decidir continuar o parar.",
+      "bloquea": [
+        "mercado",
+        "sostenibilidad"
+      ],
+      "prioridad": "Media"
+    },
+    {
+      "id": "GAP-10",
+      "dato": "HU-05…HU-17 (13 historias planificadas) y 9 vacíos no planificados según el índice: cancelación, recuperación de contraseña, desbloqueo de PIN, revocación de enfermeros, negociación/pago/liquidación, reconciliación asignación–directorio, verificación facial, ubicación en tiempo real y canal de coordinación. Se listan como brecha, no como incongruencia.",
+      "impacto": "El ciclo de vida del servicio y el alcance aprobado no están especificados.",
+      "bloquea": [
+        "tecnica",
+        "cronograma"
+      ],
+      "prioridad": "Alta"
+    },
+    {
+      "id": "GAP-11",
+      "dato": "Selección de proveedores: pasarela, verificación facial, correo/SMS, almacenamiento, mapas.",
+      "impacto": "Costos y riesgos externos sin cuantificar.",
+      "bloquea": [
+        "riesgos",
+        "financiera"
+      ],
+      "prioridad": "Media"
+    },
+    {
+      "id": "GAP-12",
+      "dato": "Mecanismo concreto de precio y negociación (rondas, última palabra).",
+      "impacto": "Sin él no se puede diseñar la asignación.",
+      "bloquea": [
+        "financiera",
+        "tecnica"
+      ],
+      "prioridad": "Alta"
+    },
+    {
+      "id": "GAP-13",
+      "dato": "Precisión y frecuencia de la geolocalización.",
+      "impacto": "Afecta privacidad, costo y diseño.",
+      "bloquea": [
+        "tecnica",
+        "legal"
+      ],
+      "prioridad": "Media"
+    },
+    {
+      "id": "GAP-14",
+      "dato": "Especificación de idempotencia (clave, alcance, retención, respuesta ante repetición).",
+      "impacto": "La aceptación atómica no es verificable.",
+      "bloquea": [
+        "tecnica"
+      ],
+      "prioridad": "Media"
+    },
+    {
+      "id": "GAP-16",
+      "dato": "Contacto de emergencia: obligatoriedad, cantidad, excepciones (paciente sin dispositivo o inconsciente).",
+      "impacto": "Funcionalidad de seguridad sin definir.",
+      "bloquea": [
+        "operativa",
+        "legal"
+      ],
+      "prioridad": "Media"
+    },
+    {
+      "id": "GAP-17",
+      "dato": "Estrategia para lograr liquidez del marketplace (vision §8: «No cubierto»).",
+      "impacto": "Riesgo principal de negocio sin plan.",
+      "bloquea": [
+        "mercado",
+        "sostenibilidad"
+      ],
+      "prioridad": "Alta"
+    },
+    {
+      "id": "GAP-18",
+      "dato": "Reloj del sistema: zona horaria, evaluación de ventanas solo en servidor y qué configuración aplica a servicios ya asignados.",
+      "impacto": "Riesgo de exponer o retirar datos sensibles por error.",
+      "bloquea": [
+        "tecnica"
+      ],
+      "prioridad": "Media"
+    },
+    {
+      "id": "GAP-19",
+      "dato": "Nivel de competencia (auxiliar/profesional) y requisitos documentales y legales por tipo de servicio (p. ej. transporte, hospital).",
+      "impacto": "Servicios aceptables por quien no puede prestarlos.",
+      "bloquea": [
+        "legal",
+        "operativa"
+      ],
+      "prioridad": "Media"
+    },
+    {
+      "id": "GAP-21",
+      "dato": "Modelo de soporte: quién es «soporte», horario, SLA y facultades (desbloqueo de PIN, ayuda en servicio, disputas).",
+      "impacto": "Bloqueos y emergencias en campo sin responsable.",
+      "bloquea": [
+        "operativa"
+      ],
+      "prioridad": "Alta"
+    },
+    {
+      "id": "GAP-22",
+      "dato": "Criterios y fuente del revisor para aprobar o pedir corrección (qué se verifica y contra qué fuente oficial), y límite de ciclos de corrección.",
+      "impacto": "La aprobación manual no es reproducible ni auditable.",
+      "bloquea": [
+        "operativa",
+        "legal"
+      ],
+      "prioridad": "Media"
+    },
+    {
+      "id": "GAP-23",
+      "dato": "Proceso de recaptura de la foto de referencia cada 6–12 meses: quién lo dispara y qué pasa si el enfermero no lo hace (vision §7: «debe diseñarse»).",
+      "impacto": "La verificación facial pierde vigencia y el enfermero puede quedar activo con una referencia obsoleta.",
+      "bloquea": [
+        "operativa"
+      ],
+      "prioridad": "Media"
+    },
+    {
+      "id": "GAP-24",
+      "dato": "Regla de solapamiento de horarios del enfermero: nada impide que acepte dos servicios simultáneos (domain-model §2 lo reconoce como vacío).",
+      "impacto": "Un enfermero puede quedar asignado a dos domicilios a la vez.",
+      "bloquea": [
+        "tecnica",
+        "operativa"
+      ],
+      "prioridad": "Media"
+    },
+    {
+      "id": "GAP-25",
+      "dato": "Marco contractual del intermediario: términos y condiciones, relación con los enfermeros como profesionales independientes, límites de responsabilidad de la plataforma y seguros.",
+      "impacto": "Sin él, el modelo de intermediación no está formalizado y la responsabilidad ante un daño al paciente no está delimitada.",
+      "bloquea": [
+        "legal",
+        "operativa"
+      ],
+      "prioridad": "Alta"
+    }
   ],
-
-  condiciones: [
-    {id:"COND-01", texto:"Existe un único documento normativo: vision.md aprobado o recortado y propagado a Requirements-Context y a HU-01…04; 0 incongruencias críticas abiertas.", refs:["INC-01","GAP-20"]},
-    {id:"COND-02", texto:"Modelo de asignación decidido (feed atómico, negociación o directorio) y tabla de transiciones de estados con guardas, incluyendo cancelación, no-show y expiración.", refs:["INC-03","INC-12"]},
-    {id:"COND-03", texto:"Historias de precio/negociación y de pagos escritas, con proveedor elegido, porcentaje de comisión y regla de custodia.", refs:["INC-02","GAP-02","GAP-12"]},
-    {id:"COND-04", texto:"Concepto jurídico escrito, firmado por un abogado de salud, sobre intermediario vs. prestador de salud.", refs:["SUP-01","GAP-07"]},
-    {id:"COND-05", texto:"Autorización de tratamiento, aviso de privacidad y consentimientos separados (salud, biometría, ubicación, tercero) integrados en las HU con criterios de aceptación.", refs:["INC-05","GAP-08"]},
-    {id:"COND-06", texto:"Verificación de identidad y de credenciales contra fuente oficial incorporadas a HU-02/03: ningún perfil pasa a «Aprobado» sin resultado.", refs:["INC-04","SUP-05"]},
-    {id:"COND-07", texto:"Presupuesto aprobado con una línea por proveedor y por rubro operativo.", refs:["GAP-01","GAP-11"]},
-    {id:"COND-08", texto:"Cronograma con hitos, responsables y equipo dimensionado (desarrollo, revisión, soporte).", refs:["GAP-03","GAP-04"]},
-    {id:"COND-09", texto:"Requisitos no funcionales documentados: volumetría año 1, latencia p95/p99, disponibilidad, RPO/RTO, retención y reloj del sistema.", refs:["GAP-05","GAP-18"]},
-    {id:"COND-10", texto:"Al menos 2 revisores asignados, reloj del SLA definido y métrica de edad de la cola; capacidad medida con 20 perfiles reales.", refs:["INC-13","SUP-04"]},
-    {id:"COND-11", texto:"Escritas las HU de cancelación, recuperación de contraseña, desbloqueo de PIN y revocación/suspensión de enfermeros; HU-05…HU-17 con estado «Definida».", refs:["INC-11","INC-12","GAP-10"]},
-    {id:"COND-12", texto:"Credenciales de enfermeros y superadministrador definidas, con verificación de correo y segundo factor para el rol administrativo.", refs:["INC-06"]},
-    {id:"COND-13", texto:"Idempotencia y código de correo especificados (clave, retención, TTL, intentos, reenvíos) con criterios de aceptación comprobables.", refs:["INC-23","GAP-14","GAP-15"]},
-    {id:"COND-14", texto:"Evidencia de demanda y oferta: propuesta del auditor de al menos 15 entrevistas a usuarios y 15 a enfermeros, con disposición de pago y tarifa mínima (umbral ajustable por el equipo).", refs:["SUP-02","SUP-03","GAP-06"]},
-    {id:"COND-15", texto:"Métricas de éxito con umbral numérico, incluida al menos una métrica de seguridad/confianza y sin depender de estados inexistentes.", refs:["INC-17","GAP-09"]},
-    {id:"COND-16", texto:"Bloqueo por calificación pendiente redefinido para no impedir PIN, extensiones, cancelación ni soporte.", refs:["INC-10"]},
-    {id:"COND-17", texto:"Precisión del origen previa a la aceptación fijada y texto libre estructurado o filtrado para impedir datos de salud.", refs:["INC-09","GAP-13"]},
-    {id:"COND-18", texto:"Documentos derivados (modelo de dominio, glosario, índice de reglas, auditoría previa) reconciliados con la fuente normativa.", refs:["INC-19","INC-20","INC-22","INC-26"]}
+  "condiciones": [
+    {
+      "id": "COND-01",
+      "texto": "El modelo de asignación, la tarifa y la verificación de identidad que define vision.md quedan reflejados en Requirements-Context y en HU-02/03/04 (o se retiran del MVP); 0 incongruencias críticas abiertas.",
+      "refs": [
+        "INC-03",
+        "INC-02",
+        "INC-04",
+        "INC-27"
+      ]
+    },
+    {
+      "id": "COND-02",
+      "texto": "Modelo de asignación decidido (feed atómico, negociación o directorio) y tabla de transiciones de estados con guardas, incluyendo cancelación, no-show y expiración.",
+      "refs": [
+        "INC-03",
+        "INC-12"
+      ]
+    },
+    {
+      "id": "COND-03",
+      "texto": "Historias de precio/negociación y de pagos escritas, con proveedor elegido, porcentaje de comisión y regla de custodia.",
+      "refs": [
+        "INC-02",
+        "GAP-02",
+        "GAP-12"
+      ]
+    },
+    {
+      "id": "COND-04",
+      "texto": "Concepto jurídico escrito, firmado por un abogado de salud, que confirme que el diseño es compatible con operar como intermediario tecnológico y no como prestador de salud; decisión registrada en vision.md.",
+      "refs": [
+        "SUP-01",
+        "GAP-07",
+        "INC-34"
+      ]
+    },
+    {
+      "id": "COND-05",
+      "texto": "Consentimientos separados y registrados (versión del aviso, fecha, revocación) para biometría, ubicación, tercero titular y datos del enfermero, integrados en las HU con criterios de aceptación; política de retención y supresión.",
+      "refs": [
+        "INC-05",
+        "GAP-08"
+      ]
+    },
+    {
+      "id": "COND-06",
+      "texto": "Verificación facial y contraste con fuente oficial incorporados a HU-02/03: ningún perfil pasa a «Aprobado» sin resultado.",
+      "refs": [
+        "INC-04",
+        "INC-33",
+        "SUP-05"
+      ]
+    },
+    {
+      "id": "COND-07",
+      "texto": "Presupuesto aprobado con una línea por proveedor y por rubro operativo.",
+      "refs": [
+        "GAP-01",
+        "GAP-11"
+      ]
+    },
+    {
+      "id": "COND-08",
+      "texto": "Cronograma con hitos, responsables y equipo dimensionado (desarrollo, revisión, soporte).",
+      "refs": [
+        "GAP-03",
+        "GAP-04"
+      ]
+    },
+    {
+      "id": "COND-09",
+      "texto": "Requisitos no funcionales documentados: volumetría año 1, latencia p95/p99, disponibilidad, RPO/RTO, retención y reloj del sistema.",
+      "refs": [
+        "GAP-05",
+        "GAP-18"
+      ]
+    },
+    {
+      "id": "COND-10",
+      "texto": "Al menos 2 revisores asignados, reloj del SLA definido y métrica de edad de la cola; capacidad medida con 20 perfiles reales.",
+      "refs": [
+        "INC-13",
+        "SUP-04",
+        "GAP-22"
+      ]
+    },
+    {
+      "id": "COND-11",
+      "texto": "Escritas las HU de cancelación, recuperación de contraseña, desbloqueo de PIN y revocación/suspensión con estado terminal para perfiles fraudulentos; HU-05…HU-17 con estado «Definida».",
+      "refs": [
+        "INC-11",
+        "INC-12",
+        "INC-29",
+        "GAP-10"
+      ]
+    },
+    {
+      "id": "COND-12",
+      "texto": "Credenciales de enfermeros y superadministrador definidas, con verificación de correo y segundo factor para el rol administrativo.",
+      "refs": [
+        "INC-06"
+      ]
+    },
+    {
+      "id": "COND-13",
+      "texto": "Idempotencia especificada (clave, alcance, retención, respuesta ante repetición) con criterios de aceptación comprobables, y recordatorio de verificación alineado con el TTL del código.",
+      "refs": [
+        "INC-30",
+        "GAP-14"
+      ]
+    },
+    {
+      "id": "COND-14",
+      "texto": "Evidencia de demanda y oferta: propuesta del auditor de al menos 15 entrevistas a usuarios y 15 a enfermeros, con disposición de pago y tarifa mínima (umbral ajustable por el equipo).",
+      "refs": [
+        "SUP-02",
+        "SUP-03",
+        "GAP-06"
+      ]
+    },
+    {
+      "id": "COND-15",
+      "texto": "Métricas de éxito con umbral numérico, incluida al menos una métrica de seguridad/confianza y sin depender de estados inexistentes.",
+      "refs": [
+        "INC-17",
+        "GAP-09"
+      ]
+    },
+    {
+      "id": "COND-16",
+      "texto": "La regla de calificación pendiente aparece igual en §19.1, §27, RN-17, índice y glosario (o solo se referencia §19.1).",
+      "refs": [
+        "INC-10"
+      ]
+    },
+    {
+      "id": "COND-17",
+      "texto": "Precisión del origen previa a la aceptación fijada y texto libre estructurado o filtrado para impedir datos de salud.",
+      "refs": [
+        "INC-09",
+        "GAP-13"
+      ]
+    },
+    {
+      "id": "COND-18",
+      "texto": "Documentos derivados (personas, glosario, HU-03 RN-08, modelo de dominio) reconciliados con la fuente normativa.",
+      "refs": [
+        "INC-32",
+        "SUP-11"
+      ]
+    },
+    {
+      "id": "COND-19",
+      "texto": "Mecanismo del PIN especificado sin contradicción: cómo se almacena y se muestra, protección frente a fuga de la base y alcance de «único por servicio».",
+      "refs": [
+        "INC-28",
+        "INC-31",
+        "SUP-14"
+      ]
+    },
+    {
+      "id": "COND-20",
+      "texto": "Rol y proceso de soporte definidos (quién, horario, SLA, facultades) y cubiertos por una HU; regla de solapamiento de horarios del enfermero decidida.",
+      "refs": [
+        "INC-11",
+        "GAP-21",
+        "GAP-24"
+      ]
+    },
+    {
+      "id": "COND-21",
+      "texto": "Marco contractual del intermediario definido: términos y condiciones, relación con los enfermeros como independientes, límites de responsabilidad y seguros.",
+      "refs": [
+        "GAP-25",
+        "SUP-01"
+      ]
+    }
   ],
-
-  acciones: [
-    {titulo:"Decidir el alcance real del MVP y fijar un documento normativo único", detalle:"Resolver, punto por punto, qué de vision.md entra (pagos, negociación, directorio, biometría, geolocalización, tiempo real, atención hospitalaria) y propagarlo a Requirements-Context y a las HU.", refs:["INC-01","INC-02","INC-03","INC-04","INC-07","INC-08"]},
-    {titulo:"Obtener concepto jurídico y base legal antes de escribir HU-05", detalle:"Definir si la plataforma es intermediario o prestador, y qué autorizaciones y consentimientos exige el tratamiento de salud, biometría y ubicación.", refs:["INC-05","SUP-01","GAP-07","GAP-08"]},
-    {titulo:"Definir presupuesto, equipo y cronograma, y dimensionar la revisión de enfermeros", detalle:"Hoy no existen. Sin ellos, cuatro dimensiones no son evaluables y el SLA de aprobación no es defendible.", refs:["GAP-01","GAP-03","GAP-04","INC-13"]}
+  "acciones": [
+    {
+      "titulo": "Reconciliar la definición del MVP con Requirements-Context y las HU existentes",
+      "detalle": "Decidir el modelo de asignación y su máquina de estados (INC-03), dónde vive la tarifa (INC-02) y actualizar HU-02/03 con la verificación facial que la visión ya define (INC-04); si algo no cabe, sacarlo del MVP.",
+      "refs": [
+        "INC-03",
+        "INC-02",
+        "INC-04",
+        "INC-27"
+      ]
+    },
+    {
+      "titulo": "Confirmar jurídicamente el modelo de intermediario y completar los consentimientos",
+      "detalle": "Se decidió operar como intermediario, no como prestador de salud: falta el concepto jurídico sobre el diseño y el marco contractual. HU-01 ya exige consentimiento para datos médicos propios; faltan tercero titular, biometría y datos del enfermero.",
+      "refs": [
+        "SUP-01",
+        "GAP-07",
+        "GAP-25",
+        "INC-05"
+      ]
+    },
+    {
+      "titulo": "Definir presupuesto, equipo y cronograma, y validar demanda y oferta",
+      "detalle": "Sin ellos cuatro dimensiones siguen sin poder evaluarse, y el SLA de aprobación y la liquidez del marketplace no son defendibles.",
+      "refs": [
+        "GAP-01",
+        "GAP-03",
+        "GAP-04",
+        "GAP-06",
+        "INC-13"
+      ]
+    }
   ],
-
-  autoverificacion: {
-    revisado: [
-      "Leí completos Requirements-Context.md, HU-01…HU-04, vision.md, domain-model.md, business-rules-index.md, glossary.md, personas.md y Auditoria-Especificacion.md.",
-      "Contrasté cada cita con el archivo original; todas las citas de incongruencias provienen del texto vigente, no de la auditoría previa.",
-      "Verifiqué con búsqueda en los documentos normativos las ausencias que afirmo: MFA (0), zona horaria/UTC (0), proveedores (solo en vision.md), retención de datos (0), cronograma (0), presupuesto (solo vision.md).",
-      "Comprobé que las decisiones CN-02…CN-09 están aplicadas en los documentos fuente.",
-      "Comprobé que cada dimensión sin datos (N/E) tiene al menos una brecha que la bloquea, y que cada referencia cruzada (INC, GAP, SUP) existe."
+  "autoverificacion": {
+    "revisado": [
+      "Leí completos Requirements-Context.md, HU-01…HU-04, vision.md, domain-model.md, business-rules-index.md y personas.md, y revisé el glosario. No usé informes de auditoría previos como fuente de hallazgos.",
+      "Cada cita de incongruencia proviene del texto vigente y compara dos documentos existentes entre sí (o un documento consigo mismo). Un hallazgo que solo dice «falta la HU» no se admite como incongruencia.",
+      "Comprobé por búsqueda las ausencias que afirmo: MFA (0), zona horaria/UTC (0), latencia/RPO/RTO/volumetría (0), retención o supresión de datos (0), cronograma (0), bloqueo de cuenta o rate limiting (0). Presupuesto y proveedores solo aparecen en vision.md.",
+      "Busqué restos de reglas ya reemplazadas («bloquea el resto», «Rechazado», «solo estado activo/inactivo», «solo su zona de residencia»): de ahí salieron INC-10 e INC-32.",
+      "Recalculé todas las cifras (tabla inferior), ejecuté mi propia medición del hash del PIN y verifiqué que cada referencia cruzada existe y que los contadores coinciden (controles de coherencia arriba)."
     ],
-    corregido: [
-      "Descarté como defectos abiertos varios hallazgos de la auditoría previa que ya están corregidos: contraseña sin longitud (ahora 12–64), PIN en claro (CTX-RN-18), lista de datos sensibles vacía, secciones duplicadas y contradicción de HU-04. Los registré como INC-22.",
-      "Detecté que la afirmación del índice sobre §12.1 (CN-01) no se cumple en el archivo: la lista duplicada sigue ahí (INC-26).",
-      "Detecté un error de cálculo en la auditoría previa (W=1,6 h para λ=15, no 1,9 h) y una mezcla de supuestos en «≈7/día» (INC-22).",
-      "Bajé de «Crítica» a «Alta» la ausencia de credenciales del enfermero (INC-06) y la contradicción de zona/geolocalización (INC-08), porque la visión ya reconoce la segunda y la primera no bloquea la definición del modelo.",
-      "Califiqué Legal con 2 y no con 1 para no afirmar inviabilidad legal que no puedo demostrar; queda como riesgo alto sujeto a concepto jurídico.",
+    "corregido": [
+      "Incorporé la decisión de negocio del 2026-09-30 (intermediario, no prestador de salud): SUP-01 pasa de «hipótesis» a «decisión que debe confirmarse jurídicamente sobre el diseño»; añadí INC-34 (decisión no propagada a vision.md), GAP-25 y COND-21. No cambia el veredicto: la decisión no resuelve las incongruencias ni las dimensiones sin datos.",
+      "Reencuadré como incongruencias solo lo que contradice a otro documento existente: INC-02 (tarifa del MVP vs. HU-04), INC-11 («soporte» vs. roles fijos), INC-12 (§26.1 vs. §16) e INC-14 (modelo vs. MVP).",
+      "Retiré INC-20 (solapamiento de horarios) porque es una regla que falta, no una contradicción: pasó a GAP-24. Retiré INC-22 porque audita un informe y no el contexto.",
+      "Bajé INC-02 y INC-04 a Alta y INC-27 a Media: su parte de «HU sin escribir» ya no cuenta; queda solo la contradicción con documentos existentes.",
+      "Añadí INC-33 (fallback de la verificación facial), detectado al revisar la coherencia interna de la visión.",
+      "Mantuve el veredicto NO VIABLE EN SU ESTADO ACTUAL: baja a 1 la cifra de críticas, pero hay 7 altas y 3 de las 4 dimensiones evaluadas quedan bajo 3.",
       "Dejé Financiera, Mercado, Cronograma y Sostenibilidad como N/E en lugar de estimarlas."
     ],
-    limitaciones: [
-      "Evalúo documentación, no un producto: el repositorio no tiene código.",
+    "limitaciones": [
+      "Evalúo documentación, no un producto: el repositorio no tiene código de producto.",
       "No hubo entrevistas ni acceso a stakeholders; la intención real puede diferir del texto.",
-      "Las referencias legales de la auditoría previa (Ley 1581, Res. 3100/2019, Ley 1164, ReTHUS) no se re-verificaron contra fuente primaria y no constituyen concepto jurídico.",
+      "Las referencias legales (Ley 1581 de 2012, Res. 3100/2019, ReTHUS) provienen de vision.md; no se re-verificaron contra fuente primaria y no constituyen concepto jurídico.",
       "Las probabilidades e impactos del pre-mortem son juicios ordinales del auditor (inferencia), no estadísticas.",
-      "El cálculo de capacidad de revisión usa premisas de la auditoría previa (12 min/perfil, 6 h/día, 35 % de correcciones) que no están medidas en el proyecto; modela llegadas y servicio con supuestos simplificadores.",
-      "Cuatro de ocho dimensiones no son evaluables; el puntaje global solo resume las evaluadas."
+      "La medición del hash se hizo con SHA-256 sin sal en una sola máquina; no dice qué tan rápido lo harían atacantes con hardware dedicado ni evalúa diseños alternativos (HMAC, hash lento).",
+      "Cuatro de ocho dimensiones no son evaluables; el puntaje global solo resume las evaluadas.",
+      "La decisión de operar como intermediario es una intención de negocio; no constituye ni sustituye un concepto jurídico sobre la calificación de la operación."
     ],
-    cifras: [
-      {c:"180 min = 3 h; 15:00 − 180 min", r:"12:00", ok:true, n:"Req §12 y §13"},
-      {c:"PIN visible: 15:00 − 5 min", r:"14:55", ok:true, n:"Req §14.2"},
-      {c:"Inicio 10:00 + duración 2 h", r:"12:00", ok:true, n:"Req §16"},
-      {c:"5 intentos / 10^6 combinaciones", r:"0,0005 %", ok:true, n:"Req §15; SUP-10"},
-      {c:"W = 24 h / (30 − λ), λ = 10 · 20 · 25 · 28 · 29", r:"1,2 · 2,4 · 4,8 · 12 · 24 h", ok:true, n:"Coincide con la auditoría previa (modelo M/M/1, premisas no medidas)"},
-      {c:"W con λ = 15", r:"24 / 15 = 1,6 h (la auditoría dice 1,9 h)", ok:false, n:"Error de la auditoría previa; ver INC-22"},
-      {c:"Ruptura con 35 % de reprocesos: 1,35·λ = 29", r:"λ ≈ 21,5 / día", ok:true, n:"Coincide con la auditoría previa"},
-      {c:"Ruptura con μ = 10/día: sin reprocesos / con reprocesos", r:"λ = 9 / λ ≈ 6,7", ok:true, n:"La auditoría dice «≈7» sin separar ambos casos"},
-      {c:"[Inferencia] p95 del tiempo de revisión ≤ 24 h exige μ − λ_ef ≥ 3/día (p95 ≈ 3 × media en M/M/1)", r:"λ ≤ 27 · ≤ 20 con reprocesos · ≤ 5,2 con reprocesos y μ = 10", ok:true, n:"Mi cálculo; la media de 24 h de la auditoría previa dejaría ~37 % de perfiles fuera del SLA"}
+    "cifras": [
+      {
+        "c": "180 min = 3 h; 15:00 − 180 min",
+        "r": "12:00",
+        "ok": true,
+        "n": "Req §12 y §13"
+      },
+      {
+        "c": "PIN visible: 15:00 − 5 min",
+        "r": "14:55",
+        "ok": true,
+        "n": "Req §14.2"
+      },
+      {
+        "c": "Inicio 10:00 + duración 2 h",
+        "r": "12:00",
+        "ok": true,
+        "n": "Req §16"
+      },
+      {
+        "c": "5 intentos / 10^6 combinaciones",
+        "r": "0,0005 %",
+        "ok": true,
+        "n": "Req §15; SUP-10"
+      },
+      {
+        "c": "Tabla de 1.000.000 SHA-256 sin sal (000000–999999)",
+        "r": "2,87 s; inversión del hash de prueba inmediata",
+        "ok": true,
+        "n": "Medición propia en esta auditoría; SUP-14 e INC-28"
+      },
+      {
+        "c": "Colisión de PIN con 1.000 servicios activos: 1 − e^(−n(n−1)/2N), N = 10^6",
+        "r": "39,3 %",
+        "ok": true,
+        "n": "Cálculo propio; INC-31 (lectura «único entre todos los servicios»)"
+      },
+      {
+        "c": "Recordatorio 24 h − TTL 15 min",
+        "r": "23 h 45 min con el código vencido",
+        "ok": true,
+        "n": "Req §4.5 y HU01-RN-09; INC-30"
+      }
     ]
   }
 };
@@ -760,6 +1615,7 @@ function renderResumen(){
   <h2>Tres acciones más urgentes</h2>
   <ol class="acts">${D.acciones.map(a=>`<li><div><b>${esc(a.titulo)}</b><p>${esc(a.detalle)}</p>${refChips(a.refs)}</div></li>`).join("")}</ol>
   <p class="warn"><b>Alcance del veredicto.</b> ${esc(sub(V.alcance_veredicto))} ${esc(D.meta.sin_codigo)}</p>
+  <p class="warn"><b>Decisión de negocio.</b> ${esc(D.meta.decision)}</p>
   <details><summary>Reconstrucción del proyecto (Fase 1)</summary><div class="body">
     <dl class="kv">
       <dt>Objetivo</dt><dd>${esc(R.objetivo)}</dd>
