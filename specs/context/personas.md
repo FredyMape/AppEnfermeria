@@ -1,7 +1,7 @@
 # Personas / Actores — AppEnfermeria
 
-> Generado por Context Builder. Re-ejecutable. Última consolidación: 2026-09-22.
-> Fuentes: `Requirements-Context.md`, `HU-01`, `HU-02`, `HU-03`, `HU-04`.
+> Generado por Context Builder. Re-ejecutable. Última consolidación: 2026-09-29 (refinamiento a partir de `Hallazgos-Auditoria-AppEnfermeria.md`, ver `business-rules-index.md` CN-10 en adelante).
+> Fuentes: `Requirements-Context.md`, `HU-01`, `HU-02`, `HU-03`, `HU-04`, `specs/context/vision.md`.
 
 ---
 
@@ -67,10 +67,10 @@
 
 - Aceptar, iniciar, finalizar, extender y calificar servicios (`HU-08` a `HU-13`, pendientes en §29).
 - **Recuperación de contraseña** — mismo vacío que para Usuario; no existe en ningún documento.
-- **Revocación o suspensión tras la aprobación** — `Requirements-Context.md` y `HU-03` solo contemplan `Pendiente de revisión`, `Aprobado`, `Rechazado`/`Corrección solicitada`. No existe estado ni flujo para retirar la aprobación a un enfermero ya habilitado (p. ej. tras una sanción). No está mencionado ni siquiera en la lista de pendientes §29.
-- **Apelación de un rechazo definitivo** — no contemplada.
+- **Revocación o suspensión tras la aprobación** — `Requirements-Context.md` y `HU-03` solo contemplan `Pendiente de revisión`, `Aprobado`, `Corrección solicitada` (unificado con `Rechazado` el 2026-09-29). No existe estado ni flujo para retirar la aprobación a un enfermero ya habilitado (p. ej. tras una sanción). No está mencionado ni siquiera en la lista de pendientes §29.
+- **Apelación de una corrección solicitada de forma reiterada** — no contemplada.
 - **Estado de borrador / reanudación del registro** — el flujo de `HU-02` es lineal sin persistencia parcial declarada.
-- **Verificación de identidad** (más allá de la verificación de credenciales documentales) — no mencionada en ningún documento; el registro exige documentos autoportados sin mecanismo de contraste declarado.
+- **Verificación de identidad biométrica/facial** — confirmada dentro del MVP el 2026-09-29 (`vision.md` §5, resolución INC-01/INC-04), pero sin proveedor, presupuesto ni HU concreta todavía; el registro actual (`HU-02`) sigue exigiendo solo documentos autoportados sin mecanismo de contraste.
 
 ---
 
@@ -80,14 +80,14 @@
 
 ### Responsabilidades
 
-- Revisar manualmente perfiles de enfermeros pendientes (`HU-03`): aprobar, rechazar o solicitar corrección.
+- Revisar manualmente perfiles de enfermeros pendientes (`HU-03`): aprobar o solicitar corrección.
 - Configurar el tiempo de habilitación de datos médicos sensibles y del PIN (`Requirements-Context.md` §23).
 - Gestionar el catálogo de tipos de servicio (`HU-04`): consultar y cambiar estado activo/inactivo.
 - Consultar información de auditoría (`Requirements-Context.md` §22).
 
 ### Datos que gestiona
 
-- Decisiones de aprobación/rechazo/corrección sobre perfiles de enfermero, con comentario asociado.
+- Decisiones de aprobación/corrección sobre perfiles de enfermero, con comentario asociado.
 - Configuración global: minutos de habilitación de datos sensibles, minutos de habilitación del PIN.
 - Catálogo `TipoServicio`: nombre, descripción, estado.
 
@@ -116,5 +116,9 @@ Estas funcionalidades se mencionan en `Requirements-Context.md` pero no tienen n
 - Revocación o suspensión de un enfermero ya aprobado (sin estado ni flujo en `HU-03` ni en ningún otro documento).
 - Cambio de correo electrónico antes de completar la verificación.
 - Gestión/gestión administrativa de las configuraciones de ventanas de tiempo (§13/§23) — mencionada como capacidad del Superadministrador en §22 pero sin HU propia; podría quedar cubierta por la futura `HU-15` si su alcance se define para incluirla explícitamente.
+- **Negociación de precio, pago y liquidación** (`vision.md` §5, MVP confirmado el 2026-09-29) — sin mecanismo concreto ni HU.
+- **Reconciliación entre asignación atómica y el modelo de directorio/invitación directa** (`vision.md` §5, MVP confirmado el 2026-09-29) — sin máquina de estados ni HU.
+- **Ubicación en tiempo real del enfermero/paciente y contacto de emergencia** (`vision.md` §5, MVP confirmado el 2026-09-29) — sin entidades, modelo de datos ni HU.
+- **Canal y momento de coordinación previa al servicio** — `Requirements-Context.md` §11/§12.2 no define qué canal cubre "lo estrictamente necesario para coordinar" ni cómo tratar servicios aceptados con menos de 180 minutos de margen.
 
 > Nota de trazabilidad: `Auditoria-Especificacion.md` (documento de auditoría externa, no de negocio) profundiza sobre estos mismos vacíos y añade otros no derivados directamente del texto de `Requirements-Context.md` (p. ej. verificación de identidad biométrica, integración con ReTHUS, modelo de pagos, disputas). Esos hallazgos adicionales son recomendaciones de un análisis externo y **no están respaldados todavía por el texto de negocio**; se dejan fuera de este documento a la espera de que el developer decida incorporarlos como HUs mediante `User Story Completer`.

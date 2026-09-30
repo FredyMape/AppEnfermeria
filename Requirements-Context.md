@@ -53,6 +53,10 @@ Los datos comunes incluyen, como mínimo:
 - Número de documento.
 - Teléfono.
 - Correo electrónico.
+- Foto.
+- Zona de residencia.
+
+`Foto` y `Zona de residencia` se modelan como datos de `Persona` (no exclusivos de `Enfermero`), aunque en el MVP solo se diligencian durante el registro de enfermero (resolución INC-24, 2026-09-29; ver `HU-02`).
 
 La información específica de cada rol deberá almacenarse en entidades relacionadas con `Persona`.
 
@@ -91,6 +95,8 @@ Los datos mínimos definidos son:
 
 El usuario podrá registrar información médica personal durante el registro.
 
+Antes de capturar cualquier dato médico, el sistema deberá presentar un aviso de privacidad y solicitar el consentimiento explícito del usuario para el tratamiento de datos sensibles de salud (Ley 1581 de 2012). El registro de datos médicos no podrá completarse sin este consentimiento (resolución INC-05, 2026-09-29).
+
 Como mínimo se contempla:
 
 - Tipo de sangre.
@@ -99,7 +105,7 @@ Como mínimo se contempla:
 
 Estos datos podrán reutilizarse cuando el usuario solicite un servicio para sí mismo.
 
-Cuando el usuario solicite un servicio para otra persona, deberá proporcionar los datos correspondientes a dicha persona.
+Cuando el usuario solicite un servicio para otra persona, deberá proporcionar los datos correspondientes a dicha persona, junto con el consentimiento correspondiente del titular o de quien lo represente.
 
 ## 4.3 Contraseña
 
@@ -144,15 +150,8 @@ El enfermero podrá registrarse directamente desde la aplicación seleccionando 
 
 El registro deberá incluir información personal y profesional.
 
-Datos definidos:
+Los datos de `Persona` (nombre completo, tipo/número de documento, teléfono, correo electrónico, foto, zona de residencia — ver §3.1) se diligencian como parte de este registro. Adicionalmente, el registro captura de forma obligatoria:
 
-- Nombre completo.
-- Tipo de documento.
-- Número de documento.
-- Teléfono.
-- Correo electrónico.
-- Foto.
-- Zona de residencia.
 - Título profesional.
 - Tarjeta profesional.
 - Años de experiencia.
@@ -162,9 +161,11 @@ Datos definidos:
 - Certificaciones.
 - Documentación profesional adicional.
 
-No se almacenará ni solicitará un radio de servicio.
+Los campos de experiencia (años de experiencia, experiencia profesional y lugares donde ha trabajado) son obligatorios para enviar el perfil a revisión (resolución INC-21, 2026-09-29; ver `HU-02`).
 
-Solamente se almacenará la zona de residencia.
+La geolocalización real del enfermero (no solo la zona de residencia como texto libre) forma parte del alcance del MVP, de acuerdo con la decisión de alcance registrada en `specs/context/vision.md` §5 (resolución INC-01/INC-08, 2026-09-29). El nivel de precisión (ciudad/barrio vs. coordenadas exactas) y la frecuencia de actualización siguen como pregunta abierta en `vision.md` §9 y deben resolverse antes de la especificación técnica.
+
+No se almacenará ni solicitará un radio máximo de desplazamiento del enfermero.
 
 ## 5.2 Estado del enfermero
 
@@ -174,10 +175,9 @@ El perfil deberá contemplar estados asociados al proceso de verificación, incl
 
 - Pendiente de revisión.
 - Aprobado.
-- Rechazado.
 - Corrección solicitada.
 
-`Rechazado` y `Corrección solicitada` son estados independientes: el primero indica que la información no fue aprobada en su estado actual, el segundo que se requieren ajustes puntuales antes de una nueva revisión (alineado con `HU-02` y `HU-03`).
+Los estados `Rechazado` y `Corrección solicitada`, antes tratados como independientes pese a tener el mismo comportamiento (corregir y volver a revisión), se unificaron en un solo estado (`Corrección solicitada`) el 2026-09-29 (resolución INC-16; ver `specs/context/business-rules-index.md`). Toda solicitud de corrección debe incluir un comentario del Superadministrador que indique qué debe ajustarse antes de una nueva revisión.
 
 ## 5.3 Aprobación
 
@@ -212,15 +212,15 @@ El superadministrador podrá revisar:
 El superadministrador podrá:
 
 - Aprobar.
-- Rechazar / solicitar corrección.
+- Solicitar corrección.
 
-Cuando sea necesaria una corrección o verificación adicional, el superadministrador podrá agregar un comentario.
+Cuando sea necesaria una corrección o verificación adicional, el superadministrador deberá agregar un comentario que indique el motivo.
 
 El comentario será enviado/notificado al enfermero.
 
 ## 6.2 Correcciones
 
-Si el perfil es rechazado o requiere correcciones:
+Si el perfil requiere correcciones:
 
 1. El enfermero recibe el motivo mediante el comentario.
 2. Corrige la información o documentación correspondiente.
@@ -314,6 +314,10 @@ Los datos personales adicionales y los datos médicos sensibles del paciente no 
 
 Los datos de contacto y la información médica sensible se habilitarán posteriormente de acuerdo con las reglas de tiempo configuradas por el superadministrador.
 
+> **Nota de alcance (INC-02, resuelta 2026-09-29):** `vision.md` §5 confirma que la pasarela de pagos y el modelo de precio híbrido (tarifa sugerida + oferta del usuario + contraoferta del enfermero) están dentro del alcance del MVP. El mecanismo concreto de captura, negociación, comisión y liquidación no se define en este documento; queda pendiente para `HU-05` en adelante (ver `specs/context/business-rules-index.md`, CN-06).
+>
+> **Nivel de precisión del origen y del texto libre (INC-09):** queda sin definir de forma deliberada — se deja como vacío para que `Architecture Definer`/`Spec Builder` lo resuelvan al diseñar la solicitud de servicio, dado el riesgo de exponer identidad o salud de una persona vulnerable antes de la asignación.
+
 ---
 
 # 10. Aceptación del servicio
@@ -341,6 +345,8 @@ Si varios enfermeros intentan aceptar el mismo servicio simultáneamente:
 3. El servicio deberá cambiar de estado `Publicado` a `Asignado`.
 4. Las solicitudes posteriores deberán ser rechazadas.
 5. El servicio no podrá quedar asignado a más de un enfermero.
+
+> **Nota de alcance (INC-03, resuelta 2026-09-29):** `vision.md` §5 confirma para el MVP un segundo modelo de descubrimiento (directorio con invitación directa a un enfermero específico) y una negociación de precio previa a la asignación, que conviven con este modelo de asignación atómica por orden de llegada. La máquina de estados y las reglas concretas para reconciliar ambos modelos (p. ej. nuevos estados `Ofertado`/`Invitado`/`Contraofertado`) quedan pendientes de diseño para `Spec Builder`/`Architecture Definer` cuando se redacten las historias `HU-05` en adelante; no se inventan en este documento.
 
 ## 10.3 Idempotencia
 
@@ -412,23 +418,7 @@ Los datos sensibles incluyen, entre otros:
 
 ## 12.1 Información visible antes de aceptar un servicio
 
-Antes de aceptar un servicio, el enfermero podrá visualizar únicamente la información necesaria para evaluar y aceptar la solicitud. Esta lista es la misma definida en la sección 9 (fuente única de verdad).
-
-La información disponible será:
-
-- Tipo de servicio.
-- Fecha del servicio.
-- Hora de inicio.
-- Si el servicio es programado.
-- Duración estimada/contratada.
-- Punto de origen.
-- Destino, cuando aplique.
-- Precio ofrecido.
-- Distancia aproximada.
-- Descripción general del servicio.
-- Información general necesaria sobre el paciente que no corresponda a datos médicos sensibles.
-
-Los datos personales adicionales y los datos médicos sensibles del paciente no estarán disponibles en esta etapa.
+Antes de aceptar un servicio, el enfermero podrá visualizar únicamente la información necesaria para evaluar y aceptar la solicitud. La lista completa de estos datos es la definida en la sección 9 (fuente única de verdad); no se repite aquí para evitar que ambas listas diverjan con el tiempo.
 
 ## 12.2 Información médica sensible visible después de aceptar el servicio
 
@@ -495,13 +485,13 @@ El PIN deberá generarse de manera segura y no deberá ser predecible.
 
 ## 14.2 Visualización del PIN
 
-El usuario podrá visualizar el PIN únicamente durante la ventana de tiempo configurada por el superadministrador.
+El usuario podrá visualizar el PIN únicamente durante la ventana de tiempo configurada por el superadministrador. El valor por defecto es de 5 minutos antes de la hora de inicio del servicio (resolución INC-25, 2026-09-29).
 
 Ejemplo:
 
 ```text
 Hora de inicio del servicio: 15:00
-Configuración: 5 minutos antes
+Configuración (valor por defecto): 5 minutos antes
 
 PIN disponible desde: 14:55
 ```
@@ -654,10 +644,13 @@ La calificación será obligatoria.
 Si una de las partes tiene una calificación pendiente:
 
 - Al abrir la aplicación deberá mostrarse primero la ventana de calificación.
-- No podrá realizar otras acciones dentro de la aplicación.
-- El bloqueo permanecerá hasta que complete la calificación.
+- No podrá crear nuevas solicitudes de servicio ni aceptar nuevos servicios mientras la calificación esté pendiente.
+- Sí podrá continuar con servicios ya en curso: consultar el PIN, solicitar ayuda/soporte, y completar su ciclo de vida (extensión, finalización).
+- El bloqueo de nuevas solicitudes/aceptaciones permanecerá hasta que complete la calificación.
 
 La misma regla deberá aplicarse tanto al usuario como al enfermero.
+
+> Alcance acotado el 2026-09-29 (resolución INC-10): el bloqueo original impedía cualquier acción dentro de la aplicación, incluso continuar un servicio ya en curso; se limita a la creación/aceptación de nuevas solicitudes.
 
 ## 20. Principios técnicos
 

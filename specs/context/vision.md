@@ -1,6 +1,8 @@
 ---
-status: "borrador"
+status: "aprobado"
 ---
+
+> **Resolución INC-01 (2026-09-29):** el developer confirmó que este documento — no `Requirements-Context.md`/`HU-01…04` en su versión previa — es la fuente de verdad del alcance del MVP. `Requirements-Context.md` y las HU aprobadas se actualizaron el mismo día para dejar de contradecir este alcance (ver `specs/context/business-rules-index.md`, CN-10 en adelante). Las preguntas abiertas de la sección 9 siguen sin resolver y no quedan cubiertas por esta aprobación de alcance — siguen pendientes de decisión técnica/de producto antes de traducirse a HU concretas.
 
 # Visión de Producto — Plataforma de Servicios de Enfermería
 
@@ -59,7 +61,7 @@ Detalle completo en [personas.md](personas.md).
 
 ### Explícitamente fuera del MVP (por ahora)
 
-- Atención hospitalaria dentro de una IPS mediante convenio formal (requiere due diligence legal aparte).
+- Atención hospitalaria **mediante convenio formal con una IPS** (integración administrativa/facturación con la institución; requiere due diligence legal aparte). Esto es distinto del tipo de servicio `Atención hospitalaria` del catálogo de `HU-04`, que sí está en el MVP: un enfermero acompañando/atendiendo a un paciente ya hospitalizado, contratado directamente por el usuario, sin convenio institucional de por medio (aclaración INC-07, 2026-09-29).
 - Chat/comunicación enriquecida entre usuario y enfermero más allá de lo estrictamente necesario para coordinar el servicio.
 - Gestión avanzada de disputas con mediación estructurada (se define una vez exista el flujo base de servicio).
 

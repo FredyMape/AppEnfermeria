@@ -56,11 +56,14 @@ El perfil profesional del enfermero deberá incluir:
 
 ### Experiencia profesional
 
-El enfermero podrá registrar:
+El enfermero **deberá** registrar (obligatorio, resolución INC-21, 2026-09-29):
 
 - Años de experiencia.
 - Experiencia profesional.
 - Lugares donde ha trabajado.
+
+Adicionalmente, podrá registrar de forma opcional:
+
 - Información relevante de cada experiencia profesional.
 - Documentos o certificados que respalden la experiencia.
 
@@ -86,6 +89,7 @@ Los siguientes elementos son obligatorios para enviar el perfil a revisión:
 2. Foto.
 3. Título profesional.
 4. Tarjeta profesional.
+5. Años de experiencia, experiencia profesional y lugares donde ha trabajado (resolución INC-21, 2026-09-29).
 
 Los demás documentos son opcionales.
 
@@ -96,6 +100,8 @@ El perfil deberá almacenar la zona de residencia del enfermero.
 No se almacenará ni solicitará un radio de servicio.
 
 La zona de residencia no representa un rango máximo de desplazamiento.
+
+> **Nota de alcance (INC-08, resuelta 2026-09-29):** la geolocalización real del enfermero (no solo zona de residencia como texto libre) forma parte del MVP según `specs/context/vision.md` §5. El nivel de precisión y la frecuencia de actualización siguen como pregunta abierta en `vision.md` §9; esta historia se actualizará cuando se resuelvan.
 
 ## Roles
 
@@ -121,8 +127,9 @@ Estados conceptuales:
 
 - Pendiente de revisión.
 - Aprobado.
-- Rechazado.
 - Corrección solicitada.
+
+> Los estados `Rechazado` y `Corrección solicitada` se unificaron en `Corrección solicitada` el 2026-09-29 (resolución INC-16; ver `HU-03` y `specs/context/business-rules-index.md`).
 
 Un enfermero solamente podrá aceptar servicios cuando su perfil tenga estado **Aprobado**.
 
@@ -190,6 +197,7 @@ Toda creación y modificación relevante del perfil deberá registrar informaci�
 - [ ] El sistema crea la información común en la entidad Persona.
 - [ ] El sistema crea la información específica del perfil de enfermero.
 - [ ] El enfermero puede registrar su experiencia profesional.
+- [ ] El sistema exige años de experiencia, experiencia profesional y lugares donde ha trabajado como campos obligatorios.
 - [ ] El enfermero puede cargar documentos que respalden su experiencia.
 - [ ] El sistema exige documento de identidad.
 - [ ] El sistema exige foto.

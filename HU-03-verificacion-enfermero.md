@@ -11,7 +11,7 @@
 
 ## Historia de Usuario
 
-> Como Superadministrador, quiero revisar toda la información personal, profesional y documental de un enfermero y aprobar, rechazar o solicitar correcciones, para garantizar que únicamente los enfermeros verificados puedan prestar servicios en la plataforma.
+> Como Superadministrador, quiero revisar toda la información personal, profesional y documental de un enfermero y aprobar o solicitar correcciones, para garantizar que únicamente los enfermeros verificados puedan prestar servicios en la plataforma.
 
 ## Descripción
 
@@ -35,8 +35,9 @@ La información disponible incluirá:
 El Superadministrador podrá tomar una de las siguientes acciones:
 
 1. Aprobar.
-2. Rechazar.
-3. Solicitar corrección.
+2. Solicitar corrección.
+
+> Los estados/acciones `Rechazado` y `Corrección solicitada` se unificaron el 2026-09-29 (resolución INC-16, ver `specs/context/business-rules-index.md`): tenían el mismo comportamiento (el enfermero corrige y solicita una nueva revisión), por lo que se eliminó la distinción.
 
 ## Información visible para el Superadministrador
 
@@ -84,19 +85,11 @@ Indica que el Superadministrador verificó satisfactoriamente la información re
 
 El enfermero queda habilitado para aceptar servicios.
 
-### Rechazado
-
-Indica que la información proporcionada no fue aprobada durante la revisión.
-
-El motivo deberá quedar registrado mediante un comentario.
-
-El enfermero podrá corregir la información indicada y solicitar una nueva revisión.
-
 ### Corrección solicitada
 
 El Superadministrador requiere modificaciones o información adicional antes de aprobar el perfil.
 
-El comentario del Superadministrador deberá indicar qué información debe corregirse o complementarse.
+El comentario del Superadministrador deberá indicar qué información debe corregirse o complementarse. El comentario es obligatorio.
 
 ## Flujo principal — Aprobación
 
@@ -128,19 +121,6 @@ El comentario del Superadministrador deberá indicar qué información debe corr
 9. El sistema cambia nuevamente el estado a **Pendiente de revisión**.
 10. El Superadministrador puede realizar una nueva revisión.
 
-## Flujo alternativo — Rechazo
-
-1. El Superadministrador revisa el perfil.
-2. Determina que la información no puede ser aprobada en su estado actual.
-3. Selecciona **Rechazar**.
-4. El Superadministrador registra el motivo del rechazo mediante un comentario.
-5. El sistema cambia el estado a **Rechazado**.
-6. El sistema notifica al enfermero.
-7. El enfermero puede corregir la información relacionada con el motivo del rechazo.
-8. El enfermero solicita una nueva revisión.
-9. El sistema vuelve a colocar el perfil en **Pendiente de revisión**.
-10. El Superadministrador realiza una nueva revisión.
-
 ## Reglas de negocio
 
 ### RN-01 — Aprobación manual
@@ -165,9 +145,9 @@ Cuando un enfermero es aprobado, el sistema debe almacenar:
 - Hora de aprobación.
 - Estado resultante.
 
-### RN-05 — Comentario de rechazo
+### RN-05 — Comentario de corrección
 
-Todo rechazo debe incluir un comentario que indique el motivo.
+Toda solicitud de corrección debe incluir un comentario que indique el motivo.
 
 ### RN-06 — Correcciones
 
@@ -202,11 +182,6 @@ Este SLA representa un objetivo operativo para la revisión administrativa.
 - [ ] El enfermero recibe una notificación cuando se solicitan correcciones.
 - [ ] El enfermero puede corregir la información.
 - [ ] El enfermero puede solicitar una nueva revisión.
-- [ ] El Superadministrador puede rechazar un perfil.
-- [ ] Un rechazo requiere registrar un comentario con el motivo.
-- [ ] El enfermero recibe una notificación del rechazo.
-- [ ] El enfermero puede corregir la información después de un rechazo.
-- [ ] El enfermero puede solicitar una nueva revisión después de corregir la información.
 - [ ] Todas las acciones relevantes quedan registradas para auditoría.
 - [ ] El sistema contempla un SLA objetivo de revisión de 24 a 36 horas.
 
@@ -219,7 +194,6 @@ Para cada acción de verificación deberá registrarse como mínimo:
 - Nombre del Superadministrador.
 - Acción realizada:
   - Aprobación.
-  - Rechazo.
   - Solicitud de corrección.
 - Comentario, cuando aplique.
 - Estado anterior.
@@ -232,7 +206,6 @@ Para cada acción de verificación deberá registrarse como mínimo:
 El sistema deberá notificar al enfermero cuando:
 
 - Su perfil sea aprobado.
-- Su perfil sea rechazado.
 - Se soliciten correcciones.
 - Su perfil vuelva a quedar pendiente de revisión, cuando corresponda.
 

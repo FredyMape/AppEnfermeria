@@ -40,9 +40,11 @@ El usuario podrá registrar información médica personal, incluyendo:
 - Tipo de sangre / RH
 - Información médica relevante definida por el sistema
 
+Antes de capturar cualquier dato médico, el sistema deberá mostrar un aviso de privacidad y solicitar el consentimiento explícito del usuario para el tratamiento de datos sensibles de salud. El registro de datos médicos no podrá completarse sin este consentimiento (resolución INC-05, 2026-09-29).
+
 Estos datos permitirán reutilizar la información cuando el usuario solicite un servicio para sí mismo.
 
-Si el usuario solicita un servicio para otra persona, deberá proporcionar los datos correspondientes a esa persona durante la creación de la solicitud.
+Si el usuario solicita un servicio para otra persona, deberá proporcionar los datos correspondientes a esa persona durante la creación de la solicitud, junto con el consentimiento correspondiente.
 
 ## Política de contraseña
 
@@ -104,6 +106,14 @@ El backend deberá rechazar cualquier contraseña que no cumpla la política mí
 
 El código de verificación será numérico y tendrá 6 dígitos.
 
+### RN-08 — Consentimiento para datos médicos
+
+El sistema no podrá almacenar datos médicos sin haber registrado el consentimiento explícito del usuario para su tratamiento.
+
+### RN-09 — Vigencia e intentos del código de verificación
+
+El código de verificación tendrá una vigencia (TTL) de 15 minutos desde su generación, un máximo de 5 intentos de validación y un máximo de 3 reenvíos por hora (resolución INC-23, 2026-09-29).
+
 ## Flujo principal
 
 1. El usuario selecciona la opción **Registrarse**.
@@ -131,15 +141,15 @@ El código de verificación será numérico y tendrá 6 dígitos.
 Si el usuario introduce un código incorrecto:
 
 - El sistema deberá informar que el código no es válido.
-- El usuario podrá intentar nuevamente.
-- Las reglas de expiración y cantidad máxima de intentos quedan pendientes de definición.
+- El usuario podrá intentar nuevamente hasta un máximo de 5 intentos (RN-09).
+- Al alcanzar el límite de intentos, el sistema deberá invalidar el código vigente y exigir la generación de uno nuevo.
 
 ### Código expirado
 
-Si el código ha expirado:
+Si el código ha expirado (transcurridos 15 minutos desde su generación, RN-09):
 
 - El sistema deberá informar al usuario.
-- El usuario deberá solicitar/generar un nuevo código.
+- El usuario deberá solicitar/generar un nuevo código, respetando el límite de 3 reenvíos por hora (RN-09).
 
 ## Criterios de aceptación
 
@@ -155,6 +165,7 @@ Si el código ha expirado:
 - [ ] Después de verificar el correo, puede solicitar servicios.
 - [ ] El sistema contempla un recordatorio después de 24 horas sin verificación.
 - [ ] Los datos médicos propios pueden almacenarse durante el registro.
+- [ ] El sistema exige consentimiento explícito antes de almacenar datos médicos.
 - [ ] Las solicitudes para terceros permiten registrar los datos correspondientes a la otra persona.
 
 ## Auditoría

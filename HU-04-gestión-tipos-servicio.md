@@ -47,7 +47,9 @@ Servicio que incluye acompañamiento y transporte de acuerdo con las condiciones
 
 ### Atención hospitalaria
 
-Servicio de atención y acompañamiento de enfermería dentro de una institución hospitalaria.
+Servicio de atención y acompañamiento de enfermería dentro de una institución hospitalaria, contratado directamente por el usuario (sin convenio institucional).
+
+> **Aclaración de alcance (INC-07, resuelta 2026-09-29):** este tipo de servicio sí está en el MVP. Es distinto de la "atención hospitalaria mediante convenio formal con una IPS" (integración administrativa/facturación con la institución), que `specs/context/vision.md` §5 excluye explícitamente del MVP por requerir due diligence legal aparte.
 
 ## Datos del tipo de servicio
 
