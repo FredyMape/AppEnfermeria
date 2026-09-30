@@ -72,9 +72,9 @@ Después del registro:
 
 ## Recordatorio de verificación
 
-Si el usuario no verifica su correo dentro de las primeras **24 horas**, el sistema deberá generar/enviar un recordatorio de verificación.
+Si el usuario no verifica su correo dentro de las primeras **24 horas**, el sistema deberá generar/enviar un recordatorio de verificación. El recordatorio genera automáticamente un nuevo código (el original ya expiró, RN-09) y no cuenta contra el límite de 3 reenvíos por hora, por tratarse de un reenvío iniciado por el sistema y no por el usuario (resolución INC-30, 2026-09-30).
 
-El mecanismo de envío y frecuencia adicional de recordatorios queda pendiente de definición.
+La frecuencia de recordatorios adicionales más allá del primero queda pendiente de definición.
 
 ## Reglas de negocio
 
@@ -113,6 +113,14 @@ El sistema no podrá almacenar datos médicos sin haber registrado el consentimi
 ### RN-09 — Vigencia e intentos del código de verificación
 
 El código de verificación tendrá una vigencia (TTL) de 15 minutos desde su generación, un máximo de 5 intentos de validación y un máximo de 3 reenvíos por hora (resolución INC-23, 2026-09-29).
+
+### RN-10 — Recordatorio con código nuevo
+
+El recordatorio de verificación enviado a las 24 horas debe incluir un código nuevo (el original ya expiró). Este reenvío es iniciado por el sistema y no cuenta contra el límite de 3 reenvíos por hora de RN-09 (resolución INC-30, 2026-09-30).
+
+### RN-11 — Registro del consentimiento
+
+Todo consentimiento capturado (datos médicos propios, datos de un tercero) debe registrar la versión del aviso de privacidad aceptado y la fecha/hora de aceptación, y debe poder revocarse posteriormente por el titular o quien lo represente (resolución INC-05, 2026-09-30).
 
 ## Flujo principal
 
@@ -164,8 +172,10 @@ Si el código ha expirado (transcurridos 15 minutos desde su generación, RN-09)
 - [ ] El usuario puede verificar su correo mediante el código recibido.
 - [ ] Después de verificar el correo, puede solicitar servicios.
 - [ ] El sistema contempla un recordatorio después de 24 horas sin verificación.
+- [ ] El recordatorio incluye un código nuevo y no consume el límite de reenvíos por hora.
 - [ ] Los datos médicos propios pueden almacenarse durante el registro.
 - [ ] El sistema exige consentimiento explícito antes de almacenar datos médicos.
+- [ ] El sistema registra la versión del aviso de privacidad, la fecha/hora de aceptación y permite su revocación posterior.
 - [ ] Las solicitudes para terceros permiten registrar los datos correspondientes a la otra persona.
 
 ## Auditoría

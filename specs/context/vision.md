@@ -89,6 +89,8 @@ Detalle completo en [personas.md](personas.md).
 - **Proveedor de verificación facial y su costo aún no definidos.** No hay presupuesto asignado todavía para un servicio externo de verificación biométrica (usualmente con costo por transacción); queda como decisión pendiente antes de comprometer la arquitectura de esta funcionalidad.
 - La recaptura periódica de la foto de referencia (cada 6-12 meses) es un proceso operativo nuevo que debe diseñarse (quién lo dispara, qué pasa si el enfermero no recaptura a tiempo).
 
+> **Consecuencia de la aprobación (INC-27, 2026-09-30):** esta aprobación fija el _alcance_ del MVP, no resuelve las preguntas abiertas (§9) ni las restricciones legales/de proveedor de esta sección. Si alguna se resuelve en contra de lo asumido aquí (p. ej. el concepto jurídico exige habilitación como prestador de salud, o no hay proveedor de verificación facial dentro de presupuesto), el elemento correspondiente del MVP se retira y esta aprobación de alcance debe revisitarse explícitamente antes de continuar con las HU que dependan de él.
+
 ## 8. Riesgos identificados
 
 | Riesgo                                                                                                  | Impacto                                                                                                                                       | Mitigación propuesta                                                                                                                |

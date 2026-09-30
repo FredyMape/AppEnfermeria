@@ -59,8 +59,11 @@ Cada tipo de servicio deberá manejar como mínimo:
 - Nombre.
 - Descripción.
 - Estado.
+- Tarifa sugerida (valor base configurable por el superadministrador; resolución INC-02, 2026-09-30).
 - Fecha y hora de creación.
 - Fecha y hora de actualización.
+
+> **Nota de alcance (INC-02, 2026-09-30):** la "tarifa sugerida" es el valor base que el superadministrador configura por tipo de servicio (`specs/context/vision.md` §5, modelo de precio híbrido). Es distinta del precio final de un servicio concreto, que resulta de la oferta del usuario y la contraoferta del enfermero — ese mecanismo de negociación y el cálculo del precio final siguen fuera de alcance de esta historia y quedan pendientes para `HU-05` en adelante (ver `specs/context/business-rules-index.md`, CN-06).
 
 ## Estado del tipo de servicio
 
@@ -116,6 +119,10 @@ La gestión de tipos de servicio estará disponible únicamente para el superadm
 
 El superadministrador podrá crear nuevos tipos de servicio y editar el nombre y la descripción de los existentes, además de gestionar su estado.
 
+### RN-10 — Tarifa sugerida
+
+El superadministrador podrá configurar y editar la tarifa sugerida de cada tipo de servicio. Este valor es solo una referencia base; no fija el precio final de un servicio concreto (resolución INC-02, 2026-09-30).
+
 ## Flujo principal
 
 1. El superadministrador ingresa al módulo de gestión de tipos de servicio.
@@ -168,6 +175,7 @@ Si un tipo de servicio es desactivado:
 - [ ] La estructura permite agregar nuevos tipos de servicio posteriormente.
 - [ ] El superadministrador puede crear un nuevo tipo de servicio con nombre y descripción.
 - [ ] El superadministrador puede editar el nombre y la descripción de un tipo de servicio existente.
+- [ ] El superadministrador puede configurar y editar la tarifa sugerida de un tipo de servicio.
 - [ ] Las operaciones de gestión generan información de auditoría.
 
 ## Auditoría
@@ -203,8 +211,7 @@ La referencia deberá realizarse mediante el identificador de TipoServicio.
 
 - Creación de solicitudes de servicio.
 - Asignación de enfermeros.
-- Definición de tarifas.
-- Cálculo del precio del servicio.
+- Negociación y cálculo del precio final de un servicio concreto (oferta y contraoferta) — la tarifa sugerida sí está en el alcance de esta historia (ver nota de alcance INC-02).
 - Definición de duración del servicio.
 - Disponibilidad de enfermeros.
 - Pagos.

@@ -176,8 +176,10 @@ El perfil deberá contemplar estados asociados al proceso de verificación, incl
 - Pendiente de revisión.
 - Aprobado.
 - Corrección solicitada.
+- Rechazado (terminal, sin reenvío).
+- Suspendido (perfil ya aprobado, revocado temporalmente).
 
-Los estados `Rechazado` y `Corrección solicitada`, antes tratados como independientes pese a tener el mismo comportamiento (corregir y volver a revisión), se unificaron en un solo estado (`Corrección solicitada`) el 2026-09-29 (resolución INC-16; ver `specs/context/business-rules-index.md`). Toda solicitud de corrección debe incluir un comentario del Superadministrador que indique qué debe ajustarse antes de una nueva revisión.
+Los estados `Rechazado` y `Corrección solicitada`, antes tratados como independientes pese a tener el mismo comportamiento (corregir y volver a revisión), se unificaron en un solo estado (`Corrección solicitada`) el 2026-09-29 (resolución INC-16). El 2026-09-30 se reintrodujo `Rechazado` como estado **terminal** para casos no corregibles o tras agotar el límite de ciclos de corrección, y se agregó `Suspendido` para revocar perfiles ya aprobados (resolución INC-29; ver `HU-03` y `specs/context/business-rules-index.md`). Toda solicitud de corrección, rechazo definitivo o suspensión debe incluir un comentario del Superadministrador que indique el motivo.
 
 ## 5.3 Aprobación
 
@@ -212,9 +214,11 @@ El superadministrador podrá revisar:
 El superadministrador podrá:
 
 - Aprobar.
-- Solicitar corrección.
+- Solicitar corrección (hasta un máximo de 3 ciclos, ver `HU-03` RN-10).
+- Rechazar de forma definitiva (terminal, sin reenvío bajo el mismo registro).
+- Suspender un perfil ya aprobado.
 
-Cuando sea necesaria una corrección o verificación adicional, el superadministrador deberá agregar un comentario que indique el motivo.
+Cuando sea necesaria una corrección, un rechazo definitivo o una suspensión, el superadministrador deberá agregar un comentario que indique el motivo.
 
 El comentario será enviado/notificado al enfermero.
 
@@ -475,13 +479,12 @@ El servicio utilizará un PIN para validar el inicio.
 
 Cuando el servicio sea aceptado:
 
-1. El sistema deberá generar un PIN.
-2. El PIN deberá almacenarse asociado al servicio en la base de datos, utilizando una función hash criptográfica. El PIN no deberá almacenarse en texto plano en ningún momento.
-3. El PIN será numérico.
-4. Tendrá 6 dígitos.
-5. Deberá ser único por servicio.
+1. El sistema deberá generar un PIN numérico de 6 dígitos.
+2. El PIN **no se almacenará en la base de datos, ni siquiera como hash**. Se derivará mediante una función HMAC (p. ej. HMAC-SHA256) a partir del identificador del servicio y un secreto criptográfico gestionado fuera de la base de datos (variable de entorno, vault o KMS), truncado a 6 dígitos.
+3. El backend deberá recalcular este valor cada vez que necesite mostrarlo al usuario (dentro de la ventana configurada, §14.2) o validarlo contra lo introducido por el enfermero (§14.3).
+4. Deberá ser único, como mínimo, entre servicios simultáneamente activos (ver RN-08 en §27.1).
 
-El PIN deberá generarse de manera segura y no deberá ser predecible.
+Una fuga de la base de datos por sí sola no permite reconstruir los PIN, porque el secreto usado para derivarlos no reside en ella (resolución INC-28, 2026-09-30; reemplaza el enfoque de hash simple, que era irreversible y por tanto incompatible con mostrar el PIN al usuario en §14.2).
 
 ## 14.2 Visualización del PIN
 
@@ -505,8 +508,8 @@ Cuando el enfermero se encuentre con el usuario/paciente:
 1. El usuario consulta el PIN desde su aplicación.
 2. El usuario proporciona el PIN al enfermero.
 3. El enfermero introduce el PIN en su aplicación.
-4. El backend consulta el hash del PIN asociado al servicio.
-5. El sistema compara el hash del PIN ingresado con el hash almacenado.
+4. El backend recalcula el valor HMAC del PIN asociado al servicio (ver §14.1).
+5. El sistema compara el valor ingresado (recalculado con el mismo HMAC) con el valor esperado.
 6. Si la validación es correcta, el servicio cambia a estado En curso.
 7. Si la validación es incorrecta, se registra el intento.
 
@@ -526,7 +529,7 @@ Si se alcanzan los 5 intentos fallidos:
 
 - El inicio del servicio deberá quedar bloqueado.
 - El sistema deberá registrar el bloqueo.
-- El sistema deberá notificar o generar el evento correspondiente para soporte.
+- El sistema deberá notificar o generar el evento correspondiente para el Superadministrador, que asume la función de soporte ante este tipo de incidentes (resolución INC-11, 2026-09-30; no se crea un rol nuevo).
 - El servicio no deberá pasar automáticamente a estado En curso.
 
 El mecanismo exacto para desbloquear el servicio después de alcanzar el límite de intentos queda pendiente de definición.
@@ -733,11 +736,13 @@ Entre las funciones definidas se encuentran:
 
 - Revisar y aprobar enfermeros.
 - Solicitar correcciones a enfermeros.
+- Rechazar de forma definitiva o suspender/revocar un perfil, cuando aplique (ver `HU-03`).
 - Consultar información y documentos de enfermeros.
 - Gestionar estados de enfermeros.
-- Configurar tipos de servicio.
+- Configurar tipos de servicio, incluida la tarifa sugerida por tipo (ver `HU-04`).
 - Configurar el tiempo de habilitación de información médica sensible.
 - Configurar el tiempo de habilitación del PIN.
+- Atender incidentes de soporte reportados por usuarios/enfermeros (p. ej. bloqueo de PIN, ayuda durante un servicio en curso) — función de soporte asumida por este rol, no un rol nuevo (resolución INC-11, 2026-09-30). El proceso concreto (SLA, horario, facultades) queda como vacío para una historia futura.
 - Consultar información de auditoría.
 
 # 23. Configuraciones administrables
@@ -871,25 +876,11 @@ Publicado / Asignado / En curso
 
 Las condiciones específicas de cancelación deberán definirse en la historia de usuario correspondiente.
 
+> **Nota de alcance (INC-12, 2026-09-30):** este documento no define qué ocurre con el cobro ni con la calificación obligatoria (§19) cuando un servicio se cancela estando `En curso`. Esas consecuencias quedan pendientes de definición en la futura historia de cancelación (vacío ya registrado en `specs/context/business-rules-index.md`); no se resuelven aquí para no inventar alcance.
+
 # 27. Reglas críticas del MVP
 
-1. Un enfermero debe ser aprobado manualmente antes de poder aceptar servicios.
-2. Un usuario debe verificar su correo antes de poder solicitar servicios.
-3. La aceptación de un servicio debe ser atómica.
-4. Un servicio solamente puede ser asignado a un enfermero.
-5. Los demás enfermeros deben dejar de poder aceptar un servicio una vez asignado.
-6. Los datos médicos sensibles deben habilitarse únicamente durante la ventana configurada.
-7. El PIN debe ser numérico de 6 dígitos.
-8. El PIN debe estar asociado al servicio.
-9. El PIN debe ser único por servicio.
-10. El PIN debe poder visualizarse únicamente durante la ventana configurada.
-11. El inicio del servicio requiere validación del PIN.
-12. El servicio no puede finalizar antes de cumplir la duración contratada.
-13. Una extensión requiere aprobación de la otra parte.
-14. Una extensión aprobada actualiza el tiempo y valor del servicio.
-15. La calificación posterior al servicio es obligatoria para ambas partes.
-16. Una calificación pendiente bloquea el resto de funcionalidades de la aplicación hasta completarla.
-17. Las operaciones críticas deben quedar auditadas.
+Esta sección remite a §27.1 (fuente única de verdad); no se repite la lista aquí para evitar que ambas diverjan con el tiempo (resolución INC-10, 2026-09-30).
 
 ## 27.1 Reglas de negocio críticas
 
@@ -923,7 +914,7 @@ El PIN será numérico y tendrá exactamente 6 dígitos.
 
 ## RN-08 — PIN por servicio
 
-Cada servicio tendrá su propio PIN.
+Cada servicio cuenta con su propio PIN, generado de forma independiente. La unicidad se garantiza como mínimo entre los PIN de servicios que estén simultáneamente en estado Asignado o En curso; dado el espacio limitado de 10^6 combinaciones, no se exige unicidad global entre todos los servicios históricos (aclaración INC-31, 2026-09-30).
 
 ## RN-09 — Visualización del PIN
 
@@ -959,11 +950,11 @@ Usuario y enfermero deberán completar la calificación después de finalizar el
 
 ## RN-17 — Bloqueo por calificación
 
-Una calificación pendiente impedirá realizar otras acciones en la aplicación hasta completarla.
+Una calificación pendiente impedirá crear nuevas solicitudes de servicio o aceptar nuevos servicios hasta completarla; no bloquea continuar con servicios ya en curso (alineada con §19.1 el 2026-09-30, resolución INC-10; antes contradecía el alcance acotado por CN-17).
 
-## RN-18 — Almacenamiento seguro del PIN
+## RN-18 — Derivación segura del PIN
 
-El PIN deberá almacenarse mediante una función hash criptográfica. No deberá almacenarse ni compararse en texto plano en ningún caso; la validación se realiza comparando hashes.
+El PIN no deberá almacenarse en la base de datos en ninguna forma (ni en claro ni como hash): se deriva mediante HMAC a partir del identificador del servicio y un secreto externo a la base de datos. El backend recalcula el valor tanto para mostrarlo al usuario como para validarlo (resolución INC-28, 2026-09-30; reemplaza el enfoque de hash simple).
 
 # 28. Historias de usuario definidas
 
@@ -977,22 +968,24 @@ Después de 24 horas sin verificar, se genera un recordatorio.
 
 ## HU-02 — Registro y gestión del perfil de enfermero
 
-El enfermero puede registrarse seleccionando el rol de enfermero y proporcionar información personal, profesional, experiencia y documentación de respaldo.
+El enfermero puede registrarse seleccionando el rol de enfermero, definir credenciales (contraseña y verificación de correo, igual que `HU-01`) y proporcionar información personal, profesional, experiencia y documentación de respaldo, incluida una foto en vivo contrastada automáticamente contra el documento de identidad.
 
 El perfil queda pendiente de aprobación por parte del superadministrador.
 
 ## HU-03 — Verificación y aprobación del enfermero
 
-El superadministrador puede consultar toda la información y documentación del enfermero.
+El superadministrador puede consultar toda la información y documentación del enfermero, incluido el resultado de la verificación facial.
 
 Puede:
 
 - Aprobar.
-- Solicitar correcciones/revisión.
+- Solicitar correcciones/revisión (hasta 3 ciclos).
+- Rechazar de forma definitiva (terminal, sin reenvío).
+- Suspender un perfil ya aprobado.
 
-Las correcciones deberán incluir un comentario.
+Las correcciones y rechazos/suspensiones deberán incluir un comentario.
 
-El enfermero podrá corregir la información y solicitar una nueva revisión.
+El enfermero podrá corregir la información y solicitar una nueva revisión mientras no alcance el límite de ciclos.
 
 La aprobación deberá registrar:
 
@@ -1008,6 +1001,8 @@ El sistema contará con los tipos de servicio iniciales:
 - Acompañamiento.
 - Acompañamiento y transporte.
 - Atención hospitalaria.
+
+Cada tipo de servicio incluye una tarifa sugerida configurable por el superadministrador.
 
 Los tipos podrán estar activos o inactivos.
 

@@ -86,7 +86,7 @@ Ejemplos:
 Los siguientes elementos son obligatorios para enviar el perfil a revisión:
 
 1. Documento de identidad.
-2. Foto.
+2. Foto (capturada en vivo durante el registro para la verificación de identidad facial, ver sección correspondiente).
 3. Título profesional.
 4. Tarjeta profesional.
 5. Años de experiencia, experiencia profesional y lugares donde ha trabajado (resolución INC-21, 2026-09-29).
@@ -102,6 +102,34 @@ No se almacenará ni solicitará un radio de servicio.
 La zona de residencia no representa un rango máximo de desplazamiento.
 
 > **Nota de alcance (INC-08, resuelta 2026-09-29):** la geolocalización real del enfermero (no solo zona de residencia como texto libre) forma parte del MVP según `specs/context/vision.md` §5. El nivel de precisión y la frecuencia de actualización siguen como pregunta abierta en `vision.md` §9; esta historia se actualizará cuando se resuelvan.
+
+## Credenciales y verificación de correo
+
+El registro de enfermero crea credenciales de acceso equivalentes a las de `HU-01` (resolución INC-06, 2026-09-30):
+
+- El enfermero define una contraseña que debe cumplir la misma política mínima de `HU-01` (letras, números, carácter especial, longitud entre 12 y 64 caracteres), validada en frontend y backend.
+- Tras el registro, el sistema genera un código de verificación numérico de 6 dígitos, lo envía al correo registrado, y aplica las mismas reglas de vigencia e intentos que `HU-01` (TTL de 15 minutos, máximo 5 intentos, máximo 3 reenvíos por hora, recordatorio a las 24 horas con código nuevo).
+- El enfermero puede iniciar sesión sin haber verificado su correo, pero no puede enviar su perfil a revisión mientras no lo verifique.
+
+> La creación y protección (MFA) de la cuenta del Superadministrador no se cubre en esta historia; queda como vacío explícito para una historia futura (ver `specs/context/business-rules-index.md`).
+
+## Verificación de identidad facial
+
+Como parte del registro, el enfermero debe capturar una foto en vivo que el sistema contrasta automáticamente contra el documento de identidad cargado (resolución INC-04, 2026-09-30; ver `specs/context/vision.md` §5):
+
+- Máximo 2 intentos automáticos de contraste.
+- Si ninguno de los 2 intentos coincide, el perfil pasa a revisión manual del Superadministrador junto con el resultado (no coincide, intentos utilizados).
+- El Superadministrador puede habilitar intentos adicionales para que el enfermero repita la captura, según el caso (ver `HU-03`).
+- La foto en vivo capturada se convierte en la foto de referencia del perfil (`Persona.foto`) una vez el resultado es satisfactorio o el Superadministrador la valida manualmente.
+- La foto de referencia se recaptura periódicamente (cada 6-12 meses); quién dispara esa recaptura y qué ocurre si el enfermero no la realiza a tiempo queda como vacío (`vision.md` §7).
+- El proveedor de verificación facial y su costo no están definidos todavía; esta historia describe el comportamiento esperado, no la integración técnica concreta (`vision.md` §7, pregunta abierta).
+
+## Consentimientos
+
+- Antes de registrar sus datos personales, profesionales y documentos, el enfermero debe aceptar un aviso de privacidad general (mismo mecanismo de `HU-01`: versión del aviso, fecha/hora, con posibilidad de revocación).
+- La verificación de identidad facial requiere un consentimiento explícito y separado para el tratamiento del dato biométrico, distinto del consentimiento general (`vision.md` §7).
+- Si el enfermero revoca el consentimiento biométrico después de estar **Aprobado**, el perfil pasa a **Suspendido** (ver `HU-03`), dado que la verificación de identidad ya no puede sostenerse sin ese dato.
+- Ninguno de los dos registros de consentimiento podrá completarse implícitamente: el sistema debe solicitar la aceptación explícita en cada caso (resolución INC-05, 2026-09-30).
 
 ## Roles
 
@@ -128,8 +156,10 @@ Estados conceptuales:
 - Pendiente de revisión.
 - Aprobado.
 - Corrección solicitada.
+- Rechazado (terminal, sin reenvío).
+- Suspendido (perfil ya aprobado, revocado temporalmente).
 
-> Los estados `Rechazado` y `Corrección solicitada` se unificaron en `Corrección solicitada` el 2026-09-29 (resolución INC-16; ver `HU-03` y `specs/context/business-rules-index.md`).
+> Los estados `Rechazado` y `Corrección solicitada` se unificaron el 2026-09-29 (resolución INC-16) para el caso corregible; el 2026-09-30 se reintrodujo `Rechazado` como estado terminal para casos no corregibles o tras agotar el límite de ciclos de corrección, y se agregó `Suspendido` para revocar perfiles ya aprobados (resolución INC-29; ver `HU-03` y `specs/context/business-rules-index.md`).
 
 Un enfermero solamente podrá aceptar servicios cuando su perfil tenga estado **Aprobado**.
 
@@ -137,18 +167,22 @@ Un enfermero solamente podrá aceptar servicios cuando su perfil tenga estado **
 
 1. El usuario selecciona la opción **Registrarse como enfermero**.
 2. El sistema solicita la información básica de Persona.
-3. El enfermero diligencia sus datos personales.
-4. El enfermero diligencia su información profesional.
-5. El enfermero registra su experiencia profesional.
-6. El enfermero carga los documentos obligatorios.
-7. El enfermero puede cargar documentos adicionales opcionales.
-8. El sistema valida que los campos obligatorios estén completos.
-9. El sistema valida que los documentos obligatorios estén cargados.
-10. El sistema crea el perfil del enfermero.
-11. El perfil queda en estado **Pendiente de revisión**.
-12. El sistema notifica al Superadministrador que existe un perfil pendiente.
-13. El Superadministrador revisa posteriormente el perfil mediante HU-03.
-14. Hasta que el Superadministrador apruebe el perfil, el enfermero no puede aceptar servicios.
+3. El enfermero diligencia sus datos personales y define una contraseña.
+4. El enfermero acepta el aviso de privacidad general.
+5. El enfermero diligencia su información profesional.
+6. El enfermero registra su experiencia profesional.
+7. El enfermero carga los documentos obligatorios, incluida la foto en vivo para verificación de identidad.
+8. El enfermero acepta el consentimiento biométrico separado.
+9. El sistema contrasta la foto en vivo contra el documento de identidad (máx. 2 intentos automáticos).
+10. El enfermero puede cargar documentos adicionales opcionales.
+11. El sistema valida que los campos obligatorios estén completos.
+12. El sistema valida que los documentos obligatorios estén cargados.
+13. El sistema crea el perfil del enfermero.
+14. El perfil queda en estado **Pendiente de revisión**.
+15. El sistema genera un código de verificación de correo y lo envía (mismas reglas que `HU-01`).
+16. El sistema notifica al Superadministrador que existe un perfil pendiente, incluido el resultado de la verificación facial.
+17. El Superadministrador revisa posteriormente el perfil mediante `HU-03`.
+18. Hasta que el Superadministrador apruebe el perfil, el enfermero no puede aceptar servicios.
 
 ## Reglas de negocio
 
@@ -191,6 +225,18 @@ El registro deberá asociarse al rol `Enfermero`.
 
 Toda creación y modificación relevante del perfil deberá registrar información de auditoría.
 
+### RN-09 — Credenciales
+
+El registro de enfermero exige contraseña y verificación de correo con las mismas reglas que `HU-01` (política de contraseña, TTL y límites del código de verificación).
+
+### RN-10 — Verificación facial
+
+El registro debe incluir el contraste automático entre una foto en vivo y el documento de identidad, con un máximo de 2 intentos; si ninguno coincide, el perfil pasa a revisión manual con ese resultado visible para el Superadministrador.
+
+### RN-11 — Consentimientos
+
+El registro no puede completarse sin el consentimiento general (datos personales/profesionales) ni, de forma separada, sin el consentimiento biométrico explícito.
+
 ## Criterios de aceptación
 
 - [ ] El usuario puede seleccionar el rol de enfermero durante el registro.
@@ -210,6 +256,11 @@ Toda creación y modificación relevante del perfil deberá registrar informaci�
 - [ ] El enfermero no puede aceptar servicios mientras no esté aprobado.
 - [ ] El Superadministrador puede revisar posteriormente el perfil.
 - [ ] El sistema registra información de auditoría.
+- [ ] El enfermero puede definir una contraseña con la misma política que `HU-01`.
+- [ ] El sistema verifica el correo del enfermero con el mismo mecanismo que `HU-01`.
+- [ ] El sistema captura una foto en vivo y la contrasta automáticamente contra el documento de identidad.
+- [ ] Tras 2 intentos sin coincidencia, el perfil pasa a revisión manual con el resultado visible.
+- [ ] El sistema exige el consentimiento general y el consentimiento biométrico por separado antes de completar el registro.
 
 ## Auditoría
 
